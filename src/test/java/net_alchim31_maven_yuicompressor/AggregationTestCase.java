@@ -9,9 +9,15 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * The Class AggregationTestCase.
+ */
 public class AggregationTestCase extends TestCase {
+    
+    /** The dir. */
     private File dir_;
 
+    /** The default build context. */
     private DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
 
     @Override
@@ -26,6 +32,11 @@ public class AggregationTestCase extends TestCase {
         FileUtils.deleteDirectory(dir_);
     }
 
+    /**
+     * Test 0 to 1.
+     *
+     * @throws Exception the exception
+     */
     public void test0to1() throws Exception {
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
@@ -46,6 +57,11 @@ public class AggregationTestCase extends TestCase {
     }
 
 
+    /**
+     * Test 1 to 1.
+     *
+     * @throws Exception the exception
+     */
     public void test1to1() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -59,6 +75,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test 2 to 1.
+     *
+     * @throws Exception the exception
+     */
     public void test2to1() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -83,6 +104,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test no duplicate aggregation.
+     *
+     * @throws Exception the exception
+     */
     public void testNoDuplicateAggregation() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -107,6 +133,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test 2 to 1 order.
+     *
+     * @throws Exception the exception
+     */
     public void test2to1Order() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -124,6 +155,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f2) + FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test 2 to 1 with new line.
+     *
+     * @throws Exception the exception
+     */
     public void test2to1WithNewLine() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -142,6 +178,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f1) + "\n" + FileUtils.fileRead(f2) + "\n", FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test absolute path from inside.
+     *
+     * @throws Exception the exception
+     */
     public void testAbsolutePathFromInside() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
@@ -159,6 +200,11 @@ public class AggregationTestCase extends TestCase {
         assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
+    /**
+     * Test absolute path from outside.
+     *
+     * @throws Exception the exception
+     */
     public void testAbsolutePathFromOutside() throws Exception {
         File f1 = File.createTempFile("test-01", ".js");
         try {
@@ -180,6 +226,11 @@ public class AggregationTestCase extends TestCase {
         }
     }
 
+    /**
+     * Test auto exclude wildcards.
+     *
+     * @throws Exception the exception
+     */
     public void testAutoExcludeWildcards() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getAbsolutePath(), "1");
