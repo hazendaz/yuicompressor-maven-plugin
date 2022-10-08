@@ -25,11 +25,21 @@ public class Aggregation {
     
     /** The excludes. */
     public String[] excludes;
-    public boolean removeIncluded = false;
-    public boolean insertNewLine = false;
-    public boolean insertFileHeader = false;
-    public boolean fixLastSemicolon = false;
-    public boolean autoExcludeWildcards = false;
+    
+    /** The remove included. */
+    public boolean removeIncluded;
+    
+    /** The insert new line. */
+    public boolean insertNewLine;
+    
+    /** The insert file header. */
+    public boolean insertFileHeader;
+    
+    /** The fix last semicolon. */
+    public boolean fixLastSemicolon;
+    
+    /** The auto exclude wildcards. */
+    public boolean autoExcludeWildcards;
 
     /**
      * Run.
