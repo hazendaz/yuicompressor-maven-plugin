@@ -2,14 +2,35 @@ package net_alchim31_maven_yuicompressor;
 
 import java.io.File;
 
+/**
+ * The Class SourceFile.
+ */
 public class SourceFile {
 
+    /** The src root. */
     private File srcRoot_;
+    
+    /** The dest root. */
     private File destRoot_;
+    
+    /** The dest as source. */
     private boolean destAsSource_;
+    
+    /** The rpath. */
     private String rpath_;
+    
+    /** The extension. */
     private String extension_;
 
+    /**
+     * Instantiates a new source file.
+     *
+     * @param srcRoot the src root
+     * @param destRoot the dest root
+     * @param name the name
+     * @param destAsSource the dest as source
+     * @throws Exception the exception
+     */
     public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) throws Exception {
         srcRoot_ = srcRoot;
         destRoot_ = destRoot;
@@ -24,6 +45,11 @@ public class SourceFile {
         }
     }
 
+    /**
+     * To file.
+     *
+     * @return the file
+     */
     public File toFile() {
         String frpath = rpath_ + extension_;
         if (destAsSource_) {
@@ -35,10 +61,21 @@ public class SourceFile {
         return new File(srcRoot_, frpath);
     }
 
+    /**
+     * To dest file.
+     *
+     * @param suffix the suffix
+     * @return the file
+     */
     public File toDestFile(String suffix) {
         return new File(destRoot_, rpath_ + suffix + extension_);
     }
 
+    /**
+     * Gets the extension.
+     *
+     * @return the extension
+     */
     public String getExtension() {
         return extension_;
     }

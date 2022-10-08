@@ -20,6 +20,8 @@ import java.util.List;
  */
 // @SuppressWarnings("unchecked")
 public abstract class MojoSupport extends AbstractMojo {
+    
+    /** The Constant EMPTY_STRING_ARRAY. */
     private static final String[] EMPTY_STRING_ARRAY = {};
 
     /**
@@ -168,16 +170,38 @@ public abstract class MojoSupport extends AbstractMojo {
         }
     }
 
+    /**
+     * Gets the default includes.
+     *
+     * @return the default includes
+     * @throws Exception the exception
+     */
     protected abstract String[] getDefaultIncludes() throws Exception;
 
+    /**
+     * Before process.
+     *
+     * @throws Exception the exception
+     */
     protected abstract void beforeProcess() throws Exception;
 
+    /**
+     * After process.
+     *
+     * @throws Exception the exception
+     */
     protected abstract void afterProcess() throws Exception;
 
     /**
      * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than *.css or *.js
-     *
+     * 
      * see https://github.com/davidB/yuicompressor-maven-plugin/issues/19
+     *
+     * @param srcRoot the src root
+     * @param destRoot the dest root
+     * @param srcExcludes the src excludes
+     * @param destAsSource the dest as source
+     * @throws Exception the exception
      */
     private void processDir(File srcRoot, File destRoot, List<String> srcExcludes, boolean destAsSource) throws Exception {
         if (srcRoot == null) {
@@ -233,5 +257,11 @@ public abstract class MojoSupport extends AbstractMojo {
         }
     }
 
+    /**
+     * Process file.
+     *
+     * @param src the src
+     * @throws Exception the exception
+     */
     protected abstract void processFile(SourceFile src) throws Exception;
 }

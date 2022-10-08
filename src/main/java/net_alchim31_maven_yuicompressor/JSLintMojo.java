@@ -12,6 +12,8 @@ package net_alchim31_maven_yuicompressor;
  */
 // @SuppressWarnings("unchecked")
 public class JSLintMojo extends MojoSupport {
+    
+    /** The jslint. */
     private JSLintChecker jslint_;
 
     @Override

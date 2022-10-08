@@ -132,12 +132,11 @@ public class YuiCompressorMojo extends MojoSupport {
      */
     private boolean useSmallestFile;
 
+    /** The in size total. */
     private long inSizeTotal_;
     private long outSizeTotal_;
 
-    /**
-     * Keep track of updated files for aggregation on incremental builds
-     */
+    /** Keep track of updated files for aggregation on incremental builds. */
     private Set<String> incrementalFiles = null;
 
     @Override
@@ -163,6 +162,11 @@ public class YuiCompressorMojo extends MojoSupport {
         if (!preProcessAggregates) aggregate();
     }
 
+    /**
+     * Aggregate.
+     *
+     * @throws Exception the exception
+     */
     private void aggregate() throws Exception {
         if (aggregations != null) {
             Set<File> previouslyIncludedFiles = new HashSet<File>();
@@ -283,6 +287,13 @@ public class YuiCompressorMojo extends MojoSupport {
         }
     }
 
+    /**
+     * Compress css.
+     *
+     * @param in the in
+     * @param out the out
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void compressCss(InputStreamReader in, OutputStreamWriter out)
             throws IOException {
         try {
@@ -294,6 +305,13 @@ public class YuiCompressorMojo extends MojoSupport {
         }
     }
 
+    /**
+     * Gzip if requested.
+     *
+     * @param file the file
+     * @return the file
+     * @throws Exception the exception
+     */
     protected File gzipIfRequested(File file) throws Exception {
         if (!gzip || (file == null) || (!file.exists())) {
             return null;
@@ -320,17 +338,39 @@ public class YuiCompressorMojo extends MojoSupport {
         return gzipped;
     }
 
+    /**
+     * Ratio of size.
+     *
+     * @param file100 the file 100
+     * @param fileX the file X
+     * @return the long
+     * @throws Exception the exception
+     */
     protected long ratioOfSize(File file100, File fileX) throws Exception {
         long v100 = Math.max(file100.length(), 1);
         long vX = Math.max(fileX.length(), 1);
         return (vX * 100) / v100;
     }
 
+    /**
+     * Checks if is minified file.
+     *
+     * @param inFile the in file
+     * @return true, if is minified file
+     */
     private boolean isMinifiedFile(File inFile) {
         String filename = inFile.getName().toLowerCase();
         return filename.endsWith(suffix + ".js") || filename.endsWith(suffix + ".css");
     }
 
+    /**
+     * Minified file exists in source.
+     *
+     * @param source the source
+     * @param dest the dest
+     * @return true, if successful
+     * @throws InterruptedException the interrupted exception
+     */
     private static boolean minifiedFileExistsInSource(File source, File dest) throws InterruptedException {
         String parent = source.getParent();
         String destFilename = dest.getName();

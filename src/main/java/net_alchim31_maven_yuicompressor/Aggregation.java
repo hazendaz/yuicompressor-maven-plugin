@@ -9,10 +9,21 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+/**
+ * The Class Aggregation.
+ */
 public class Aggregation {
+    
+    /** The input dir. */
     public File inputDir;
+    
+    /** The output. */
     public File output;
+    
+    /** The includes. */
     public String[] includes;
+    
+    /** The excludes. */
     public String[] excludes;
     public boolean removeIncluded = false;
     public boolean insertNewLine = false;
@@ -20,10 +31,27 @@ public class Aggregation {
     public boolean fixLastSemicolon = false;
     public boolean autoExcludeWildcards = false;
 
+    /**
+     * Run.
+     *
+     * @param previouslyIncludedFiles the previously included files
+     * @param buildContext the build context
+     * @return the list
+     * @throws Exception the exception
+     */
     public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext) throws Exception {
         return this.run(previouslyIncludedFiles, buildContext, null);
     }
 
+    /**
+     * Run.
+     *
+     * @param previouslyIncludedFiles the previously included files
+     * @param buildContext the build context
+     * @param incrementalFiles the incremental files
+     * @return the list
+     * @throws Exception the exception
+     */
     public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext, Set<String> incrementalFiles) throws Exception {
         defineInputDir();
 
@@ -72,6 +100,12 @@ public class Aggregation {
         return files;
     }
 
+    /**
+     * Creates the file header.
+     *
+     * @param file the file
+     * @return the string
+     */
     private String createFileHeader(File file) {
         StringBuilder header = new StringBuilder();
         header.append("/*");
@@ -85,6 +119,11 @@ public class Aggregation {
         return header.toString();
     }
 
+    /**
+     * Define input dir.
+     *
+     * @throws Exception the exception
+     */
     private void defineInputDir() throws Exception {
         if (inputDir == null) {
             inputDir = output.getParentFile();
@@ -95,6 +134,15 @@ public class Aggregation {
         }
     }
 
+    /**
+     * Gets the included files.
+     *
+     * @param previouslyIncludedFiles the previously included files
+     * @param buildContext the build context
+     * @param incrementalFiles the incremental files
+     * @return the included files
+     * @throws Exception the exception
+     */
     private List<File> getIncludedFiles(Collection<File> previouslyIncludedFiles, BuildContext buildContext, Set<String> incrementalFiles) throws Exception {
         List<File> filesToAggregate = new ArrayList<>();
         if (includes != null) {
@@ -126,6 +174,14 @@ public class Aggregation {
 
     }
 
+    /**
+     * Adds the into.
+     *
+     * @param include the include
+     * @param includedFiles the included files
+     * @param previouslyIncludedFiles the previously included files
+     * @throws Exception the exception
+     */
     private void addInto(String include, List<File> includedFiles, Collection<File> previouslyIncludedFiles) throws Exception {
         if (include.indexOf('*') > -1) {
             DirectoryScanner scanner = newScanner();
@@ -150,6 +206,12 @@ public class Aggregation {
         }
     }
 
+    /**
+     * New scanner.
+     *
+     * @return the directory scanner
+     * @throws Exception the exception
+     */
     private DirectoryScanner newScanner() throws Exception {
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir(inputDir);

@@ -7,22 +7,50 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 import java.io.File;
 
+/**
+ * The Class ErrorReporter4Mojo.
+ */
 public class ErrorReporter4Mojo implements ErrorReporter {
 
+    /** The default filename. */
     private String defaultFilename_;
+    
+    /** The accept warn. */
     private boolean acceptWarn_;
+    
+    /** The log. */
     private Log log_;
+    
+    /** The warning cnt. */
     private int warningCnt_;
+    
+    /** The error cnt. */
     private int errorCnt_;
+    
+    /** The build context. */
     private BuildContext buildContext_;
+    
+    /** The source file. */
     private File sourceFile_;
 
+    /**
+     * Instantiates a new error reporter 4 mojo.
+     *
+     * @param log the log
+     * @param jswarn the jswarn
+     * @param buildContext the build context
+     */
     public ErrorReporter4Mojo(Log log, boolean jswarn, BuildContext buildContext) {
         log_ = log;
         acceptWarn_ = jswarn;
         buildContext_ = buildContext;
     }
 
+    /**
+     * Sets the default file name.
+     *
+     * @param v the new default file name
+     */
     public void setDefaultFileName(String v) {
         if (v.length() == 0) {
             v = null;
@@ -30,10 +58,20 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         defaultFilename_ = v;
     }
 
+    /**
+     * Gets the error cnt.
+     *
+     * @return the error cnt
+     */
     public int getErrorCnt() {
         return errorCnt_;
     }
 
+    /**
+     * Gets the warning cnt.
+     *
+     * @return the warning cnt
+     */
     public int getWarningCnt() {
         return warningCnt_;
     }
@@ -59,6 +97,16 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         }
     }
 
+    /**
+     * New message.
+     *
+     * @param message the message
+     * @param sourceName the source name
+     * @param line the line
+     * @param lineSource the line source
+     * @param lineOffset the line offset
+     * @return the string
+     */
     private String newMessage(String message, String sourceName, int line, String lineSource, int lineOffset) {
         StringBuilder back = new StringBuilder();
         if ((sourceName == null) || (sourceName.length() == 0)) {
@@ -86,6 +134,11 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         return back.toString();
     }
 
+    /**
+     * Sets the file.
+     *
+     * @param file the new file
+     */
     public void setFile(File file) {
         sourceFile_ = file;
     }

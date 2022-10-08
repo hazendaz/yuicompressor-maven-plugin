@@ -7,10 +7,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+/**
+ * The Class JSLintChecker.
+ */
 //TODO: use MojoErrorReporter
 class JSLintChecker {
+    
+    /** The jslint path. */
     private String jslintPath_;
 
+    /**
+     * Instantiates a new JS lint checker.
+     *
+     * @throws Exception the exception
+     */
     public JSLintChecker() throws Exception {
         FileOutputStream out = null;
         InputStream in = null;
@@ -27,6 +37,12 @@ class JSLintChecker {
         }
     }
 
+    /**
+     * Check.
+     *
+     * @param jsFile the js file
+     * @param reporter the reporter
+     */
     public void check(File jsFile, ErrorReporter reporter) {
         String[] args = new String[2];
         args[0] = jslintPath_;
