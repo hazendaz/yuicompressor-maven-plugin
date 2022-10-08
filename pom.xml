@@ -2,9 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>net.alchim31.maven</groupId>
+
+  <parent>
+    <groupId>com.github.hazendaz</groupId>
+    <artifactId>base-parent</artifactId>
+    <version>36</version>
+    <relativePath />
+  </parent>
+
+  <groupId>com.github.hazendaz.maven</groupId>
   <artifactId>yuicompressor-maven-plugin</artifactId>
-  <version>1.5.2-SNAPSHOT</version>
+  <version>1.6.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>YUI Compressor Maven Mojo</name>
@@ -13,7 +21,7 @@
     files (using YUI Compressor from Julien Lecomte) and/or to check
     Javascript files with jslint.
   </description>
-  <url>http://github.com/davidB/${project.artifactId}</url>
+  <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
   <inceptionYear>2012</inceptionYear>
   <licenses>
     <license>
@@ -23,17 +31,32 @@
     </license>
   </licenses>
 
+  <prerequisites>
+    <maven>3.3.9</maven>
+  </prerequisites>
+
   <scm>
-    <connection>scm:git:git://github.com/davidB/${project.artifactId}.git</connection>
-    <developerConnection>scm:git:git@github.com:davidB/${project.artifactId}.git</developerConnection>
-    <url>https://github.com/davidB/${project.artifactId}/</url>
+    <connection>scm:git:ssh://github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</developerConnection>
     <tag>HEAD</tag>
+    <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
   </scm>
 
   <issueManagement>
     <system>github</system>
-    <url>http://github.com/davidB/${project.artifactId}/issues#issue/</url>
+    <url>>https://github.com/hazendaz/yuicompressor-maven-plugin/issues/</url>
   </issueManagement>
+  <ciManagement>
+    <system>Github</system>
+    <url>https://github.com/hazendaz/yuicompressor-maven-plugin/actions</url>
+  </ciManagement>
+  <distributionManagement>
+    <site>
+      <id>gh-pages-scm</id>
+      <name>GitHub Pages</name>
+      <url>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</url>
+    </site>
+  </distributionManagement>
 
   <developers>
     <developer>
@@ -71,48 +94,31 @@
       </roles>
       <timezone>+5.5</timezone>
     </contributor>
+    <contributor>
+      <name>Jeremy Landis</name>
+      <email>jeremylandis@hotmail.com</email>
+      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+      <organization>hazendaz</organization>
+      <organizationUrl>https://github.com/hazendaz</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+      </properties>
+    </contributor>
   </contributors>
 
-
-  <distributionManagement>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
   <properties>
-    <encoding>UTF-8</encoding>
-    <github.global.server>github</github.global.server>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.reporting.version>3.0</maven.reporting.version>
-    <maven.version>3.3.9</maven.version>
-    <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-    <sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/
-    </sonatypeOssDistMgmtSnapshotsUrl>
-    <runtime.log>target/velocity.log</runtime.log>
-    <maven.reporting.version>3.0</maven.reporting.version>
+    <!-- Maven Artifacts -->
+    <invoker-plugin.version>3.3.0</invoker-plugin.version>
+    <maven.version>3.8.6</maven.version>
+    <maven-plugin.version>3.6.4</maven-plugin.version>
+
+    <!-- Velocity -->
+    <runtime.log>${project.build.directory}/velocity.log</runtime.log>
   </properties>
-
-  <prerequisites>
-    <maven>${maven.version}</maven>
-  </prerequisites>
-
-  <!-- dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>rhino</groupId>
-        <artifactId>js</artifactId>
-        <version>1.7R2</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement-->
 
   <dependencies>
     <dependency>
@@ -129,179 +135,38 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${maven-plugin.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>${maven.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.9.1</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.sonatype.plexus</groupId>
       <artifactId>plexus-build-api</artifactId>
       <version>0.0.7</version>
     </dependency>
   </dependencies>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </pluginRepository>
-  </pluginRepositories>
+
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-changes-plugin</artifactId>
-          <version>2.9</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.3</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.8.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jxr-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>taglist-maven-plugin</artifactId>
-          <version>2.4</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.6.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.1.1</version>
-            <configuration>
-                <minmemory>128m</minmemory>
-                <maxmemory>512m</maxmemory>
-                <useStandardDocletOptions>true</useStandardDocletOptions>
-                <charset>${encoding}</charset>
-                <encoding>${encoding}</encoding>
-                <docencoding>${encoding}</docencoding>
-                <docfilessubdirs>true</docfilessubdirs>
-                <breakiterator>true</breakiterator>
-                <version>true</version>
-                <author>true</author>
-                <keywords>true</keywords>
-                <attach>false</attach>
-                <doclint>-missing</doclint>
-                <links>
-                    <link>http://java.sun.com/j2se/${maven.compiler.source}/docs/api/</link>
-                    <link>http://slf4j.org/api/</link>
-                    <link>http://commons.apache.org/lang/api-release/</link>
-                    <link>http://commons.apache.org/io/api-release/</link>
-                    <link>http://junit.sourceforge.net/javadoc/</link>
-                </links>
-                <!-- additionalparam>-nopackagediagram</additionalparam-->
-                <!-- additionalparam>-sourceclasspath ${project.build.outputDirectory}</additionalparam-->
-                <!-- -sourceclasspath ${project.build.outputDirectory} -->
-                <excludePackageNames>${project.groupId}.example*:${project.groupId}.util.internal*</excludePackageNames>
-            </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.8.2</version>
-        <executions>
-          <execution>
-            <id>default-site</id>
-            <phase>site</phase>
-            <goals>
-              <goal>site</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>default-deploy</id>
-            <phase>site-deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
-          <templateFile>${basedir}/src/site/template-site.vm</templateFile>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <!-- make sure our code doesn't have 1.6 dependencies except where we know it see * http://mojo.codehaus.org/animal-sniffer/index.html * http://weblogs.java.net/blog/kohsuke/archive/2008/11/compiling_with.html -->
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>animal-sniffer-maven-plugin</artifactId>
-        <version>1.18</version>
-        <configuration>
-          <signature>
-            <groupId>org.codehaus.mojo.signature</groupId>
-            <artifactId>java18</artifactId>
-            <version>1.0</version>
-          </signature>
+          <templateFile>${project.basedir}/src/site/template-site.vm</templateFile>
         </configuration>
       </plugin>
       <plugin>
@@ -317,73 +182,36 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>sonatype-nexus-snapshots</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>false</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-api</artifactId>
-            <version>1.11.2</version>
-            <scope>compile</scope>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-gitexe</artifactId>
-            <version>1.11.2</version>
-            <scope>compile</scope>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <releaseProfiles>release</releaseProfiles>
-          <goals>install animal-sniffer:check site deploy nexus-staging:release</goals>
-          <useReleaseProfile>false</useReleaseProfile>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>${maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>default-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+
   <reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <version>${maven-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <configuration>
-          <tags>
-            <tag>TODO</tag>
-            <tag>FIXME</tag>
-            <tag>@todo</tag>
-            <tag>@deprecated</tag>
-          </tags>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-changes-plugin</artifactId>
         <reportSets>
           <reportSet>
@@ -395,6 +223,7 @@
       </plugin>
     </plugins>
   </reporting>
+
   <profiles>
     <profile>
       <id>integration-tests</id>
@@ -407,13 +236,12 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
+            <version>${invoker-plugin.version}</version>
             <configuration>
-              <!-- debugging -->
-              <!--<mavenOpts>-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y</mavenOpts>-->
-              <debug>false</debug>
               <streamLogs>true</streamLogs>
-              <projectsDirectory>src/it</projectsDirectory>
+              <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
               <pomIncludes>
                 <pomInclude>**/pom.xml</pomInclude>
               </pomIncludes>
@@ -429,51 +257,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>release</id>
-      <activation>
-        <property>
-          <name>performRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-site-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <version>0.12</version>
-            <executions>
-              <execution>
-                <phase>site</phase>
-                <goals>
-                  <goal>site</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <message>Building site for ${project.version}</message>
-            </configuration>
           </plugin>
         </plugins>
       </build>
