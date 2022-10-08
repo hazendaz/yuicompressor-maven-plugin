@@ -177,7 +177,7 @@ public class Aggregation {
                     return filesToAggregate;
                 }
             }
-            return new ArrayList<File>();
+            return new ArrayList<>();
         } else {
             return filesToAggregate;
         }
