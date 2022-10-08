@@ -4,6 +4,8 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
@@ -18,7 +20,6 @@ import java.util.List;
  * @author David Bernard
  * @since 2007-08-29
  */
-// @SuppressWarnings("unchecked")
 public abstract class MojoSupport extends AbstractMojo {
     
     /** The Constant EMPTY_STRING_ARRAY. */
@@ -26,108 +27,83 @@ public abstract class MojoSupport extends AbstractMojo {
 
     /**
      * Javascript source directory. (result will be put to outputDirectory).
-     * This allow project with "src/main/js" structure.
-     *
-     * @parameter expression="${project.build.sourceDirectory}/../js"
      */
+    @Parameter(defaultValue="${project.build.sourceDirectory}/../js")
     private File sourceDirectory;
 
     /**
      * Single directory for extra files to include in the WAR.
-     *
-     * @parameter expression="${basedir}/src/main/webapp"
      */
+    @Parameter(defaultValue="${project.basedir}/src/main/webapp")
     private File warSourceDirectory;
 
     /**
      * The directory where the webapp is built.
-     *
-     * @parameter expression="${project.build.directory}/${project.build.finalName}"
      */
+    @Parameter(defaultValue="${project.build.directory}/${project.build.finalName}")
     private File webappDirectory;
 
     /**
      * The output directory into which to copy the resources.
-     *
-     * @parameter property="project.build.outputDirectory"
      */
+    @Parameter(defaultValue="${project.build.outputDirectory}", required = true)
     private File outputDirectory;
 
     /**
      * The list of resources we want to transfer.
-     *
-     * @parameter property="project.resources"
      */
+    @Parameter(defaultValue="${project.resources}", required = true, readonly = true)
     private List<Resource> resources;
 
-    /**
-     * list of additional excludes
-     *
-     * @parameter
-     */
+    /** list of additional excludes. */
+    @Parameter
     private List<String> excludes;
 
-    /**
-     * Use processed resources if available
-     *
-     * @parameter default-value="false"
-     */
+    /** Use processed resources if available. */
+    @Parameter(defaultValue="false")
     private boolean useProcessedResources;
 
-    /**
-     * list of additional includes
-     *
-     * @parameter
-     */
+    /** list of additional includes. */
+    @Parameter
     private List<String> includes;
 
-    /**
-     * Excludes files from webapp directory
-     *
-     * @parameter
-     */
-    private boolean excludeWarSourceDirectory = false;
+    /** Excludes files from webapp directory. */
+    @Parameter
+    private boolean excludeWarSourceDirectory;
 
     /**
      * Excludes files from resources directories.
-     *
-     * @parameter default-value="false"
-     */
-    private boolean excludeResources = false;
+    */
+    @Parameter(defaultValue="false")
+    private boolean excludeResources;
 
-    /**
-     * @parameter property="project"
-     * @readonly
-     * @required
-     */
+    /** Maven Project. */
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
-    /**
-     * [js only] Display possible errors in the code
-     *
-     * @parameter property="maven.yuicompressor.jswarn" default-value="true"
-     */
+    /** [js only] Display possible errors in the code. */
+    @Parameter(defaultValue="true", property="maven.yuicompressor.jswarn")
     protected boolean jswarn;
 
     /**
      * Whether to skip execution.
-     *
-     * @parameter property="maven.yuicompressor.skip" default-value="false"
      */
+    @Parameter(defaultValue = "false", property="maven.yuicompressor.skip")
     private boolean skip;
 
     /**
-     * define if plugin must stop/fail on warnings.
-     *
-     * @parameter property="maven.yuicompressor.failOnWarning" default-value="false"
+     * Define if plugin must stop/fail on warnings.
      */
+    @Parameter(defaultValue = "false", property="maven.yuicompressor.failOnWarning")
     protected boolean failOnWarning;
 
     /**
-     * @component
+     * Build Context.
      */
+    @Component
     protected BuildContext buildContext;
 
+    /** The js error reporter. */
     protected ErrorReporter4Mojo jsErrorReporter_;
 
     public void execute() throws MojoExecutionException, MojoFailureException {

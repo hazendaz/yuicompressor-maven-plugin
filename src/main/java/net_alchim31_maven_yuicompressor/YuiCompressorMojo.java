@@ -3,6 +3,9 @@ package net_alchim31_maven_yuicompressor;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -21,124 +24,100 @@ import java.util.zip.GZIPOutputStream;
  * Apply compression on JS and CSS (using YUI Compressor).
  *
  * @author David Bernard
- * @goal compress
- * @phase process-resources
- * @threadSafe
  * @since 2007-08-28
  */
-// @SuppressWarnings("unchecked")
+@Mojo(name = "compress", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
 public class YuiCompressorMojo extends MojoSupport {
 
     /**
      * Read the input file using "encoding".
-     *
-     * @parameter property="file.encoding" default-value="UTF-8"
      */
+    @Parameter(defaultValue="${project.build.sourceEncoding}", property="file.encoding")
     private String encoding;
 
     /**
      * The output filename suffix.
-     *
-     * @parameter property="maven.yuicompressor.suffix" default-value="-min"
      */
+    @Parameter(defaultValue="-min", property="maven.yuicompressor.suffix")
     private String suffix;
 
     /**
      * If no "suffix" must be add to output filename (maven's configuration manage empty suffix like default).
-     *
-     * @parameter property="maven.yuicompressor.nosuffix" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.nosuffix")
     private boolean nosuffix;
 
     /**
      * Insert line breaks in output after the specified column number.
-     *
-     * @parameter property="maven.yuicompressor.linebreakpos" default-value="-1"
      */
+    @Parameter(defaultValue="-1", property="maven.yuicompressor.linebreakpos")
     private int linebreakpos;
 
-    /**
-     * [js only] No compression
-     *
-     * @parameter property="maven.yuicompressor.nocompress" default-value="false"
-     */
+    /** [js only] No compression. */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.nocompress")
     private boolean nocompress;
 
     /**
      * [js only] Minify only, do not obfuscate.
-     *
-     * @parameter property="maven.yuicompressor.nomunge" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.nomunge")
     private boolean nomunge;
 
     /**
      * [js only] Preserve unnecessary semicolons.
-     *
-     * @parameter property="maven.yuicompressor.preserveAllSemiColons" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.preserveAllSemiColons")
     private boolean preserveAllSemiColons;
 
     /**
      * [js only] disable all micro optimizations.
-     *
-     * @parameter property="maven.yuicompressor.disableOptimizations" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.disableOptimizations")
     private boolean disableOptimizations;
 
     /**
      * force the compression of every files,
      * else if compressed file already exists and is younger than source file, nothing is done.
-     *
-     * @parameter property="maven.yuicompressor.force" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.force")
     private boolean force;
 
     /**
      * a list of aggregation/concatenation to do after processing,
      * for example to create big js files that contain several small js files.
      * Aggregation could be done on any type of file (js, css, ...).
-     *
-     * @parameter
      */
+    @Parameter
     private Aggregation[] aggregations;
 
     /**
      * request to create a gzipped version of the yuicompressed/aggregation files.
-     *
-     * @parameter property="maven.yuicompressor.gzip" default-value="false"
      */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.gzip")
     private boolean gzip;
 
-    /**
-     * gzip level
-     *
-     * @parameter property="maven.yuicompressor.level" default-value="9"
-     */
+    /** gzip level. */
+    @Parameter(defaultValue="9", property="maven.yuicompressor.level")
     private int level;
 
     /**
      * show statistics (compression ratio).
-     *
-     * @parameter property="maven.yuicompressor.statistics" default-value="true"
      */
+    @Parameter(defaultValue="true", property="maven.yuicompressor.statistics")
     private boolean statistics;
 
-    /**
-     * aggregate files before minify
-     *
-     * @parameter property="maven.yuicompressor.preProcessAggregates" default-value="false"
-     */
+    /** aggregate files before minify. */
+    @Parameter(defaultValue="false", property="maven.yuicompressor.preProcessAggregates")
     private boolean preProcessAggregates;
 
-    /**
-     * use the input file as output when the compressed file is larger than the original
-     *
-     * @parameter property="maven.yuicompressor.useSmallestFile" default-value="true"
-     */
+    /** use the input file as output when the compressed file is larger than the original. */
+    @Parameter(defaultValue="true", property="maven.yuicompressor.useSmallestFile")
     private boolean useSmallestFile;
 
     /** The in size total. */
     private long inSizeTotal_;
+    
+    /** The out size total. */
     private long outSizeTotal_;
 
     /** Keep track of updated files for aggregation on incremental builds. */

@@ -1,16 +1,15 @@
 package net_alchim31_maven_yuicompressor;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Check JS files with jslint.
  *
  * @author David Bernard
- * @goal jslint
- * @phase process-resources
- * @threadSafe
  * @since 2007-08-29
  */
-// @SuppressWarnings("unchecked")
+@Mojo(name = "jslint", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
 public class JSLintMojo extends MojoSupport {
     
     /** The jslint. */

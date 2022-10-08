@@ -48,8 +48,5 @@ class JSLintChecker {
         args[0] = jslintPath_;
         args[1] = jsFile.getAbsolutePath();
         BasicRhinoShell.exec(args, reporter);
-        //if (Main.exec(args) != 0) {
-        //    reporter.warning("warnings during checking of :" + jsFile.getAbsolutePath(), null, -1, null, -1);
-        //}
     }
 }
