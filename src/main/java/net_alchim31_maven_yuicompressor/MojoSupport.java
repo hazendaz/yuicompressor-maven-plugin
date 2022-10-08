@@ -135,14 +135,10 @@ public abstract class MojoSupport extends AbstractMojo {
             if (failOnWarning && (jsErrorReporter_.getWarningCnt() > 0)) {
                 throw new MojoFailureException("warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
             }
-        } catch (RuntimeException exc) {
-            throw exc;
-        } catch (MojoFailureException exc) {
-            throw exc;
-        } catch (MojoExecutionException exc) {
-            throw exc;
-        } catch (Exception exc) {
-            throw new MojoExecutionException("wrap: " + exc.getMessage(), exc);
+        } catch (RuntimeException | MojoFailureException | MojoExecutionException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new MojoExecutionException("wrap: " + e.getMessage(), e);
         }
     }
 

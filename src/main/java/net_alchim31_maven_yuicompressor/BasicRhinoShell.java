@@ -37,6 +37,8 @@ package net_alchim31_maven_yuicompressor;
 
 import org.codehaus.plexus.util.IOUtil;
 import org.mozilla.javascript.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -54,6 +56,9 @@ import java.io.*;
 @SuppressWarnings("serial")
 public class BasicRhinoShell extends ScriptableObject {
 
+    /** The Constant logger. */
+    private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);
+  
     @Override
     public String getClassName() {
         return "global";
@@ -190,15 +195,15 @@ public class BasicRhinoShell extends ScriptableObject {
     public static void print(Context cx, Scriptable thisObj, Object[] args, Function funObj) {
         for (int i = 0; i < args.length; i++) {
             if (i > 0) {
-                System.out.print(" ");
+                logger.info("");
             }
 
             // Convert the arbitrary JavaScript value into a string form.
             String s = Context.toString(args[i]);
 
-            System.out.print(s);
+            logger.info(s);
         }
-        System.out.println();
+        logger.info("");
     }
 
     /**
@@ -296,8 +301,7 @@ public class BasicRhinoShell extends ScriptableObject {
             boolean hitEOF = false;
             do {
                 int startline = lineno;
-                System.err.print("js> ");
-                System.err.flush();
+                logger.info("js> ");
                 try {
                     String source = "";
                     // Collect lines of source to compile.
@@ -322,28 +326,27 @@ public class BasicRhinoShell extends ScriptableObject {
                     }
                     Object result = cx.evaluateString(this, source, sourceName, startline, null);
                     if (result != Context.getUndefinedValue()) {
-                        System.err.println(Context.toString(result));
+                        if (logger.isInfoEnabled()) {  
+                            logger.info("{}", Context.toString(result));
+                        }
                     }
-                } catch (WrappedException we) {
+                } catch (WrappedException e) {
                     // Some form of exception was caught by JavaScript and
                     // propagated up.
-                    System.err.println(we.getWrappedException().toString());
-                    we.printStackTrace();
-                } catch (EvaluatorException ee) {
+                    logger.info(e.getWrappedException().toString());
+                    logger.error("", e);
+                } catch (EvaluatorException | JavaScriptException e) {
                     // Some form of JavaScript error.
-                    System.err.println("js: " + ee.getMessage());
-                } catch (JavaScriptException jse) {
-                    // Some form of JavaScript error.
-                    System.err.println("js: " + jse.getMessage());
+                    logger.info("js: {}", e.getMessage());
                 } catch (IOException ioe) {
-                    System.err.println(ioe.toString());
+                    logger.info(ioe.toString());
                 }
                 if (quitting) {
                     // The user executed the quit() function.
                     break;
                 }
             } while (!hitEOF);
-            System.err.println();
+            logger.info("");
         } else {
             FileReader in = null;
             try {
@@ -354,24 +357,22 @@ public class BasicRhinoShell extends ScriptableObject {
             }
 
             try {
-                // Here we evalute the entire contents of the file as
+                // Here we evaluate the entire contents of the file as
                 // a script. Text is printed only if the print() function
                 // is called.
                 cx.evaluateReader(this, in, filename, 1, null);
-            } catch (WrappedException we) {
-                System.err.println(we.getWrappedException().toString());
-                we.printStackTrace();
-            } catch (EvaluatorException ee) {
-                System.err.println("js: " + ee.getMessage());
-            } catch (JavaScriptException jse) {
-                System.err.println("js: " + jse.getMessage());
-            } catch (IOException ioe) {
-                System.err.println(ioe.toString());
+            } catch (WrappedException e) {
+                logger.info(e.getWrappedException().toString());
+                logger.error("", e);
+            } catch (EvaluatorException | JavaScriptException e) {
+                logger.info("js: {}", e.getMessage());
+            } catch (IOException e) {
+                logger.info(e.toString());
             } finally {
                 try {
                     in.close();
                 } catch (IOException ioe) {
-                    System.err.println(ioe.toString());
+                    logger.info(ioe.toString());
                 }
             }
         }
@@ -383,8 +384,9 @@ public class BasicRhinoShell extends ScriptableObject {
      * @param s the s
      */
     private static void p(String s) {
-        System.out.println(s);
+        logger.info(s);
     }
 
+    /** The quitting. */
     private boolean quitting;
 }
