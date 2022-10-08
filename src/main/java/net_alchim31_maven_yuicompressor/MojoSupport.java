@@ -208,8 +208,8 @@ public abstract class MojoSupport extends AbstractMojo {
             return;
         }
         if (!srcRoot.exists()) {
-            buildContext.addMessage(srcRoot, 0, 0, "Directory " + srcRoot.getPath() + " does not exists", BuildContext.SEVERITY_WARNING, null);
-            getLog().info("Directory " + srcRoot.getPath() + " does not exists");
+            buildContext.addMessage(srcRoot, 0, 0, "Directory " + srcRoot.getPath() + " does not exist", BuildContext.SEVERITY_WARNING, null);
+            getLog().info("Directory " + srcRoot.getPath() + " does not exist");
             return;
         }
         if (destRoot == null) {
