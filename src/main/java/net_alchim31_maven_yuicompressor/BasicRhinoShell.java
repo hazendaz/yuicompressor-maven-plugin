@@ -76,14 +76,14 @@ public class BasicRhinoShell extends ScriptableObject {
         try {
             // Initialize the standard objects (Object, Function, etc.)
             // This must be done before scripts can be executed.
-            BasicRhinoShell BasicRhinoShell = new BasicRhinoShell();
-            cx.initStandardObjects(BasicRhinoShell);
+            BasicRhinoShell basicRhinoShell = new BasicRhinoShell();
+            cx.initStandardObjects(basicRhinoShell);
 
             // Define some global functions particular to the BasicRhinoShell.
             // Note
             // that these functions are not part of ECMA.
             String[] names = {"print", "quit", "version", "load", "help", "readFile", "warn"};
-            BasicRhinoShell.defineFunctionProperties(names, BasicRhinoShell.class, ScriptableObject.DONTENUM);
+            basicRhinoShell.defineFunctionProperties(names, BasicRhinoShell.class, ScriptableObject.DONTENUM);
 
             args = processOptions(cx, args);
 
@@ -97,10 +97,10 @@ public class BasicRhinoShell extends ScriptableObject {
                 array = new Object[length];
                 System.arraycopy(args, 1, array, 0, length);
             }
-            Scriptable argsObj = cx.newArray(BasicRhinoShell, array);
-            BasicRhinoShell.defineProperty("arguments", argsObj, ScriptableObject.DONTENUM);
+            Scriptable argsObj = cx.newArray(basicRhinoShell, array);
+            basicRhinoShell.defineProperty("arguments", argsObj, ScriptableObject.DONTENUM);
 
-            BasicRhinoShell.processSource(cx, args.length == 0 ? null : args[0]);
+            basicRhinoShell.processSource(cx, args.length == 0 ? null : args[0]);
         } finally {
             Context.exit();
         }
@@ -275,9 +275,9 @@ public class BasicRhinoShell extends ScriptableObject {
      * @param funObj the fun obj
      */
     public static void load(Context cx, Scriptable thisObj, Object[] args, Function funObj) {
-        BasicRhinoShell BasicRhinoShell = (BasicRhinoShell) getTopLevelScope(thisObj);
+        BasicRhinoShell basicRhinoShell = (BasicRhinoShell) getTopLevelScope(thisObj);
         for (Object element : args) {
-            BasicRhinoShell.processSource(cx, Context.toString(element));
+            basicRhinoShell.processSource(cx, Context.toString(element));
         }
     }
 
