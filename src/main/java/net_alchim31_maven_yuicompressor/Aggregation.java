@@ -93,7 +93,9 @@ public class Aggregation {
                         }
                     }
                     if (removeIncluded) {
-                        file.delete();
+                        if (file.exists() && file.delete()) {
+                          throw new IllegalStateException("unable to delete file: " + file);
+                        }
                         buildContext.refresh(file);
                     }
                 }
