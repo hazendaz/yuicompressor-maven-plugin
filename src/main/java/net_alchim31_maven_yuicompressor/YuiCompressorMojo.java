@@ -142,7 +142,7 @@ public class YuiCompressorMojo extends MojoSupport {
     private long outSizeTotal_;
 
     /** Keep track of updated files for aggregation on incremental builds. */
-    private Set<String> incrementalFiles = null;
+    private Set<String> incrementalFiles;
 
     @Override
     protected String[] getDefaultIncludes() throws Exception {
@@ -164,7 +164,9 @@ public class YuiCompressorMojo extends MojoSupport {
             getLog().info(String.format("total input (%db) -> output (%db)[%d%%]", inSizeTotal_, outSizeTotal_, ((outSizeTotal_ * 100) / inSizeTotal_)));
         }
 
-        if (!preProcessAggregates) aggregate();
+        if (!preProcessAggregates) {
+            aggregate();
+        }
     }
 
     /**
@@ -206,7 +208,7 @@ public class YuiCompressorMojo extends MojoSupport {
                 return;
             }
             if (incrementalFiles == null) {
-                incrementalFiles = new HashSet<String>();
+                incrementalFiles = new HashSet<>();
             }
         }
 
