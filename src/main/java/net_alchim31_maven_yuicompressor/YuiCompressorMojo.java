@@ -23,8 +23,8 @@ import java.util.zip.GZIPOutputStream;
  * @author David Bernard
  * @goal compress
  * @phase process-resources
- * @created 2007-08-28
  * @threadSafe
+ * @since 2007-08-28
  */
 // @SuppressWarnings("unchecked")
 public class YuiCompressorMojo extends MojoSupport {

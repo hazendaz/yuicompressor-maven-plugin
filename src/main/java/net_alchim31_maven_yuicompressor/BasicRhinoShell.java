@@ -45,10 +45,11 @@ import java.io.*;
  * <p>
  * Can execute scripts interactively or in batch mode at the command line. An
  * example of controlling the JavaScript engine.
+ * <p>
+ * Based on Rhino (2007-08-30).
  *
  * @author Norris Boyd
- * @based http://lxr.mozilla.org/mozilla/source/js/rhino/examples/BasicRhinoShell.java
- * (2007-08-30)
+ * @see <a href="http://lxr.mozilla.org/mozilla/source/js/rhino/examples/BasicRhinoShell.java">Basic Rhino Shell</a>
  */
 @SuppressWarnings("serial")
 public class BasicRhinoShell extends ScriptableObject {

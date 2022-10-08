@@ -7,8 +7,8 @@ package net_alchim31_maven_yuicompressor;
  * @author David Bernard
  * @goal jslint
  * @phase process-resources
- * @created 2007-08-29
  * @threadSafe
+ * @since 2007-08-29
  */
 // @SuppressWarnings("unchecked")
 public class JSLintMojo extends MojoSupport {

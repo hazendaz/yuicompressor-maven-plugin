@@ -16,7 +16,7 @@ import java.util.List;
  * Common class for mojos.
  *
  * @author David Bernard
- * @created 2007-08-29
+ * @since 2007-08-29
  */
 // @SuppressWarnings("unchecked")
 public abstract class MojoSupport extends AbstractMojo {
