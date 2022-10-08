@@ -58,7 +58,7 @@ public class BasicRhinoShell extends ScriptableObject {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);
-  
+
     @Override
     public String getClassName() {
         return "global";
@@ -326,7 +326,7 @@ public class BasicRhinoShell extends ScriptableObject {
                     }
                     Object result = cx.evaluateString(this, source, sourceName, startline, null);
                     if (result != Context.getUndefinedValue()) {
-                        if (logger.isInfoEnabled()) {  
+                        if (logger.isInfoEnabled()) {
                             logger.info("{}", Context.toString(result));
                         }
                     }

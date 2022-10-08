@@ -117,7 +117,7 @@ public class YuiCompressorMojo extends MojoSupport {
 
     /** The in size total. */
     private long inSizeTotal_;
-    
+
     /** The out size total. */
     private long outSizeTotal_;
 

@@ -13,7 +13,7 @@ import java.util.HashSet;
  * The Class AggregationTestCase.
  */
 public class AggregationTestCase extends TestCase {
-    
+
     /** The dir. */
     private File dir_;
 

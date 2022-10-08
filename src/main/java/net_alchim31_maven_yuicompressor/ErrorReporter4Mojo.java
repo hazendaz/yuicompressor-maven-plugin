@@ -14,22 +14,22 @@ public class ErrorReporter4Mojo implements ErrorReporter {
 
     /** The default filename. */
     private String defaultFilename_;
-    
+
     /** The accept warn. */
     private boolean acceptWarn_;
-    
+
     /** The log. */
     private Log log_;
-    
+
     /** The warning cnt. */
     private int warningCnt_;
-    
+
     /** The error cnt. */
     private int errorCnt_;
-    
+
     /** The build context. */
     private BuildContext buildContext_;
-    
+
     /** The source file. */
     private File sourceFile_;
 

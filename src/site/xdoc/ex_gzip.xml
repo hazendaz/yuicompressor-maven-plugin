@@ -4,7 +4,7 @@
   </properties>
  <body>
  <section name="Enable Gzip">
- 
+
 <p>To Compress every js and css files and generate a gzipped version (gzip option doesn't remove input file):
 <source><![CDATA[
 <project>
@@ -21,7 +21,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
         <configuration>
           <gzip>true</gzip>
         </configuration>

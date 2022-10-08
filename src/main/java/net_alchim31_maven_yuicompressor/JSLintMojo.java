@@ -11,7 +11,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "jslint", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
 public class JSLintMojo extends MojoSupport {
-    
+
     /** The jslint. */
     private JSLintChecker jslint_;
 

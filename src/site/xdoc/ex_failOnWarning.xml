@@ -22,7 +22,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
         <configuration>
           <failOnWarning>true</failOnWarning>
         </configuration>

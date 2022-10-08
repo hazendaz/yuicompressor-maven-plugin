@@ -4,7 +4,7 @@
   </properties>
  <body>
  <section name="Usage">
- 
+
  <subsection name="Without pom.xml change">
 <p>To Check every js :
  <source><![CDATA[
@@ -14,7 +14,7 @@
  </subsection>
 
 
- 
+
  <subsection name="With pom.xml change">
 <p>To Check every js :
 <source><![CDATA[

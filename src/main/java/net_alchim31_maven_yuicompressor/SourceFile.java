@@ -9,16 +9,16 @@ public class SourceFile {
 
     /** The src root. */
     private File srcRoot_;
-    
+
     /** The dest root. */
     private File destRoot_;
-    
+
     /** The dest as source. */
     private boolean destAsSource_;
-    
+
     /** The rpath. */
     private String rpath_;
-    
+
     /** The extension. */
     private String extension_;
 

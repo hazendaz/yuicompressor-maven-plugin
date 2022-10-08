@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2007-08-29
  */
 public abstract class MojoSupport extends AbstractMojo {
-    
+
     /** The Constant EMPTY_STRING_ARRAY. */
     private static final String[] EMPTY_STRING_ARRAY = {};
 
@@ -166,7 +166,7 @@ public abstract class MojoSupport extends AbstractMojo {
 
     /**
      * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than *.css or *.js
-     * 
+     *
      * see https://github.com/davidB/yuicompressor-maven-plugin/issues/19
      *
      * @param srcRoot the src root

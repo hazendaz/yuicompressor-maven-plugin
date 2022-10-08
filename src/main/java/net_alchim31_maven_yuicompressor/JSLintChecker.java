@@ -12,7 +12,7 @@ import java.io.InputStream;
  */
 //TODO: use MojoErrorReporter
 class JSLintChecker {
-    
+
     /** The jslint path. */
     private String jslintPath_;
 

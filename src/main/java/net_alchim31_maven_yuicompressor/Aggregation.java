@@ -13,31 +13,31 @@ import java.util.*;
  * The Class Aggregation.
  */
 public class Aggregation {
-    
+
     /** The input dir. */
     public File inputDir;
-    
+
     /** The output. */
     public File output;
-    
+
     /** The includes. */
     public String[] includes;
-    
+
     /** The excludes. */
     public String[] excludes;
-    
+
     /** The remove included. */
     public boolean removeIncluded;
-    
+
     /** The insert new line. */
     public boolean insertNewLine;
-    
+
     /** The insert file header. */
     public boolean insertFileHeader;
-    
+
     /** The fix last semicolon. */
     public boolean fixLastSemicolon;
-    
+
     /** The auto exclude wildcards. */
     public boolean autoExcludeWildcards;
 

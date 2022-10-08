@@ -25,7 +25,7 @@
 <subsection name="Executable war">
 <ul>
 <li><a href="http://alchim.sf.net/winstone-maven-plugin/index.html">Winstone Maven Plugin</a>: Embed your warfile into/with the winstone JAR itself. This allows an all-in-one container plus web-application JAR file to run as a standalone application.</li>
-<li><a href="http://simplericity.com/2009/11/10/1257880778509.html">JettyConsole Maven Plugin</a>: Make your war file executable with the Jetty Console Maven plugin</li> 
+<li><a href="http://simplericity.com/2009/11/10/1257880778509.html">JettyConsole Maven Plugin</a>: Make your war file executable with the Jetty Console Maven plugin</li>
 <li>an article for Jetty 6 : <a href="http://eclipsesource.com/blogs/2009/10/02/executable-wars-with-jetty/">Executable WARs with Jetty</a></li>
 <li>an article for Jetty 7 : <a href="http://open.bekk.no/2011/01/14/embedded-jetty-7-webapp-executable-with-maven/">Embedded Jetty 7 webapp executable with Maven</a></li>
 </ul>

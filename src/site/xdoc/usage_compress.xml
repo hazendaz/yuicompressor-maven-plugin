@@ -4,7 +4,7 @@
   </properties>
  <body>
  <section name="Usage">
- 
+
  <subsection name="Without pom.xml change">
 <p>To Compress every js and css files :
  <source><![CDATA[
@@ -23,7 +23,7 @@
  </subsection>
 
 
- 
+
  <subsection name="With pom.xml change">
 <p>To Compress every js and css files at process-resources phase (before compile) :
 <source><![CDATA[
@@ -41,7 +41,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
       </plugin>
 ...
     </plugins>
@@ -67,7 +67,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
         <configuration>
           <nosuffix>true</nosuffix>
         </configuration>
@@ -96,7 +96,7 @@
               <goal>compress</goal>
             </goals>
           </execution>
-        </executions>        
+        </executions>
         <configuration>
           <excludes>
             <exclude>**/*.pack.js</exclude>
