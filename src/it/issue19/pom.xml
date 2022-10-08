@@ -12,11 +12,11 @@
   </properties>
   <build>
     <filters>
-      <filter>src/main/filters/dev.properties</filter>
+      <filter>${project.basedir}/src/main/filters/dev.properties</filter>
     </filters>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>${project.basedir}/src/main/resources</directory>
         <filtering>true</filtering>
         <includes>
           <include>webapp.properties</include>

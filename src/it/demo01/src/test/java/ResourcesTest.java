@@ -2,14 +2,16 @@ package net_alchim31_maven_yuicompressor;
 
 import java.io.File;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.apache.commons.io.FileUtils;
 
-public class ResourcesTest extends TestCase {
+public class ResourcesTest {
 
     private File outputDir_ = new File("target/classes");
 
+    @Test
     public void testSimpleResources() throws Exception {
         File r01 = new File(outputDir_, "file_r01.js");
         assertExists(r01);
@@ -20,6 +22,7 @@ public class ResourcesTest extends TestCase {
         assertNoComments(r02);
     }
 
+    @Test
     public void testResourcesWithFilter() throws Exception {
         File r01 = new File(outputDir_, "file_rf01.js");
         assertExists(r01);
@@ -32,6 +35,7 @@ public class ResourcesTest extends TestCase {
         assertNoFilteringValue(r02);
     }
 
+    @Test
     public void testResourcesWithTargetPath() throws Exception {
         File r01 = new File(outputDir_, "redirect/file_rr01.js");
         assertExists(r01);
@@ -45,22 +49,22 @@ public class ResourcesTest extends TestCase {
     }
 
     private void assertExists(File file) throws Exception {
-        assertTrue(file.getName() + " not found", file.exists());
+      Assert.assertTrue(file.getName() + " not found", file.exists());
     }
 
     private void assertNotExists(File file) throws Exception {
-        assertFalse(file.getName() + " found", file.exists());
+      Assert.assertFalse(file.getName() + " found", file.exists());
     }
 
     private void assertNoComments(File file) throws Exception {
         String content = FileUtils.readFileToString(file);
         //System.out.println(file + ": "+ content);
-        assertTrue("comments found (=> not compressed)", content.indexOf("//") < 0);
-        assertTrue("comments found (=> not compressed)", content.indexOf("/*") < 0);
+        Assert.assertTrue("comments found (=> not compressed)", content.indexOf("//") < 0);
+        Assert.assertTrue("comments found (=> not compressed)", content.indexOf("/*") < 0);
     }
 
     private void assertNoFilteringValue(File file) throws Exception {
         String content = FileUtils.readFileToString(file);
-        assertTrue("property to filter found", content.indexOf("${") < 0);
+        Assert.assertTrue("property to filter found", content.indexOf("${") < 0);
     }
 }
