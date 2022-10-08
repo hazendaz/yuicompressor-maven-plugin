@@ -72,7 +72,7 @@ public class Aggregation {
             files = getIncludedFiles(null, buildContext, incrementalFiles);
         }
 
-        if (files.size() != 0) {
+        if (!files.isEmpty()) {
             output = output.getCanonicalFile();
             output.getParentFile().mkdirs();
             OutputStream out = buildContext.newFileOutputStream(output);
