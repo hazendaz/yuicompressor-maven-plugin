@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -211,7 +212,7 @@ public class YuiCompressorMojo extends MojoSupport {
         File outFileTmp = new File(outFile.getAbsolutePath() + ".tmp");
         FileUtils.forceDelete(outFileTmp);
         try {
-            in = new InputStreamReader(new FileInputStream(inFile), encoding);
+            in = new InputStreamReader(new FileInputStream(inFile), Charset.forName(encoding));
             if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
                 throw new MojoExecutionException("Cannot create resource output directory: " + outFile.getParentFile());
             }
@@ -219,7 +220,7 @@ public class YuiCompressorMojo extends MojoSupport {
 
             getLog().debug("start compression");
             /* outFileTmp will be deleted create with FileOutputStream  */
-            out = new OutputStreamWriter(new FileOutputStream(outFileTmp), encoding);
+            out = new OutputStreamWriter(new FileOutputStream(outFileTmp), Charset.forName(encoding));
             if (nocompress) {
                 getLog().info("No compression is enabled");
                 IOUtil.copy(in, out);
