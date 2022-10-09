@@ -22,19 +22,13 @@ class JSLintChecker {
      * @throws Exception the exception
      */
     public JSLintChecker() throws Exception {
-        FileOutputStream out = null;
-        InputStream in = null;
-        try {
-            File jslint = File.createTempFile("jslint", ".js");
-            jslint.deleteOnExit();
-            in = getClass().getResourceAsStream("/jslint.js");
-            out = new FileOutputStream(jslint);
+        File jslint = File.createTempFile("jslint", ".js");
+        jslint.deleteOnExit();
+        try (InputStream in = getClass().getResourceAsStream("/jslint.js");
+            FileOutputStream out = new FileOutputStream(jslint)) {
             IOUtil.copy(in, out);
-            jslintPath_ = jslint.getAbsolutePath();
-        } finally {
-            IOUtil.close(in);
-            IOUtil.close(out);
         }
+        jslintPath_ = jslint.getAbsolutePath();
     }
 
     /**
