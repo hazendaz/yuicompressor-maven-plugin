@@ -29,16 +29,6 @@ dist
 test-output
 build.log
 
-# other scm
-.svn
-.CVS
-.hg*
-
-# switch to regexp syntax.
-#  syntax: regexp
-#  ^\.pc/
-
-
 /pom.xml.releaseBackup
 /release.properties
 .factorypath
