@@ -75,14 +75,12 @@ public class Aggregation {
         if (!files.isEmpty()) {
             output = output.getCanonicalFile();
             output.getParentFile().mkdirs();
-            OutputStream out = buildContext.newFileOutputStream(output);
-            try {
+            try (OutputStream out = buildContext.newFileOutputStream(output)) {
                 for (File file : files) {
                     if (file.getCanonicalPath().equals(output.getCanonicalPath())) {
                         continue;
                     }
-                    FileInputStream in = new FileInputStream(file);
-                    try {
+                    try (FileInputStream in = new FileInputStream(file)) {
                         if (insertFileHeader) {
                             out.write(createFileHeader(file).getBytes());
                         }
@@ -93,18 +91,12 @@ public class Aggregation {
                         if (insertNewLine) {
                             out.write('\n');
                         }
-                    } finally {
-                        IOUtil.close(in);
-                        in = null;
                     }
                     if (removeIncluded) {
                         file.delete();
                         buildContext.refresh(file);
                     }
                 }
-            } finally {
-                IOUtil.close(out);
-                out = null;
             }
         }
         return files;
