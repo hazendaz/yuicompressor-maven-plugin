@@ -207,20 +207,19 @@ public class YuiCompressorMojo extends MojoSupport {
             }
             return;
         }
-        InputStreamReader in = null;
-        OutputStreamWriter out = null;
         File outFileTmp = new File(outFile.getAbsolutePath() + ".tmp");
         FileUtils.forceDelete(outFileTmp);
-        try {
-            in = new InputStreamReader(new FileInputStream(inFile), Charset.forName(encoding));
-            if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
-                throw new MojoExecutionException("Cannot create resource output directory: " + outFile.getParentFile());
-            }
-            getLog().debug("use a temporary outputfile (in case in == out)");
+
+        if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
+            throw new MojoExecutionException("Cannot create resource output directory: " + outFile.getParentFile());
+        }
+        getLog().debug("use a temporary outputfile (in case in == out)");
+
+        try (InputStreamReader in = new InputStreamReader(new FileInputStream(inFile), Charset.forName(encoding));
+            /* outFileTmp will be deleted create with FileOutputStream  */
+            OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outFileTmp), Charset.forName(encoding));) {
 
             getLog().debug("start compression");
-            /* outFileTmp will be deleted create with FileOutputStream  */
-            out = new OutputStreamWriter(new FileOutputStream(outFileTmp), Charset.forName(encoding));
             if (nocompress) {
                 getLog().info("No compression is enabled");
                 IOUtil.copy(in, out);
@@ -231,9 +230,6 @@ public class YuiCompressorMojo extends MojoSupport {
                 compressCss(in, out);
             }
             getLog().debug("end compression");
-        } finally {
-            IOUtil.close(in);
-            IOUtil.close(out);
         }
 
         boolean outputIgnored = useSmallestFile && inFile.length() < outFile.length();
