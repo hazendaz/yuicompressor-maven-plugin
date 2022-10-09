@@ -9,10 +9,16 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Class Aggregation.
  */
 public class Aggregation {
+
+    /** The Constant Logger. */
+    private static final Logger logger = LoggerFactory.getLogger(Aggregation.class);
 
     /** The input dir. */
     public File inputDir;
@@ -94,7 +100,7 @@ public class Aggregation {
                     }
                     if (removeIncluded) {
                         if (file.exists() && file.delete()) {
-                          throw new IllegalStateException("unable to delete file: " + file);
+                          logger.warn("unable to delete file: {}", file);
                         }
                         buildContext.refresh(file);
                     }
