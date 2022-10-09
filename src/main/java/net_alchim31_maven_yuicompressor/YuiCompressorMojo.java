@@ -215,7 +215,7 @@ public class YuiCompressorMojo extends MojoSupport {
         }
 
         File outFile = src.toDestFile(suffix);
-        if (isMinifiedFile(inFile)) {
+        if (!nosuffix && isMinifiedFile(inFile)) {
             return;
         }
         if (minifiedFileExistsInSource(inFile, outFile)) {
