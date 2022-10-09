@@ -304,19 +304,13 @@ public class YuiCompressorMojo extends MojoSupport {
         }
         File gzipped = new File(file.getAbsolutePath() + ".gz");
         getLog().debug(String.format("create gzip version : %s", gzipped.getName()));
-        GZIPOutputStream out = null;
-        FileInputStream in = null;
-        try {
-            out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {
+        try (FileInputStream in = new FileInputStream(file);
+            GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {
                 {
                     def.setLevel(level);
                 }
-            };
-            in = new FileInputStream(file);
+            };) {
             IOUtil.copy(in, out);
-        } finally {
-            IOUtil.close(in);
-            IOUtil.close(out);
         }
         return gzipped;
     }
