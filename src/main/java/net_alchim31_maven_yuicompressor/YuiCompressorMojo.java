@@ -220,10 +220,6 @@ public class YuiCompressorMojo extends MojoSupport {
         if (!nosuffix && isMinifiedFile(inFile)) {
             return;
         }
-        if (minifiedFileExistsInSource(inFile, outFile)) {
-            getLog().info("compressed file " + outFile.getAbsolutePath() + " already exists in the source directory: " + inFile.getAbsolutePath());
-            return;
-        }
         getLog().debug("only compress if input file is younger than existing output file");
         if (!force && outFile.exists() && (outFile.lastModified() > inFile.lastModified())) {
             if (getLog().isInfoEnabled()) {
@@ -370,18 +366,4 @@ public class YuiCompressorMojo extends MojoSupport {
         return filename.endsWith(suffix + ".js") || filename.endsWith(suffix + ".css");
     }
 
-    /**
-     * Minified file exists in source.
-     *
-     * @param source the source
-     * @param dest the dest
-     * @return true, if successful
-     * @throws InterruptedException the interrupted exception
-     */
-    private static boolean minifiedFileExistsInSource(File source, File dest) throws InterruptedException {
-        String parent = source.getParent();
-        String destFilename = dest.getName();
-        File file = new File(parent + File.separator + destFilename);
-        return file.exists();
-    }
 }
