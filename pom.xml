@@ -118,6 +118,9 @@
 
     <!-- Velocity -->
     <runtime.log>${project.build.directory}/velocity.log</runtime.log>
+
+    <!-- Automatic Module Name -->
+    <module.name>com.github.hazendaz.yuicompressor.maven.plugin</module.name>
   </properties>
 
   <dependencies>
