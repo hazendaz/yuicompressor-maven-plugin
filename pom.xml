@@ -121,6 +121,9 @@
 
     <!-- Automatic Module Name -->
     <module.name>com.github.hazendaz.yuicompressor.maven.plugin</module.name>
+
+    <!-- Reproducible Builds -->
+    <project.build.outputTimestamp>1681596927</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
