@@ -186,7 +186,7 @@ public class Aggregation {
             if (incrementalFiles != null) {
                 boolean aggregateMustBeUpdated = false;
                 for (File file : filesToAggregate) {
-                    if (incrementalFiles.contains(file.getAbsolutePath())) {
+                    if (incrementalFiles.contains(file.getCanonicalPath())) {
                         aggregateMustBeUpdated = true;
                         break;
                     }

@@ -263,7 +263,7 @@ public class YuiCompressorMojo extends MojoSupport {
         }
 
         if (buildContext.isIncremental()) {
-            incrementalFiles.add(outFile.getAbsolutePath());
+            incrementalFiles.add(outFile.getCanonicalPath());
         }
 
         File gzipped = gzipIfRequested(outFile);
