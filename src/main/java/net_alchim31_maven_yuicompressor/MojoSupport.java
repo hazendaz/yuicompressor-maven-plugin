@@ -242,7 +242,7 @@ public abstract class MojoSupport extends AbstractMojo {
         }
         for (String name : includedFiles) {
             SourceFile src = new SourceFile(srcRoot, destRoot, name, destAsSource);
-            jsErrorReporter_.setDefaultFileName("..." + src.toFile().getAbsolutePath().substring(src.toFile().getAbsolutePath().lastIndexOf('/') + 1));
+            jsErrorReporter_.setDefaultFileName("..." + src.toFile().getCanonicalPath().substring(src.toFile().getCanonicalPath().lastIndexOf('/') + 1));
             jsErrorReporter_.setFile(src.toFile());
             processFile(src);
         }

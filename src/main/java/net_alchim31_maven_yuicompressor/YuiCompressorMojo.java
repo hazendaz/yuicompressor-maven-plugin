@@ -317,7 +317,7 @@ public class YuiCompressorMojo extends MojoSupport {
         if (".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
             return null;
         }
-        File gzipped = new File(file.getAbsolutePath() + ".gz");
+        File gzipped = new File(file.getCanonicalPath() + ".gz");
         getLog().debug(String.format("create gzip version : %s", gzipped.getName()));
         try (FileInputStream in = new FileInputStream(file);
             GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {
