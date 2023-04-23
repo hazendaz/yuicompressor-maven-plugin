@@ -25,7 +25,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.plexus.build.incremental.DefaultBuildContext;
+import org.codehaus.plexus.build.DefaultBuildContext;
 
 import java.io.File;
 import java.util.Collection;

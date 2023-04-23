@@ -21,7 +21,7 @@ package net_alchim31_maven_yuicompressor;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.IOUtil;
-import org.sonatype.plexus.build.incremental.BuildContext;
+import org.codehaus.plexus.build.BuildContext;
 
 import java.io.File;
 import java.io.FileInputStream;
