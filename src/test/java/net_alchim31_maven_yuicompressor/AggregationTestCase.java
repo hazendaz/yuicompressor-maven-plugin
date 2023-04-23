@@ -88,7 +88,7 @@ public class AggregationTestCase {
     @Test
     public void test1to1() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
         target.includes = new String[]{f1.getName()};
@@ -107,10 +107,10 @@ public class AggregationTestCase {
     @Test
     public void test2to1() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
@@ -137,10 +137,10 @@ public class AggregationTestCase {
     @Test
     public void testNoDuplicateAggregation() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
@@ -167,10 +167,10 @@ public class AggregationTestCase {
     @Test
     public void test2to1Order() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "2");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "2");
 
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
@@ -190,10 +190,10 @@ public class AggregationTestCase {
     @Test
     public void test2to1WithNewLine() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
@@ -214,15 +214,15 @@ public class AggregationTestCase {
     @Test
     public void testAbsolutePathFromInside() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
 
-        target.includes = new String[]{f1.getAbsolutePath(), f2.getName()};
+        target.includes = new String[]{f1.getCanonicalPath(), f2.getName()};
         Assert.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
         Assert.assertTrue(target.output.exists());
@@ -238,15 +238,15 @@ public class AggregationTestCase {
     public void testAbsolutePathFromOutside() throws Exception {
         File f1 = File.createTempFile("test-01", ".js");
         try {
-            FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+            FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
             File f2 = new File(dir_, "02.js");
-            FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+            FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
             Aggregation target = new Aggregation();
             target.output = new File(dir_, "output.js");
 
-            target.includes = new String[]{f1.getAbsolutePath(), f2.getName()};
+            target.includes = new String[]{f1.getCanonicalPath(), f2.getName()};
             Assert.assertFalse(target.output.exists());
             target.run(null, defaultBuildContext);
             Assert.assertTrue(target.output.exists());
@@ -264,10 +264,10 @@ public class AggregationTestCase {
     @Test
     public void testAutoExcludeWildcards() throws Exception {
         File f1 = new File(dir_, "01.js");
-        FileUtils.fileWrite(f1.getAbsolutePath(), "1");
+        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
         File f2 = new File(dir_, "02.js");
-        FileUtils.fileWrite(f2.getAbsolutePath(), "22\n22");
+        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
 
         Aggregation target = new Aggregation();
         target.autoExcludeWildcards = true;
