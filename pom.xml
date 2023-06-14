@@ -152,7 +152,7 @@
       <artifactId>yuicompressor</artifactId>
       <!-- 2.4.8 seems to have issue on windows : https://github.com/yui/yuicompressor/issues/78 -->
       <!-- 2.4.8 failed to process empty file (demo01) : https://github.com/yui/yuicompressor/issues/130 -->
-      <version>2.4.7</version>
+      <version>2.4.8</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
