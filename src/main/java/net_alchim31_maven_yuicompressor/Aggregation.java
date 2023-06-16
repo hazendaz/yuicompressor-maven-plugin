@@ -26,6 +26,7 @@ import org.codehaus.plexus.build.BuildContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -107,7 +108,7 @@ public class Aggregation {
                     }
                     try (FileInputStream in = new FileInputStream(file)) {
                         if (insertFileHeader) {
-                            out.write(createFileHeader(file).getBytes());
+                            out.write(createFileHeader(file).getBytes(StandardCharsets.UTF_8));
                         }
                         IOUtil.copy(in, out);
                         if (fixLastSemicolon) {
