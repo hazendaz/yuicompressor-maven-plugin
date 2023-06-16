@@ -84,7 +84,6 @@ import org.slf4j.LoggerFactory;
  *
  * @see <a href="http://lxr.mozilla.org/mozilla/source/js/rhino/examples/BasicRhinoShell.java">Basic Rhino Shell</a>
  */
-@SuppressWarnings("serial")
 public class BasicRhinoShell extends ScriptableObject {
 
     /** The Constant serial version uid. */
@@ -92,6 +91,9 @@ public class BasicRhinoShell extends ScriptableObject {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);
+
+    /** The quitting. */
+    private boolean quitting;
 
     @Override
     public String getClassName() {
@@ -431,6 +433,4 @@ public class BasicRhinoShell extends ScriptableObject {
         logger.info(s);
     }
 
-    /** The quitting. */
-    private boolean quitting;
 }
