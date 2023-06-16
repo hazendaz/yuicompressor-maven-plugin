@@ -37,6 +37,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
@@ -351,7 +352,7 @@ public class YuiCompressorMojo extends MojoSupport {
      * @return true, if is minified file
      */
     private boolean isMinifiedFile(File inFile) {
-        String filename = inFile.getName().toLowerCase();
+        String filename = inFile.getName().toLowerCase(Locale.getDefault());
         return filename.endsWith(suffix + ".js") || filename.endsWith(suffix + ".css");
     }
 
