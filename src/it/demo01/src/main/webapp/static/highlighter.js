@@ -30,10 +30,10 @@ function getElementsByClassName(oElm, strTagName, strClassName){
 	var oRegExp = new RegExp("(^|\\s)" + strClassName + "(\\s|$)");
 	var oElement;
 	for(var i=0; i<arrElements.length; i++){
-		oElement = arrElements[i];		
+		oElement = arrElements[i];
 		if(oRegExp.test(oElement.className)){
 			arrReturnElements.push(oElement);
-		}	
+		}
 	}
 	return (arrReturnElements)
 }
@@ -54,7 +54,7 @@ function addClassName(objElement, strClass, blnMayAlreadyExist){
       arrList[arrList.length] = strClass;
       objElement.className = arrList.join(' ');
    }
-   else{  
+   else{
       objElement.className = strClass;
       }
 }
@@ -106,12 +106,12 @@ Highlighter.init = function() {
 			  removeClassName(this.parentNode.parentNode, "focused");
       };
 		}
-	} 
+	}
 };
 
 Highlighter.unhighlight = function() {
   var fields = getElementsByClassName(document, '*', Highlighter.settings.field_class);
 	for(i = 0; i < fields.length; i++) {
 	  removeClassName(fields[i].parentNode.parentNode, "focused");
-	} 
+	}
 };

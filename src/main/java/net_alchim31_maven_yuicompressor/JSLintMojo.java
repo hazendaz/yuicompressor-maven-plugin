@@ -26,6 +26,7 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Check JS files with jslint.
  *
  * @author David Bernard
+ *
  * @since 2007-08-29
  */
 @Mojo(name = "jslint", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
@@ -36,7 +37,7 @@ public class JSLintMojo extends MojoSupport {
 
     @Override
     protected String[] getDefaultIncludes() throws Exception {
-        return new String[]{"**/**.js"};
+        return new String[] { "**/**.js" };
     }
 
     @Override

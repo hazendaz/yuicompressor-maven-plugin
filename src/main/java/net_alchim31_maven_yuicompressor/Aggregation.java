@@ -19,16 +19,15 @@
  */
 package net_alchim31_maven_yuicompressor;
 
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.build.BuildContext;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import org.codehaus.plexus.build.BuildContext;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,10 +69,15 @@ public class Aggregation {
     /**
      * Run.
      *
-     * @param previouslyIncludedFiles the previously included files
-     * @param buildContext the build context
+     * @param previouslyIncludedFiles
+     *            the previously included files
+     * @param buildContext
+     *            the build context
+     *
      * @return the list
-     * @throws Exception the exception
+     *
+     * @throws Exception
+     *             the exception
      */
     public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext) throws Exception {
         return this.run(previouslyIncludedFiles, buildContext, null);
@@ -82,13 +86,20 @@ public class Aggregation {
     /**
      * Run.
      *
-     * @param previouslyIncludedFiles the previously included files
-     * @param buildContext the build context
-     * @param incrementalFiles the incremental files
+     * @param previouslyIncludedFiles
+     *            the previously included files
+     * @param buildContext
+     *            the build context
+     * @param incrementalFiles
+     *            the incremental files
+     *
      * @return the list
-     * @throws Exception the exception
+     *
+     * @throws Exception
+     *             the exception
      */
-    public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext, Set<String> incrementalFiles) throws Exception {
+    public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext,
+            Set<String> incrementalFiles) throws Exception {
         defineInputDir();
 
         List<File> files;
@@ -120,7 +131,7 @@ public class Aggregation {
                     }
                     if (removeIncluded) {
                         if (file.exists() && file.delete()) {
-                          logger.warn("unable to delete file: {}", file);
+                            logger.warn("unable to delete file: {}", file);
                         }
                         buildContext.refresh(file);
                     }
@@ -133,7 +144,9 @@ public class Aggregation {
     /**
      * Creates the file header.
      *
-     * @param file the file
+     * @param file
+     *            the file
+     *
      * @return the string
      */
     private String createFileHeader(File file) {
@@ -152,7 +165,8 @@ public class Aggregation {
     /**
      * Define input dir.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     private void defineInputDir() throws Exception {
         if (inputDir == null) {
@@ -167,13 +181,20 @@ public class Aggregation {
     /**
      * Gets the included files.
      *
-     * @param previouslyIncludedFiles the previously included files
-     * @param buildContext the build context
-     * @param incrementalFiles the incremental files
+     * @param previouslyIncludedFiles
+     *            the previously included files
+     * @param buildContext
+     *            the build context
+     * @param incrementalFiles
+     *            the incremental files
+     *
      * @return the included files
-     * @throws Exception the exception
+     *
+     * @throws Exception
+     *             the exception
      */
-    private List<File> getIncludedFiles(Collection<File> previouslyIncludedFiles, BuildContext buildContext, Set<String> incrementalFiles) throws Exception {
+    private List<File> getIncludedFiles(Collection<File> previouslyIncludedFiles, BuildContext buildContext,
+            Set<String> incrementalFiles) throws Exception {
         List<File> filesToAggregate = new ArrayList<>();
         if (includes != null) {
             for (String include : includes) {
@@ -181,7 +202,7 @@ public class Aggregation {
             }
         }
 
-        //If build is incremental with no delta, then don't include for aggregation
+        // If build is incremental with no delta, then don't include for aggregation
         if (buildContext.isIncremental()) {
 
             if (incrementalFiles != null) {
@@ -207,21 +228,28 @@ public class Aggregation {
     /**
      * Adds the into.
      *
-     * @param include the include
-     * @param includedFiles the included files
-     * @param previouslyIncludedFiles the previously included files
-     * @throws Exception the exception
+     * @param include
+     *            the include
+     * @param includedFiles
+     *            the included files
+     * @param previouslyIncludedFiles
+     *            the previously included files
+     *
+     * @throws Exception
+     *             the exception
      */
-    private void addInto(String include, List<File> includedFiles, Collection<File> previouslyIncludedFiles) throws Exception {
+    private void addInto(String include, List<File> includedFiles, Collection<File> previouslyIncludedFiles)
+            throws Exception {
         if (include.indexOf('*') > -1) {
             DirectoryScanner scanner = newScanner();
-            scanner.setIncludes(new String[]{include});
+            scanner.setIncludes(new String[] { include });
             scanner.scan();
             String[] rpaths = scanner.getIncludedFiles();
             Arrays.sort(rpaths);
             for (String rpath : rpaths) {
                 File file = new File(scanner.getBasedir(), rpath);
-                if (!includedFiles.contains(file) && (previouslyIncludedFiles == null || !previouslyIncludedFiles.contains(file))) {
+                if (!includedFiles.contains(file)
+                        && (previouslyIncludedFiles == null || !previouslyIncludedFiles.contains(file))) {
                     includedFiles.add(file);
                 }
             }
@@ -240,7 +268,9 @@ public class Aggregation {
      * New scanner.
      *
      * @return the directory scanner
-     * @throws Exception the exception
+     *
+     * @throws Exception
+     *             the exception
      */
     private DirectoryScanner newScanner() throws Exception {
         DirectoryScanner scanner = new DirectoryScanner();

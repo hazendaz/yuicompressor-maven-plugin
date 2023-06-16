@@ -80,7 +80,7 @@
           }
             .uniForm .inlineLabel input{
             }
-          
+
           /* Highlighting the rows on input focus */
           .focused{
             background:#FFFCDF url(img/uf_focused.png);
@@ -99,7 +99,7 @@
                 margin:.3em 0 0 0; padding:0;
                 line-height:100%;
                 /* user prefs */
-                width:30%; 
+                width:30%;
                 font-weight:bold;
               }
 
@@ -112,7 +112,7 @@
               }
               .inlineLabels .fileUpload > input{
               }
-              
+
               .inlineLabels .selectInput{
                 float:left;
                 /* user prefs */
@@ -135,15 +135,15 @@
               margin:.5em 0 0 30%; padding:3px 0;
               font-size:80%;
             }
-  
+
               /* inlineLabels esthetics */
               .inlineLabels .formHint strong{
-                padding:0 0 0 14px; 
+                padding:0 0 0 14px;
                 background:url(img/icon_alert.png) 0 0 no-repeat;
                 display:inline-block;
               }
 
-  
+
           /* ########################################################################## */
 
           /* Styles for form controls where labels are above the input elements */
@@ -173,13 +173,13 @@
                 /* user prefs */
                 border:2px solid #dfdfdf;
               }
-              
+
               .blockLabels .selectInput{
                 float:left;
                 width:60%;
                 /* user prefs */
                 border:2px solid #dfdfdf;
-                
+
               }
 
               .blockLabels textarea{

@@ -19,6 +19,9 @@
  */
 package net_alchim31_maven_yuicompressor;
 
+import java.io.File;
+import java.util.List;
+
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -26,17 +29,15 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
-import org.codehaus.plexus.build.BuildContext;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * Common class for mojos.
  *
  * @author David Bernard
+ *
  * @since 2007-08-29
  */
 public abstract class MojoSupport extends AbstractMojo {
@@ -47,31 +48,31 @@ public abstract class MojoSupport extends AbstractMojo {
     /**
      * Javascript source directory. (result will be put to outputDirectory).
      */
-    @Parameter(defaultValue="${project.build.sourceDirectory}/../js")
+    @Parameter(defaultValue = "${project.build.sourceDirectory}/../js")
     private File sourceDirectory;
 
     /**
      * Single directory for extra files to include in the WAR.
      */
-    @Parameter(defaultValue="${project.basedir}/src/main/webapp")
+    @Parameter(defaultValue = "${project.basedir}/src/main/webapp")
     private File warSourceDirectory;
 
     /**
      * The directory where the webapp is built.
      */
-    @Parameter(defaultValue="${project.build.directory}/${project.build.finalName}")
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
     private File webappDirectory;
 
     /**
      * The output directory into which to copy the resources.
      */
-    @Parameter(defaultValue="${project.build.outputDirectory}", required = true)
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
     private File outputDirectory;
 
     /**
      * The list of resources we want to transfer.
      */
-    @Parameter(defaultValue="${project.resources}", required = true, readonly = true)
+    @Parameter(defaultValue = "${project.resources}", required = true, readonly = true)
     private List<Resource> resources;
 
     /** list of additional excludes. */
@@ -79,7 +80,7 @@ public abstract class MojoSupport extends AbstractMojo {
     private List<String> excludes;
 
     /** Use processed resources if available. */
-    @Parameter(defaultValue="false")
+    @Parameter(defaultValue = "false")
     private boolean useProcessedResources;
 
     /** list of additional includes. */
@@ -92,8 +93,8 @@ public abstract class MojoSupport extends AbstractMojo {
 
     /**
      * Excludes files from resources directories.
-    */
-    @Parameter(defaultValue="false")
+     */
+    @Parameter(defaultValue = "false")
     private boolean excludeResources;
 
     /** Maven Project. */
@@ -101,19 +102,19 @@ public abstract class MojoSupport extends AbstractMojo {
     protected MavenProject project;
 
     /** [js only] Display possible errors in the code. */
-    @Parameter(defaultValue="true", property="maven.yuicompressor.jswarn")
+    @Parameter(defaultValue = "true", property = "maven.yuicompressor.jswarn")
     protected boolean jswarn;
 
     /**
      * Whether to skip execution.
      */
-    @Parameter(defaultValue = "false", property="maven.yuicompressor.skip")
+    @Parameter(defaultValue = "false", property = "maven.yuicompressor.skip")
     private boolean skip;
 
     /**
      * Define if plugin must stop/fail on warnings.
      */
-    @Parameter(defaultValue = "false", property="maven.yuicompressor.failOnWarning")
+    @Parameter(defaultValue = "false", property = "maven.yuicompressor.failOnWarning")
     protected boolean failOnWarning;
 
     /**
@@ -144,16 +145,19 @@ public abstract class MojoSupport extends AbstractMojo {
                     if (resource.getTargetPath() != null) {
                         destRoot = new File(outputDirectory, resource.getTargetPath());
                     }
-                    processDir(new File(resource.getDirectory()), destRoot, resource.getExcludes(), useProcessedResources);
+                    processDir(new File(resource.getDirectory()), destRoot, resource.getExcludes(),
+                            useProcessedResources);
                 }
             }
             if (!excludeWarSourceDirectory) {
                 processDir(warSourceDirectory, webappDirectory, null, useProcessedResources);
             }
             afterProcess();
-            getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(), jsErrorReporter_.getErrorCnt()));
+            getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(),
+                    jsErrorReporter_.getErrorCnt()));
             if (failOnWarning && (jsErrorReporter_.getWarningCnt() > 0)) {
-                throw new MojoFailureException("warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
+                throw new MojoFailureException(
+                        "warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
             }
         } catch (RuntimeException | MojoFailureException | MojoExecutionException e) {
             throw e;
@@ -166,41 +170,52 @@ public abstract class MojoSupport extends AbstractMojo {
      * Gets the default includes.
      *
      * @return the default includes
-     * @throws Exception the exception
+     *
+     * @throws Exception
+     *             the exception
      */
     protected abstract String[] getDefaultIncludes() throws Exception;
 
     /**
      * Before process.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     protected abstract void beforeProcess() throws Exception;
 
     /**
      * After process.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     protected abstract void afterProcess() throws Exception;
 
     /**
-     * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than *.css or *.js
+     * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than
+     * *.css or *.js see https://github.com/davidB/yuicompressor-maven-plugin/issues/19
      *
-     * see https://github.com/davidB/yuicompressor-maven-plugin/issues/19
+     * @param srcRoot
+     *            the src root
+     * @param destRoot
+     *            the dest root
+     * @param srcExcludes
+     *            the src excludes
+     * @param destAsSource
+     *            the dest as source
      *
-     * @param srcRoot the src root
-     * @param destRoot the dest root
-     * @param srcExcludes the src excludes
-     * @param destAsSource the dest as source
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
-    private void processDir(File srcRoot, File destRoot, List<String> srcExcludes, boolean destAsSource) throws Exception {
+    private void processDir(File srcRoot, File destRoot, List<String> srcExcludes, boolean destAsSource)
+            throws Exception {
         if (srcRoot == null) {
             return;
         }
         if (!srcRoot.exists()) {
-            buildContext.addMessage(srcRoot, 0, 0, "Directory " + srcRoot.getPath() + " does not exist", BuildContext.SEVERITY_WARNING, null);
+            buildContext.addMessage(srcRoot, 0, 0, "Directory " + srcRoot.getPath() + " does not exist",
+                    BuildContext.SEVERITY_WARNING, null);
             getLog().info("Directory " + srcRoot.getPath() + " does not exist");
             return;
         }
@@ -243,7 +258,8 @@ public abstract class MojoSupport extends AbstractMojo {
         }
         for (String name : includedFiles) {
             SourceFile src = new SourceFile(srcRoot, destRoot, name, destAsSource);
-            jsErrorReporter_.setDefaultFileName("..." + src.toFile().getCanonicalPath().substring(src.toFile().getCanonicalPath().lastIndexOf('/') + 1));
+            jsErrorReporter_.setDefaultFileName("..."
+                    + src.toFile().getCanonicalPath().substring(src.toFile().getCanonicalPath().lastIndexOf('/') + 1));
             jsErrorReporter_.setFile(src.toFile());
             processFile(src);
         }
@@ -252,8 +268,11 @@ public abstract class MojoSupport extends AbstractMojo {
     /**
      * Process file.
      *
-     * @param src the src
-     * @throws Exception the exception
+     * @param src
+     *            the src
+     *
+     * @throws Exception
+     *             the exception
      */
     protected abstract void processFile(SourceFile src) throws Exception;
 }

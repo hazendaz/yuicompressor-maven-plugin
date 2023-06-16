@@ -44,11 +44,17 @@ public class SourceFile {
     /**
      * Instantiates a new source file.
      *
-     * @param srcRoot the src root
-     * @param destRoot the dest root
-     * @param name the name
-     * @param destAsSource the dest as source
-     * @throws Exception the exception
+     * @param srcRoot
+     *            the src root
+     * @param destRoot
+     *            the dest root
+     * @param name
+     *            the name
+     * @param destAsSource
+     *            the dest as source
+     *
+     * @throws Exception
+     *             the exception
      */
     public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) throws Exception {
         srcRoot_ = srcRoot;
@@ -83,7 +89,9 @@ public class SourceFile {
     /**
      * To dest file.
      *
-     * @param suffix the suffix
+     * @param suffix
+     *            the suffix
+     *
      * @return the file
      */
     public File toDestFile(String suffix) {

@@ -19,17 +19,17 @@
  */
 package net_alchim31_maven_yuicompressor;
 
-import org.codehaus.plexus.util.IOUtil;
-import org.mozilla.javascript.ErrorReporter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import org.codehaus.plexus.util.IOUtil;
+import org.mozilla.javascript.ErrorReporter;
+
 /**
  * The Class JSLintChecker.
  */
-//TODO: use MojoErrorReporter
+// TODO: use MojoErrorReporter
 class JSLintChecker {
 
     /** The jslint path. */
@@ -38,13 +38,14 @@ class JSLintChecker {
     /**
      * Instantiates a new JS lint checker.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     public JSLintChecker() throws Exception {
         File jslint = File.createTempFile("jslint", ".js");
         jslint.deleteOnExit();
         try (InputStream in = getClass().getResourceAsStream("/jslint.js");
-            FileOutputStream out = new FileOutputStream(jslint)) {
+                FileOutputStream out = new FileOutputStream(jslint)) {
             IOUtil.copy(in, out);
         }
         jslintPath_ = jslint.getAbsolutePath();
@@ -53,8 +54,10 @@ class JSLintChecker {
     /**
      * Check.
      *
-     * @param jsFile the js file
-     * @param reporter the reporter
+     * @param jsFile
+     *            the js file
+     * @param reporter
+     *            the reporter
      */
     public void check(File jsFile, ErrorReporter reporter) {
         String[] args = new String[2];

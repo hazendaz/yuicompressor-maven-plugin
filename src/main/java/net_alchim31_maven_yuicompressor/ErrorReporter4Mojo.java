@@ -19,12 +19,12 @@
  */
 package net_alchim31_maven_yuicompressor;
 
+import java.io.File;
+
 import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.build.BuildContext;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
-import org.codehaus.plexus.build.BuildContext;
-
-import java.io.File;
 
 /**
  * The Class ErrorReporter4Mojo.
@@ -55,9 +55,12 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     /**
      * Instantiates a new error reporter 4 mojo.
      *
-     * @param log the log
-     * @param jswarn the jswarn
-     * @param buildContext the build context
+     * @param log
+     *            the log
+     * @param jswarn
+     *            the jswarn
+     * @param buildContext
+     *            the build context
      */
     public ErrorReporter4Mojo(Log log, boolean jswarn, BuildContext buildContext) {
         log_ = log;
@@ -68,7 +71,8 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     /**
      * Sets the default file name.
      *
-     * @param v the new default file name
+     * @param v
+     *            the new default file name
      */
     public void setDefaultFileName(String v) {
         if (v.length() == 0) {
@@ -104,7 +108,8 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     }
 
     @Override
-    public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource, int lineOffset) {
+    public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource,
+            int lineOffset) {
         error(message, sourceName, line, lineSource, lineOffset);
         throw new EvaluatorException(message, sourceName, line, lineSource, lineOffset);
     }
@@ -122,11 +127,17 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     /**
      * New message.
      *
-     * @param message the message
-     * @param sourceName the source name
-     * @param line the line
-     * @param lineSource the line source
-     * @param lineOffset the line offset
+     * @param message
+     *            the message
+     * @param sourceName
+     *            the source name
+     * @param line
+     *            the line
+     * @param lineSource
+     *            the line source
+     * @param lineOffset
+     *            the line offset
+     *
      * @return the string
      */
     private String newMessage(String message, String sourceName, int line, String lineSource, int lineOffset) {
@@ -135,13 +146,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
             sourceName = defaultFilename_;
         }
         if (sourceName != null) {
-            back.append(sourceName)
-                    .append(":line ")
-                    .append(line)
-                    .append(":column ")
-                    .append(lineOffset)
-                    .append(':')
-            ;
+            back.append(sourceName).append(":line ").append(line).append(":column ").append(lineOffset).append(':');
         }
         if ((message != null) && (message.length() != 0)) {
             back.append(message);
@@ -149,9 +154,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
             back.append("unknown error");
         }
         if ((lineSource != null) && (lineSource.length() != 0)) {
-            back.append("\n\t")
-                    .append(lineSource)
-            ;
+            back.append("\n\t").append(lineSource);
         }
         return back.toString();
     }
@@ -159,7 +162,8 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     /**
      * Sets the file.
      *
-     * @param file the new file
+     * @param file
+     *            the new file
      */
     public void setFile(File file) {
         sourceFile_ = file;
