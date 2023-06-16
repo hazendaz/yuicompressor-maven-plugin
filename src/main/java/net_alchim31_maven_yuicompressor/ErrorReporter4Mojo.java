@@ -142,18 +142,18 @@ public class ErrorReporter4Mojo implements ErrorReporter {
      */
     private String newMessage(String message, String sourceName, int line, String lineSource, int lineOffset) {
         StringBuilder back = new StringBuilder();
-        if ((sourceName == null) || (sourceName.length() == 0)) {
+        if (sourceName == null || sourceName.length() == 0) {
             sourceName = defaultFilename_;
         }
         if (sourceName != null) {
             back.append(sourceName).append(":line ").append(line).append(":column ").append(lineOffset).append(':');
         }
-        if ((message != null) && (message.length() != 0)) {
+        if (message != null && message.length() != 0) {
             back.append(message);
         } else {
             back.append("unknown error");
         }
-        if ((lineSource != null) && (lineSource.length() != 0)) {
+        if (lineSource != null && lineSource.length() != 0) {
             back.append("\n\t").append(lineSource);
         }
         return back.toString();

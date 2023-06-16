@@ -87,6 +87,9 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("serial")
 public class BasicRhinoShell extends ScriptableObject {
 
+    /** The Constant serial version uid. */
+    private static final long serialVersionUID = 1L;
+
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);
 
@@ -164,7 +167,8 @@ public class BasicRhinoShell extends ScriptableObject {
                 return result;
             }
             if (arg.equals("-version")) {
-                if (++i == args.length) {
+                i++;
+                if (i == args.length) {
                     usage(arg);
                 }
                 double d = Context.toNumber(args[i]);
@@ -380,10 +384,8 @@ public class BasicRhinoShell extends ScriptableObject {
                         }
                     }
                     Object result = cx.evaluateString(this, source, sourceName, startline, null);
-                    if (result != Context.getUndefinedValue()) {
-                        if (logger.isInfoEnabled()) {
-                            logger.info("{}", Context.toString(result));
-                        }
+                    if ((result != Context.getUndefinedValue()) && logger.isInfoEnabled()) {
+                        logger.info("{}", Context.toString(result));
                     }
                 } catch (WrappedException e) {
                     // Some form of exception was caught by JavaScript and

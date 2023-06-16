@@ -23,7 +23,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -203,25 +207,23 @@ public class Aggregation {
         }
 
         // If build is incremental with no delta, then don't include for aggregation
-        if (buildContext.isIncremental()) {
-
-            if (incrementalFiles != null) {
-                boolean aggregateMustBeUpdated = false;
-                for (File file : filesToAggregate) {
-                    if (incrementalFiles.contains(file.getCanonicalPath())) {
-                        aggregateMustBeUpdated = true;
-                        break;
-                    }
-                }
-
-                if (aggregateMustBeUpdated) {
-                    return filesToAggregate;
-                }
-            }
-            return new ArrayList<>();
-        } else {
+        if (!buildContext.isIncremental()) {
             return filesToAggregate;
         }
+        if (incrementalFiles != null) {
+            boolean aggregateMustBeUpdated = false;
+            for (File file : filesToAggregate) {
+                if (incrementalFiles.contains(file.getCanonicalPath())) {
+                    aggregateMustBeUpdated = true;
+                    break;
+                }
+            }
+
+            if (aggregateMustBeUpdated) {
+                return filesToAggregate;
+            }
+        }
+        return new ArrayList<>();
 
     }
 
@@ -275,7 +277,7 @@ public class Aggregation {
     private DirectoryScanner newScanner() throws Exception {
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir(inputDir);
-        if ((excludes != null) && (excludes.length != 0)) {
+        if (excludes != null && excludes.length != 0) {
             scanner.setExcludes(excludes);
         }
         scanner.addDefaultExcludes();

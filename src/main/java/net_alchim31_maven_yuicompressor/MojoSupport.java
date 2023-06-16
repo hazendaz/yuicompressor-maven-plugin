@@ -155,7 +155,7 @@ public abstract class MojoSupport extends AbstractMojo {
             afterProcess();
             getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(),
                     jsErrorReporter_.getErrorCnt()));
-            if (failOnWarning && (jsErrorReporter_.getWarningCnt() > 0)) {
+            if (failOnWarning && jsErrorReporter_.getWarningCnt() > 0) {
                 throw new MojoFailureException(
                         "warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
             }
@@ -237,10 +237,10 @@ public abstract class MojoSupport extends AbstractMojo {
             scanner.setIncludes(includes.toArray(new String[0]));
         }
 
-        if ((srcExcludes != null) && !srcExcludes.isEmpty()) {
+        if (srcExcludes != null && !srcExcludes.isEmpty()) {
             scanner.setExcludes(srcExcludes.toArray(EMPTY_STRING_ARRAY));
         }
-        if ((excludes != null) && !excludes.isEmpty()) {
+        if (excludes != null && !excludes.isEmpty()) {
             scanner.setExcludes(excludes.toArray(EMPTY_STRING_ARRAY));
         }
         scanner.addDefaultExcludes();

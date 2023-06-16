@@ -156,15 +156,16 @@ public class YuiCompressorMojo extends MojoSupport {
             suffix = "";
         }
 
-        if (preProcessAggregates)
+        if (preProcessAggregates) {
             aggregate();
+        }
     }
 
     @Override
     protected void afterProcess() throws Exception {
-        if (statistics && (inSizeTotal_ > 0)) {
+        if (statistics && inSizeTotal_ > 0) {
             getLog().info(String.format("total input (%db) -> output (%db)[%d%%]", inSizeTotal_, outSizeTotal_,
-                    ((outSizeTotal_ * 100) / inSizeTotal_)));
+                    outSizeTotal_ * 100 / inSizeTotal_));
         }
 
         if (!preProcessAggregates) {
@@ -180,7 +181,7 @@ public class YuiCompressorMojo extends MojoSupport {
      */
     private void aggregate() throws Exception {
         if (aggregations != null) {
-            Set<File> previouslyIncludedFiles = new HashSet<File>();
+            Set<File> previouslyIncludedFiles = new HashSet<>();
             for (Aggregation aggregation : aggregations) {
                 getLog().info("generate aggregation : " + aggregation.output);
                 Collection<File> aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext,
@@ -229,7 +230,7 @@ public class YuiCompressorMojo extends MojoSupport {
             return;
         }
         getLog().debug("only compress if input file is younger than existing output file");
-        if (!force && outFile.exists() && (outFile.lastModified() > inFile.lastModified())) {
+        if (!force && outFile.exists() && outFile.lastModified() > inFile.lastModified()) {
             if (getLog().isInfoEnabled()) {
                 getLog().info("nothing to do, " + outFile
                         + " is younger than original, use 'force' option or clean your target");
@@ -334,10 +335,7 @@ public class YuiCompressorMojo extends MojoSupport {
      *             the exception
      */
     protected File gzipIfRequested(File file) throws Exception {
-        if (!gzip || file == null || !file.exists()) {
-            return null;
-        }
-        if (".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
+        if (!gzip || file == null || !file.exists() || ".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
             return null;
         }
         File gzipped = new File(file.getCanonicalPath() + ".gz");
@@ -369,7 +367,7 @@ public class YuiCompressorMojo extends MojoSupport {
     protected long ratioOfSize(File file100, File fileX) throws Exception {
         long v100 = Math.max(file100.length(), 1);
         long vX = Math.max(fileX.length(), 1);
-        return (vX * 100) / v100;
+        return vX * 100 / v100;
     }
 
     /**
