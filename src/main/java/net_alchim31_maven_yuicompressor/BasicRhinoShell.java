@@ -326,7 +326,7 @@ public class BasicRhinoShell extends ScriptableObject {
      */
     private void processSource(Context cx, String filename) {
         if (filename == null) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             String sourceName = "<stdin>";
             int lineno = 1;
             boolean hitEOF = false;
