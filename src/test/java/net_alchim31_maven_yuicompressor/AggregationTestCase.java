@@ -42,6 +42,11 @@ public class AggregationTestCase {
     /** The default build context. */
     private DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
 
+    /**
+     * Setup the temporarily directory.
+     *
+     * @throws Exception the exception
+     */
     @Before
     public void setUp() throws Exception {
         dir_ = File.createTempFile(this.getClass().getName(), "-test");
@@ -49,6 +54,11 @@ public class AggregationTestCase {
         dir_.mkdirs();
     }
 
+    /**
+     * Destroy the temporary directory.
+     *
+     * @throws Exception the exception
+     */
     @After
     public void tearDown() throws Exception {
         FileUtils.deleteDirectory(dir_);
