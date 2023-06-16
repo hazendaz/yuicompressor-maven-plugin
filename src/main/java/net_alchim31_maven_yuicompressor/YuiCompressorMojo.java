@@ -311,7 +311,7 @@ public class YuiCompressorMojo extends MojoSupport {
      * @throws Exception the exception
      */
     protected File gzipIfRequested(File file) throws Exception {
-        if (!gzip || (file == null) || (!file.exists())) {
+        if (!gzip || file == null || !file.exists()) {
             return null;
         }
         if (".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
