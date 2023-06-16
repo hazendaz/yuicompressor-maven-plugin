@@ -386,7 +386,7 @@ public class BasicRhinoShell extends ScriptableObject {
                         }
                     }
                     Object result = cx.evaluateString(this, source, sourceName, startline, null);
-                    if ((result != Context.getUndefinedValue()) && logger.isInfoEnabled()) {
+                    if (result != Context.getUndefinedValue() && logger.isInfoEnabled()) {
                         logger.info("{}", Context.toString(result));
                     }
                 } catch (WrappedException e) {
