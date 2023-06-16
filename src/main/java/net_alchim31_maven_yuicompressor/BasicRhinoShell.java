@@ -272,7 +272,7 @@ public class BasicRhinoShell extends ScriptableObject {
      */
     public String readFile(String path) {
         try {
-            return new String(Files.readAllBytes(Paths.get(path)));
+            return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
         } catch (RuntimeException exc) {
             throw exc;
         } catch (Exception exc) {
