@@ -54,12 +54,24 @@
 
 package net_alchim31_maven_yuicompressor;
 
-import org.codehaus.plexus.util.IOUtil;
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.JavaScriptException;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.WrappedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * The BasicRhinoShell program.
@@ -260,7 +272,7 @@ public class BasicRhinoShell extends ScriptableObject {
      */
     public String readFile(String path) {
         try {
-            return IOUtil.toString(new FileInputStream(path));
+            return new String(Files.readAllBytes(Paths.get(path)));
         } catch (RuntimeException exc) {
             throw exc;
         } catch (Exception exc) {
@@ -367,15 +379,7 @@ public class BasicRhinoShell extends ScriptableObject {
             } while (!hitEOF);
             logger.info("");
         } else {
-            FileReader in = null;
-            try {
-                in = new FileReader(filename);
-            } catch (FileNotFoundException ex) {
-                Context.reportError("Couldn't open file \"" + filename + "\".");
-                return;
-            }
-
-            try {
+            try (BufferedReader in = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
                 // Here we evaluate the entire contents of the file as
                 // a script. Text is printed only if the print() function
                 // is called.
@@ -386,13 +390,7 @@ public class BasicRhinoShell extends ScriptableObject {
             } catch (EvaluatorException | JavaScriptException e) {
                 logger.info("js: {}", e.getMessage());
             } catch (IOException e) {
-                logger.info(e.toString());
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException ioe) {
-                    logger.info(ioe.toString());
-                }
+                logger.error("", e);
             }
         }
     }
