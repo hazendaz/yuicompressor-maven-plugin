@@ -20,4 +20,4 @@
 /**
  * The yui compressor package.
  */
-package net_alchim31_maven_yuicompressor;
+package net.alchim31.maven.yuicompressor;

@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net_alchim31_maven_yuicompressor;
+package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.FileOutputStream;

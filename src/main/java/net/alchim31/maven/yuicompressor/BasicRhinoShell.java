@@ -52,7 +52,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-package net_alchim31_maven_yuicompressor;
+package net.alchim31.maven.yuicompressor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
