@@ -27,10 +27,10 @@ import java.util.HashSet;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.codehaus.plexus.util.FileUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class AggregationTestCase.
@@ -49,8 +49,8 @@ public class AggregationTestCase {
      * @throws Exception
      *             the exception
      */
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         dir_ = File.createTempFile(this.getClass().getName(), "-test");
         dir_.delete();
         dir_.mkdirs();
@@ -62,8 +62,8 @@ public class AggregationTestCase {
      * @throws Exception
      *             the exception
      */
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() throws Exception {
         FileUtils.deleteDirectory(dir_);
     }
 
@@ -74,23 +74,23 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void test0to1() throws Exception {
+    void test0to1() throws Exception {
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
 
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
 
         target.includes = new String[] {};
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
 
         target.includes = new String[] { "**/*.js" };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
     }
 
     /**
@@ -100,17 +100,17 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void test1to1() throws Exception {
+    void test1to1() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
         target.includes = new String[] { f1.getName() };
 
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
     }
 
     /**
@@ -120,7 +120,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void test2to1() throws Exception {
+    void test2to1() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -131,17 +131,17 @@ public class AggregationTestCase {
         target.output = new File(dir_, "output.js");
 
         target.includes = new String[] { f1.getName(), f2.getName() };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
 
         target.output.delete();
         target.includes = new String[] { "*.js" };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
     /**
@@ -151,7 +151,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void testNoDuplicateAggregation() throws Exception {
+    void testNoDuplicateAggregation() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -162,17 +162,17 @@ public class AggregationTestCase {
         target.output = new File(dir_, "output.js");
 
         target.includes = new String[] { f1.getName(), f1.getName(), f2.getName() };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
 
         target.output.delete();
         target.includes = new String[] { f1.getName(), "*.js" };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
     /**
@@ -182,7 +182,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void test2to1Order() throws Exception {
+    void test2to1Order() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -193,10 +193,10 @@ public class AggregationTestCase {
         target.output = new File(dir_, "output.js");
 
         target.includes = new String[] { f2.getName(), f1.getName() };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f2) + FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f2) + FileUtils.fileRead(f1), FileUtils.fileRead(target.output));
     }
 
     /**
@@ -206,7 +206,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void test2to1WithNewLine() throws Exception {
+    void test2to1WithNewLine() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -218,10 +218,10 @@ public class AggregationTestCase {
         target.insertNewLine = true;
         target.includes = new String[] { f1.getName(), f2.getName() };
 
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + "\n" + FileUtils.fileRead(f2) + "\n",
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + "\n" + FileUtils.fileRead(f2) + "\n",
                 FileUtils.fileRead(target.output));
     }
 
@@ -232,7 +232,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void testAbsolutePathFromInside() throws Exception {
+    void testAbsolutePathFromInside() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -243,10 +243,10 @@ public class AggregationTestCase {
         target.output = new File(dir_, "output.js");
 
         target.includes = new String[] { f1.getCanonicalPath(), f2.getName() };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(null, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 
     /**
@@ -256,7 +256,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void testAbsolutePathFromOutside() throws Exception {
+    void testAbsolutePathFromOutside() throws Exception {
         File f1 = File.createTempFile("test-01", ".js");
         try {
             FileUtils.fileWrite(f1.getCanonicalPath(), "1");
@@ -268,10 +268,10 @@ public class AggregationTestCase {
             target.output = new File(dir_, "output.js");
 
             target.includes = new String[] { f1.getCanonicalPath(), f2.getName() };
-            Assert.assertFalse(target.output.exists());
+            Assertions.assertFalse(target.output.exists());
             target.run(null, defaultBuildContext);
-            Assert.assertTrue(target.output.exists());
-            Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+            Assertions.assertTrue(target.output.exists());
+            Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
         } finally {
             f1.delete();
         }
@@ -284,7 +284,7 @@ public class AggregationTestCase {
      *             the exception
      */
     @Test
-    public void testAutoExcludeWildcards() throws Exception {
+    void testAutoExcludeWildcards() throws Exception {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -295,21 +295,21 @@ public class AggregationTestCase {
         target.autoExcludeWildcards = true;
         target.output = new File(dir_, "output.js");
 
-        Collection<File> previouslyIncluded = new HashSet<File>();
+        Collection<File> previouslyIncluded = new HashSet<>();
         previouslyIncluded.add(f1);
 
         target.includes = new String[] { f1.getName(), f2.getName() };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         target.run(previouslyIncluded, defaultBuildContext);
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
 
         target.output.delete();
         target.includes = new String[] { "*.js" };
-        Assert.assertFalse(target.output.exists());
+        Assertions.assertFalse(target.output.exists());
         // f1 was in previouslyIncluded so it is not included
-        Assert.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Lists.newArrayList(f2));
-        Assert.assertTrue(target.output.exists());
-        Assert.assertEquals(FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
+        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Lists.newArrayList(f2));
+        Assertions.assertTrue(target.output.exists());
+        Assertions.assertEquals(FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
 }
