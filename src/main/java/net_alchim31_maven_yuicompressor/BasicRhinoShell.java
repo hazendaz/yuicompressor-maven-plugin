@@ -164,7 +164,7 @@ public class BasicRhinoShell extends ScriptableObject {
                     usage(arg);
                 }
                 double d = Context.toNumber(args[i]);
-                if (d != d) {
+                if (Double.isNaN(d)) {
                     usage(arg);
                 }
                 cx.setLanguageVersion((int) d);
