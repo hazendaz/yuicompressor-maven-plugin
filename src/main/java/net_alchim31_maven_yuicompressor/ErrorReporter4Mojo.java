@@ -95,6 +95,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         return warningCnt_;
     }
 
+    @Override
     public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
         String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);
         buildContext_.addMessage(sourceFile_, line, lineOffset, message, BuildContext.SEVERITY_ERROR, null);
@@ -102,11 +103,13 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         errorCnt_++;
     }
 
+    @Override
     public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource, int lineOffset) {
         error(message, sourceName, line, lineSource, lineOffset);
         throw new EvaluatorException(message, sourceName, line, lineSource, lineOffset);
     }
 
+    @Override
     public void warning(String message, String sourceName, int line, String lineSource, int lineOffset) {
         if (acceptWarn_) {
             String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);

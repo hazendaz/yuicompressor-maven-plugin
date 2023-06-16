@@ -125,6 +125,7 @@ public abstract class MojoSupport extends AbstractMojo {
     /** The js error reporter. */
     protected ErrorReporter4Mojo jsErrorReporter_;
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             if (skip) {
