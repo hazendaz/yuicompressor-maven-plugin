@@ -367,8 +367,7 @@ public class BasicRhinoShell extends ScriptableObject {
                     String source = "";
                     // Collect lines of source to compile.
                     while (true) {
-                        String newline;
-                        newline = in.readLine();
+                        String newline = in.readLine();
                         if (newline == null) {
                             hitEOF = true;
                             break;
