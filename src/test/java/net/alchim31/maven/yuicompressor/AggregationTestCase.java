@@ -27,6 +27,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.junit.jupiter.api.Assertions;
@@ -303,7 +304,9 @@ public class AggregationTestCase {
 
         target.setIncludes(new String[] { f1.getName(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(previouslyIncluded, defaultBuildContext);
+        // First call uses path that does not deal with previouslyIncluded so both files are added
+        List<File> content = target.run(previouslyIncluded, defaultBuildContext);
+        Assertions.assertEquals(2, content.size());
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
