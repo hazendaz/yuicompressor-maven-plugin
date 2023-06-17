@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -90,7 +89,8 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1), FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -114,16 +114,20 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
 
         target.getOutput().delete();
         target.setIncludes(new String[] { "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -147,16 +151,20 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
 
         target.getOutput().delete();
         target.setIncludes(new String[] { f1.getName(), "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -180,8 +188,10 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f2) + FileUtils.fileRead(f1),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -206,8 +216,10 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + "\n" + FileUtils.fileRead(f2) + "\n",
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8) + "\n"
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8) + "\n",
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -231,8 +243,10 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 
     /**
@@ -257,8 +271,10 @@ public class AggregationTestCase {
             Assertions.assertFalse(target.getOutput().exists());
             target.run(null, defaultBuildContext);
             Assertions.assertTrue(target.getOutput().exists());
-            Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                    FileUtils.fileRead(target.getOutput()));
+            Assertions.assertEquals(
+                    new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                            + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                    new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
         } finally {
             f1.delete();
         }
@@ -289,8 +305,10 @@ public class AggregationTestCase {
         Assertions.assertFalse(target.getOutput().exists());
         target.run(previouslyIncluded, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f1) + FileUtils.fileRead(f2),
-                FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(
+                new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
+                        + new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
 
         target.getOutput().delete();
         target.setIncludes(new String[] { "*.js" });
@@ -300,6 +318,7 @@ public class AggregationTestCase {
         System.out.println("f2 is located at: " + f2.getPath());
         Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Arrays.asList(f2));
         Assertions.assertTrue(target.getOutput().exists());
-        Assertions.assertEquals(FileUtils.fileRead(f2), FileUtils.fileRead(target.getOutput()));
+        Assertions.assertEquals(new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
+                new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
     }
 }
