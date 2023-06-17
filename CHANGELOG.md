@@ -1,3 +1,12 @@
+2.0.0-M1
+--------
+
+* Rebranded repository under 'hazendaz' to allow it to work properly with maven 3.9 and 4.0 without issuing warnings or potentially breaking with 4.0.
+* Completely overhauled the project including running many code cleanups up it to use more modern Java
+* Confirmed working for java 11, 17, 20, and 21.
+* Maven expectation is for 3.9 and above but should work on older versions but not confirmed.
+* Yui compressor included is at 2.4.7 due to an edge case bug, override it if you don't have that condition, see issues.
+
 
 1.3.1
 --------------------
