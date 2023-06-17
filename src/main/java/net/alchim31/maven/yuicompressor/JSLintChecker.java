@@ -49,7 +49,7 @@ class JSLintChecker {
                 FileOutputStream out = new FileOutputStream(jslint)) {
             IOUtil.copy(in, out);
         }
-        jslintPath = jslint.getAbsolutePath();
+        jslintPath = jslint.getCanonicalPath();
     }
 
     /**
@@ -59,11 +59,14 @@ class JSLintChecker {
      *            the js file
      * @param reporter
      *            the reporter
+     *
+     * @throws IOException
+     *             the IO exception
      */
-    public void check(File jsFile, ErrorReporter reporter) {
+    public void check(File jsFile, ErrorReporter reporter) throws IOException {
         String[] args = new String[2];
         args[0] = jslintPath;
-        args[1] = jsFile.getAbsolutePath();
+        args[1] = jsFile.getCanonicalPath();
         BasicRhinoShell.exec(args, reporter);
     }
 }

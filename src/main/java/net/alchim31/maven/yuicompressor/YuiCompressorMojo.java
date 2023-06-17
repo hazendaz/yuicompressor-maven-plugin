@@ -233,7 +233,7 @@ public class YuiCompressorMojo extends MojoSupport {
             }
             return;
         }
-        File outFileTmp = new File(outFile.getAbsolutePath() + ".tmp");
+        File outFileTmp = new File(outFile.getCanonicalFile() + ".tmp");
         FileUtils.forceDelete(outFileTmp);
 
         if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {

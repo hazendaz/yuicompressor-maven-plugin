@@ -53,7 +53,7 @@ public class JSLintMojo extends MojoSupport {
     }
 
     @Override
-    protected void processFile(SourceFile src) {
+    protected void processFile(SourceFile src) throws IOException {
         getLog().info("check file :" + src.toFile());
         jslint.check(src.toFile(), jsErrorReporter);
     }
