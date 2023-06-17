@@ -9,7 +9,7 @@
 
 ## Overview
 
-Maven's plugin to compress (minify/obfuscate/aggregate) JavaScript and CSS files using [YUI Compressor](http://developer.yahoo.com/yui/compressor/)
+Maven's plugin to compress (minify/obfuscate/aggregate) JavaScript and CSS files using [YUI Compressor](https://github.com/yui/yuicompressor)
 
 ## Documentation
 
