@@ -56,7 +56,7 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:git:ssh://github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
+    <connection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</developerConnection>
     <tag>HEAD</tag>
     <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
@@ -64,7 +64,7 @@
 
   <issueManagement>
     <system>github</system>
-    <url>&gt;https://github.com/hazendaz/yuicompressor-maven-plugin/issues/</url>
+    <url>https://github.com/hazendaz/yuicompressor-maven-plugin/issues/</url>
   </issueManagement>
   <ciManagement>
     <system>Github</system>
