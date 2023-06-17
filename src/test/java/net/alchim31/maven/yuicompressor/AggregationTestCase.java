@@ -300,7 +300,7 @@ public class AggregationTestCase {
         target.setOutput(new File(dir, "output.js"));
 
         Collection<File> previouslyIncluded = new HashSet<>();
-        previouslyIncluded.add(f1);
+        previouslyIncluded.add(f1.getCanonicalFile());
 
         target.setIncludes(new String[] { f1.getName(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
