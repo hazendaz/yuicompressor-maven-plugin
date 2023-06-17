@@ -1,6 +1,11 @@
 # YUICompressor-maven-plugin
 
-[![Build Status](https://travis-ci.com/davidB/yuicompressor-maven-plugin.svg?branch=master)](https://travis-ci.com/davidB/yuicompressor-maven-plugin)
+[![Java CI](https://github.com/hazendaz/yuicompressor-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/hazendaz/yuicompressor-maven-plugin/actions?query=workflow%3A%22Java+CI%22)
+[![Coverage Status](https://coveralls.io/repos/github/hazendaz/yuicompressor-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/hazendaz/yuicompressor-maven-plugin?branch=master)
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/yuicompressor-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/yuicompressor-maven-plugin)
+[![License](http://img.shields.io/:license-glp-blue.svg)](https://www.gnu.org/licenses/lgpl-2.1.html)
+
+![hazendaz](src/site/resources/images/hazendaz-banner.jpg)
 
 ## Overview
 
@@ -39,6 +44,7 @@ Found a bug? Have an idea? Report it to the [issue tracker](https://github.com/d
 
 * [David Bernard](https://github.com/davidB)
 * [Piotr Kuczynski](https://github.com/pkuczynski)
+* [Jeremy Landis](https://github.com/hazendaz)
 
 
 ## License
