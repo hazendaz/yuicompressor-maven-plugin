@@ -34,7 +34,7 @@ import org.mozilla.javascript.ErrorReporter;
 class JSLintChecker {
 
     /** The jslint path. */
-    private String jslintPath_;
+    private String jslintPath;
 
     /**
      * Instantiates a new JS lint checker.
@@ -49,7 +49,7 @@ class JSLintChecker {
                 FileOutputStream out = new FileOutputStream(jslint)) {
             IOUtil.copy(in, out);
         }
-        jslintPath_ = jslint.getAbsolutePath();
+        jslintPath = jslint.getAbsolutePath();
     }
 
     /**
@@ -62,7 +62,7 @@ class JSLintChecker {
      */
     public void check(File jsFile, ErrorReporter reporter) {
         String[] args = new String[2];
-        args[0] = jslintPath_;
+        args[0] = jslintPath;
         args[1] = jsFile.getAbsolutePath();
         BasicRhinoShell.exec(args, reporter);
     }

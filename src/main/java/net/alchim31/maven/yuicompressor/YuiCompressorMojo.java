@@ -133,10 +133,10 @@ public class YuiCompressorMojo extends MojoSupport {
     private boolean useSmallestFile;
 
     /** The in size total. */
-    private long inSizeTotal_;
+    private long inSizeTotal;
 
     /** The out size total. */
-    private long outSizeTotal_;
+    private long outSizeTotal;
 
     /** Keep track of updated files for aggregation on incremental builds. */
     private Set<String> incrementalFiles;
@@ -159,9 +159,9 @@ public class YuiCompressorMojo extends MojoSupport {
 
     @Override
     protected void afterProcess() throws IOException {
-        if (statistics && inSizeTotal_ > 0) {
-            getLog().info(String.format("total input (%db) -> output (%db)[%d%%]", inSizeTotal_, outSizeTotal_,
-                    outSizeTotal_ * 100 / inSizeTotal_));
+        if (statistics && inSizeTotal > 0) {
+            getLog().info(String.format("total input (%db) -> output (%db)[%d%%]", inSizeTotal, outSizeTotal,
+                    outSizeTotal * 100 / inSizeTotal));
         }
 
         if (!preProcessAggregates) {
@@ -251,7 +251,7 @@ public class YuiCompressorMojo extends MojoSupport {
                 getLog().info("No compression is enabled");
                 IOUtil.copy(in, out);
             } else if (".js".equalsIgnoreCase(src.getExtension())) {
-                JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter_);
+                JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);
                 compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons, disableOptimizations);
             } else if (".css".equalsIgnoreCase(src.getExtension())) {
                 compressCss(in, out);
@@ -276,8 +276,8 @@ public class YuiCompressorMojo extends MojoSupport {
 
         File gzipped = gzipIfRequested(outFile);
         if (statistics) {
-            inSizeTotal_ += inFile.length();
-            outSizeTotal_ += outFile.length();
+            inSizeTotal += inFile.length();
+            outSizeTotal += outFile.length();
 
             String fileStatistics;
             if (outputIgnored) {

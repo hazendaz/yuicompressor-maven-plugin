@@ -36,10 +36,6 @@ import org.codehaus.plexus.util.Scanner;
 
 /**
  * Common class for mojos.
- *
- * @author David Bernard
- *
- * @since 2007-08-29
  */
 public abstract class MojoSupport extends AbstractMojo {
 
@@ -125,7 +121,7 @@ public abstract class MojoSupport extends AbstractMojo {
     protected BuildContext buildContext;
 
     /** The js error reporter. */
-    protected ErrorReporter4Mojo jsErrorReporter_;
+    protected ErrorReporter4Mojo jsErrorReporter;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -138,7 +134,7 @@ public abstract class MojoSupport extends AbstractMojo {
             jswarn = true;
         }
 
-        jsErrorReporter_ = new ErrorReporter4Mojo(getLog(), jswarn, buildContext);
+        jsErrorReporter = new ErrorReporter4Mojo(getLog(), jswarn, buildContext);
 
         try {
             beforeProcess();
@@ -161,9 +157,9 @@ public abstract class MojoSupport extends AbstractMojo {
             throw new MojoExecutionException("wrap: " + e.getMessage(), e);
         }
 
-        getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(),
-                jsErrorReporter_.getErrorCnt()));
-        if (failOnWarning && jsErrorReporter_.getWarningCnt() > 0) {
+        getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter.getWarningCnt(),
+                jsErrorReporter.getErrorCnt()));
+        if (failOnWarning && jsErrorReporter.getWarningCnt() > 0) {
             throw new MojoFailureException("warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
         }
     }
@@ -261,9 +257,9 @@ public abstract class MojoSupport extends AbstractMojo {
         }
         for (String name : includedFiles) {
             SourceFile src = new SourceFile(srcRoot, destRoot, name, destAsSource);
-            jsErrorReporter_.setDefaultFileName("..."
+            jsErrorReporter.setDefaultFileName("..."
                     + src.toFile().getCanonicalPath().substring(src.toFile().getCanonicalPath().lastIndexOf('/') + 1));
-            jsErrorReporter_.setFile(src.toFile());
+            jsErrorReporter.setFile(src.toFile());
             processFile(src);
         }
     }

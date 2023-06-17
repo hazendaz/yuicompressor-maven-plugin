@@ -27,19 +27,19 @@ import java.io.File;
 public class SourceFile {
 
     /** The src root. */
-    private File srcRoot_;
+    private File srcRoot;
 
     /** The dest root. */
-    private File destRoot_;
+    private File destRoot;
 
     /** The dest as source. */
-    private boolean destAsSource_;
+    private boolean destAsSource;
 
     /** The rpath. */
-    private String rpath_;
+    private String rpath;
 
     /** The extension. */
-    private String extension_;
+    private String extension;
 
     /**
      * Instantiates a new source file.
@@ -54,16 +54,16 @@ public class SourceFile {
      *            the dest as source
      */
     public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {
-        srcRoot_ = srcRoot;
-        destRoot_ = destRoot;
-        destAsSource_ = destAsSource;
-        rpath_ = name;
-        int sep = rpath_.lastIndexOf('.');
+        this.srcRoot = srcRoot;
+        this.destRoot = destRoot;
+        this.destAsSource = destAsSource;
+        this.rpath = name;
+        int sep = this.rpath.lastIndexOf('.');
         if (sep > 0) {
-            extension_ = rpath_.substring(sep);
-            rpath_ = rpath_.substring(0, sep);
+            this.extension = this.rpath.substring(sep);
+            this.rpath = rpath.substring(0, sep);
         } else {
-            extension_ = "";
+            this.extension = "";
         }
     }
 
@@ -73,14 +73,14 @@ public class SourceFile {
      * @return the file
      */
     public File toFile() {
-        String frpath = rpath_ + extension_;
-        if (destAsSource_) {
-            File defaultDest = new File(destRoot_, frpath);
+        String frpath = rpath + extension;
+        if (destAsSource) {
+            File defaultDest = new File(destRoot, frpath);
             if (defaultDest.exists() && defaultDest.canRead()) {
                 return defaultDest;
             }
         }
-        return new File(srcRoot_, frpath);
+        return new File(srcRoot, frpath);
     }
 
     /**
@@ -92,7 +92,7 @@ public class SourceFile {
      * @return the file
      */
     public File toDestFile(String suffix) {
-        return new File(destRoot_, rpath_ + suffix + extension_);
+        return new File(destRoot, rpath + suffix + extension);
     }
 
     /**
@@ -101,6 +101,6 @@ public class SourceFile {
      * @return the extension
      */
     public String getExtension() {
-        return extension_;
+        return extension;
     }
 }

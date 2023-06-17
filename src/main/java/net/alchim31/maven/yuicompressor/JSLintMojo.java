@@ -35,7 +35,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 public class JSLintMojo extends MojoSupport {
 
     /** The jslint. */
-    private JSLintChecker jslint_;
+    private JSLintChecker jslint;
 
     @Override
     protected String[] getDefaultIncludes() {
@@ -44,16 +44,17 @@ public class JSLintMojo extends MojoSupport {
 
     @Override
     public void beforeProcess() throws IOException {
-        jslint_ = new JSLintChecker();
+        jslint = new JSLintChecker();
     }
 
     @Override
     public void afterProcess() {
+        // Do nothing
     }
 
     @Override
     protected void processFile(SourceFile src) {
         getLog().info("check file :" + src.toFile());
-        jslint_.check(src.toFile(), jsErrorReporter_);
+        jslint.check(src.toFile(), jsErrorReporter);
     }
 }

@@ -32,25 +32,25 @@ import org.mozilla.javascript.EvaluatorException;
 public class ErrorReporter4Mojo implements ErrorReporter {
 
     /** The default filename. */
-    private String defaultFilename_;
+    private String defaultFilename;
 
     /** The accept warn. */
-    private boolean acceptWarn_;
+    private boolean acceptWarn;
 
     /** The log. */
-    private Log log_;
+    private Log log;
 
     /** The warning cnt. */
-    private int warningCnt_;
+    private int warningCnt;
 
     /** The error cnt. */
-    private int errorCnt_;
+    private int errorCnt;
 
     /** The build context. */
-    private BuildContext buildContext_;
+    private BuildContext buildContext;
 
     /** The source file. */
-    private File sourceFile_;
+    private File sourceFile;
 
     /**
      * Instantiates a new error reporter 4 mojo.
@@ -63,9 +63,9 @@ public class ErrorReporter4Mojo implements ErrorReporter {
      *            the build context
      */
     public ErrorReporter4Mojo(Log log, boolean jswarn, BuildContext buildContext) {
-        log_ = log;
-        acceptWarn_ = jswarn;
-        buildContext_ = buildContext;
+        this.log = log;
+        this.acceptWarn = jswarn;
+        this.buildContext = buildContext;
     }
 
     /**
@@ -78,7 +78,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
         if (v.length() == 0) {
             v = null;
         }
-        defaultFilename_ = v;
+        defaultFilename = v;
     }
 
     /**
@@ -87,7 +87,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
      * @return the error cnt
      */
     public int getErrorCnt() {
-        return errorCnt_;
+        return errorCnt;
     }
 
     /**
@@ -96,15 +96,15 @@ public class ErrorReporter4Mojo implements ErrorReporter {
      * @return the warning cnt
      */
     public int getWarningCnt() {
-        return warningCnt_;
+        return warningCnt;
     }
 
     @Override
     public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
         String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);
-        buildContext_.addMessage(sourceFile_, line, lineOffset, message, BuildContext.SEVERITY_ERROR, null);
-        log_.error(fullMessage);
-        errorCnt_++;
+        buildContext.addMessage(sourceFile, line, lineOffset, message, BuildContext.SEVERITY_ERROR, null);
+        log.error(fullMessage);
+        errorCnt++;
     }
 
     @Override
@@ -116,11 +116,11 @@ public class ErrorReporter4Mojo implements ErrorReporter {
 
     @Override
     public void warning(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        if (acceptWarn_) {
+        if (acceptWarn) {
             String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);
-            buildContext_.addMessage(sourceFile_, line, lineOffset, message, BuildContext.SEVERITY_WARNING, null);
-            log_.warn(fullMessage);
-            warningCnt_++;
+            buildContext.addMessage(sourceFile, line, lineOffset, message, BuildContext.SEVERITY_WARNING, null);
+            log.warn(fullMessage);
+            warningCnt++;
         }
     }
 
@@ -143,7 +143,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
     private String newMessage(String message, String sourceName, int line, String lineSource, int lineOffset) {
         StringBuilder back = new StringBuilder();
         if (sourceName == null || sourceName.length() == 0) {
-            sourceName = defaultFilename_;
+            sourceName = defaultFilename;
         }
         if (sourceName != null) {
             back.append(sourceName).append(":line ").append(line).append(":column ").append(lineOffset).append(':');
@@ -166,7 +166,7 @@ public class ErrorReporter4Mojo implements ErrorReporter {
      *            the new file
      */
     public void setFile(File file) {
-        sourceFile_ = file;
+        sourceFile = file;
     }
 
 }
