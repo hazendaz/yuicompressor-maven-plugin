@@ -19,10 +19,9 @@
  */
 package net.alchim31.maven.yuicompressor;
 
-import com.google.common.collect.Lists;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -36,6 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * The Class AggregationTestCase.
  */
+// Note: public here needed for javadocs to work so don't remove it
 public class AggregationTestCase {
 
     /** The dir. */
@@ -309,7 +309,7 @@ public class AggregationTestCase {
         target.includes = new String[] { "*.js" };
         Assertions.assertFalse(target.output.exists());
         // f1 was in previouslyIncluded so it is not included
-        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Lists.newArrayList(f2));
+        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Arrays.asList(f2));
         Assertions.assertTrue(target.output.exists());
         Assertions.assertEquals(FileUtils.fileRead(f2), FileUtils.fileRead(target.output));
     }
