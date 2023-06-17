@@ -317,7 +317,8 @@ public class AggregationTestCase {
         target.setIncludes(new String[] { "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
         // f1 was in previouslyIncluded so it is not included
-        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Arrays.asList(f2.getCanonicalFile()));
+        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext),
+                Arrays.asList(f2.getCanonicalFile()));
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
                 new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
