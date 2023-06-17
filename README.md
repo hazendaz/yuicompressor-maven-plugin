@@ -11,6 +11,8 @@
 
 Maven's plugin to compress (minify/obfuscate/aggregate) JavaScript and CSS files using [YUI Compressor](https://github.com/yui/yuicompressor)
 
+This repository is a restore of the original plugin as it was archived and usage will break on maven 4.0.  The intent is not to build out a lot of new features but rather allow continued usage.  However, project is open to all to contribute features if deemed necessary as well as any bug fixes.
+
 ## Documentation
 
 Full documentation is available under following link:  https://davidb.github.io/yuicompressor-maven-plugin/
@@ -19,25 +21,19 @@ Summary of the project history can be found in [CHANGELOG](https://github.com/ha
 
 ## Build
 
-* `./mvnw package` : generate jar
-* `./mvnw site` : generate the plugin website
-* `./mvnw integration-test` : `./mvnw package` + run all integration test
-* `./mvnw integration-test -Dinvoker.test=demo01` : run integration test 'demo01' (against all configuration) useful for tuning/debug
-* `./mvnw install` :  `./mvnw integration-test` + publish on local maven repository
-* `./mvnw install -Dmaven.test.skip=true` : ./mvnw install` without run of unit test and run of integration test
-* release :
-  * `gpg --use-agent --armor --detach-sign --output $(mktemp) pom.xml` to avoid issue on macosx with gpg signature see [[MGPG-59] GPG Plugin: "gpg: signing failed: Inap
-propriate ioctl for device" - ASF JIRA](https://issues.apache.org/jira/browse/MGPG-59)
-  * `./mvnw release:clean && ./mvnw release:prepare && ./mvnw release:perform` : to publish on staging repository via plugin
-  * `./mvnw release:clean && ./mvnw release:prepare -Darguments="-DskipTests -Dmaven.test.skip=true" && ./mvnw release:perform -Darguments="-DskipTests -Dmaven.test.skip=true"` to publish without tests
-  * `./mvnw site package source:jar javadoc:jar install:install gpg:sign deploy:deploy changes:announcement-generate -Dmaven.test.skip=true -DperformRelease=true` : man
-ual
-  * connect to http://oss.sonatype.org/ close and release the request(about yuicompressor-maven-plugin) in staging repositories
-  * browse the updated [mvnsite](https://davidb.github.io/yuicompressor-maven-plugin/) (check version into samples, ...)
+Regular build
+* mvn clean install
+
+Release
+* mvn release:clean
+* mvn release:prepare
+* mvn release:perform
+
+For release and build in general, all items necessary are built into the .mvn folder under settings.xml.  For secure items, those are not included there but it is designed to run snapshots to sonatype through github.
 
 ## Issues
 
-Found a bug? Have an idea? Report it to the [issue tracker](https://github.com/davidB/yuicompressor-maven-plugin/issues?state=open)
+Found a bug? Have an idea? Report it to the [issue tracker](https://github.com/hazendaz/yuicompressor-maven-plugin/issues)
 
 
 ## Developers
