@@ -41,31 +41,80 @@ import org.codehaus.plexus.util.IOUtil;
 public class Aggregation {
 
     /** The input dir. */
-    public File inputDir;
+    private File inputDir;
 
     /** The output. */
-    public File output;
+    private File output;
 
     /** The includes. */
-    public String[] includes;
+    private String[] includes;
 
     /** The excludes. */
-    public String[] excludes;
+    private String[] excludes;
 
     /** The remove included. */
-    public boolean removeIncluded;
+    private boolean removeIncluded;
 
     /** The insert new line. */
-    public boolean insertNewLine;
+    private boolean insertNewLine;
 
     /** The insert file header. */
-    public boolean insertFileHeader;
+    private boolean insertFileHeader;
 
     /** The fix last semicolon. */
-    public boolean fixLastSemicolon;
+    private boolean fixLastSemicolon;
 
     /** The auto exclude wildcards. */
-    public boolean autoExcludeWildcards;
+    private boolean autoExcludeWildcards;
+
+    /**
+     * Gets the output.
+     *
+     * @return the output
+     */
+    public File getOutput() {
+        return output;
+    }
+
+    /**
+     * Sets the output.
+     *
+     * @param output
+     *            the new output
+     */
+    public void setOutput(File output) {
+        this.output = output;
+    }
+
+    /**
+     * Sets the includes.
+     *
+     * @param includes
+     *            the new includes
+     */
+    public void setIncludes(String[] includes) {
+        this.includes = includes;
+    }
+
+    /**
+     * Sets the insert new line.
+     *
+     * @param insertNewLine
+     *            the new insert new line
+     */
+    public void setInsertNewLine(boolean insertNewLine) {
+        this.insertNewLine = insertNewLine;
+    }
+
+    /**
+     * Sets the auto exclude wildcards.
+     *
+     * @param autoExcludeWildcards
+     *            the new auto exclude wildcards
+     */
+    public void setAutoExcludeWildcards(boolean autoExcludeWildcards) {
+        this.autoExcludeWildcards = autoExcludeWildcards;
+    }
 
     /**
      * Run.

@@ -103,7 +103,7 @@ public class YuiCompressorMojo extends MojoSupport {
 
     /**
      * a list of aggregation/concatenation to do after processing, for example to create big js files that contain
-     * several small js files. Aggregation could be done on any type of file (js, css, ...).
+     * several small js files. Aggregation could be done on any type of file (js, css, ..).
      */
     @Parameter
     private Aggregation[] aggregations;
@@ -179,22 +179,22 @@ public class YuiCompressorMojo extends MojoSupport {
         if (aggregations != null) {
             Set<File> previouslyIncludedFiles = new HashSet<>();
             for (Aggregation aggregation : aggregations) {
-                getLog().info("generate aggregation : " + aggregation.output);
+                getLog().info("generate aggregation : " + aggregation.getOutput());
                 Collection<File> aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext,
                         incrementalFiles);
                 previouslyIncludedFiles.addAll(aggregatedFiles);
 
-                File gzipped = gzipIfRequested(aggregation.output);
+                File gzipped = gzipIfRequested(aggregation.getOutput());
                 if (statistics) {
                     if (gzipped != null) {
-                        getLog().info(String.format("%s (%db) -> %s (%db)[%d%%]", aggregation.output.getName(),
-                                aggregation.output.length(), gzipped.getName(), gzipped.length(),
-                                ratioOfSize(aggregation.output, gzipped)));
-                    } else if (aggregation.output.exists()) {
-                        getLog().info(
-                                String.format("%s (%db)", aggregation.output.getName(), aggregation.output.length()));
+                        getLog().info(String.format("%s (%db) -> %s (%db)[%d%%]", aggregation.getOutput().getName(),
+                                aggregation.getOutput().length(), gzipped.getName(), gzipped.length(),
+                                ratioOfSize(aggregation.getOutput(), gzipped)));
+                    } else if (aggregation.getOutput().exists()) {
+                        getLog().info(String.format("%s (%db)", aggregation.getOutput().getName(),
+                                aggregation.getOutput().length()));
                     } else {
-                        getLog().warn(String.format("%s not created", aggregation.output.getName()));
+                        getLog().warn(String.format("%s not created", aggregation.getOutput().getName()));
                     }
                 }
             }
