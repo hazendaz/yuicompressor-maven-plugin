@@ -13,7 +13,7 @@ Maven's plugin to compress (minify/obfuscate/aggregate) JavaScript and CSS files
 
 ## Documentation
 
-Full documentation is available under following link:  http://davidb.github.com/yuicompressor-maven-plugin/
+Full documentation is available under following link:  https://davidb.github.io/yuicompressor-maven-plugin/
 
 Summary of the project history can be found in [CHANGELOG](https://github.com/davidB/yuicompressor-maven-plugin/blob/master/CHANGELOG)
 
