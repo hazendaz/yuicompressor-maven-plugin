@@ -21,6 +21,9 @@ package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -79,7 +82,7 @@ public class AggregationTestCase {
     @Test
     void test1to1() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
         target.setIncludes(new String[] { f1.getName() });
@@ -99,10 +102,10 @@ public class AggregationTestCase {
     @Test
     void test2to1() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
@@ -132,10 +135,10 @@ public class AggregationTestCase {
     @Test
     void testNoDuplicateAggregation() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
@@ -165,10 +168,10 @@ public class AggregationTestCase {
     @Test
     void test2to1Order() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "2");
+        Files.write(f2.toPath(), "2".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
@@ -190,10 +193,10 @@ public class AggregationTestCase {
     @Test
     void test2to1WithNewLine() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
@@ -216,10 +219,10 @@ public class AggregationTestCase {
     @Test
     void testAbsolutePathFromInside() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
@@ -241,15 +244,15 @@ public class AggregationTestCase {
     @Test
     void testAbsolutePathFromOutside() throws IOException {
         File f1 = File.createTempFile("test-01", ".js");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+
+        File f2 = new File(dir, "02.js");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+
+        Aggregation target = new Aggregation();
+        target.setOutput(new File(dir, "output.js"));
+
         try {
-            FileUtils.fileWrite(f1.getCanonicalPath(), "1");
-
-            File f2 = new File(dir, "02.js");
-            FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
-
-            Aggregation target = new Aggregation();
-            target.setOutput(new File(dir, "output.js"));
-
             target.setIncludes(new String[] { f1.getCanonicalPath(), f2.getName() });
             Assertions.assertFalse(target.getOutput().exists());
             target.run(null, defaultBuildContext);
@@ -270,10 +273,10 @@ public class AggregationTestCase {
     @Test
     void testAutoExcludeWildcards() throws IOException {
         File f1 = new File(dir, "01.js");
-        FileUtils.fileWrite(f1.getCanonicalPath(), "1");
+        Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         File f2 = new File(dir, "02.js");
-        FileUtils.fileWrite(f2.getCanonicalPath(), "22\n22");
+        Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         Aggregation target = new Aggregation();
         target.setAutoExcludeWildcards(true);
