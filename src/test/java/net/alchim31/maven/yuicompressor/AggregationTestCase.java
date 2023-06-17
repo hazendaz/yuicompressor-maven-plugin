@@ -316,7 +316,7 @@ public class AggregationTestCase {
         // f1 was in previouslyIncluded so it is not included
         System.out.println("f1 is located at: " + f1.getPath());
         System.out.println("f2 is located at: " + f2.getPath());
-        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Arrays.asList(f2));
+        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext), Arrays.asList(f2.getCanonicalFile()));
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
                 new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
