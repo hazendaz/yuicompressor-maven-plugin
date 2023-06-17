@@ -364,7 +364,7 @@ public class BasicRhinoShell extends ScriptableObject {
                 int startline = lineno;
                 logger.info("js> ");
                 try {
-                    String source = "";
+                    StringBuilder source = new StringBuilder();
                     // Collect lines of source to compile.
                     while (true) {
                         String newline = in.readLine();
@@ -372,16 +372,16 @@ public class BasicRhinoShell extends ScriptableObject {
                             hitEOF = true;
                             break;
                         }
-                        source = source + newline + "\n";
+                        source.append(newline).append("\n");
                         lineno++;
                         // Continue collecting as long as more lines are needed to complete the current statement.
                         // stringIsCompilableUnit is also true if the source statement will result in any error other
                         // than one that might be resolved by appending more source.
-                        if (cx.stringIsCompilableUnit(source)) {
+                        if (cx.stringIsCompilableUnit(source.toString())) {
                             break;
                         }
                     }
-                    Object result = cx.evaluateString(this, source, sourceName, startline, null);
+                    Object result = cx.evaluateString(this, source.toString(), sourceName, startline, null);
                     if (result != Context.getUndefinedValue() && logger.isInfoEnabled()) {
                         logger.info("{}", Context.toString(result));
                     }
