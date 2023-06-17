@@ -27,10 +27,9 @@ import java.util.HashSet;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.codehaus.plexus.util.FileUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * The Class AggregationTestCase.
@@ -39,34 +38,11 @@ import org.junit.jupiter.api.Test;
 public class AggregationTestCase {
 
     /** The dir. */
+    @TempDir
     private File dir;
 
     /** The default build context. */
     private DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
-
-    /**
-     * Setup the temporarily directory.
-     *
-     * @throws IOException
-     *             the IO exception
-     */
-    @BeforeEach
-    void setUp() throws IOException {
-        dir = File.createTempFile(this.getClass().getName(), "-test");
-        dir.delete();
-        dir.mkdirs();
-    }
-
-    /**
-     * Destroy the temporary directory.
-     *
-     * @throws IOException
-     *             the IO exception
-     */
-    @AfterEach
-    void tearDown() throws IOException {
-        FileUtils.deleteDirectory(dir);
-    }
 
     /**
      * Test 0 to 1.
