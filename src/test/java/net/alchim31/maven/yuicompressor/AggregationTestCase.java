@@ -239,7 +239,7 @@ public class AggregationTestCase {
         Aggregation target = new Aggregation();
         target.setOutput(new File(dir, "output.js"));
 
-        target.setIncludes(new String[] { f1.getCanonicalPath(), f2.getName() });
+        target.setIncludes(new String[] { f1.getAbsolutePath(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
         target.run(null, defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
@@ -267,7 +267,7 @@ public class AggregationTestCase {
         target.setOutput(new File(dir, "output.js"));
 
         try {
-            target.setIncludes(new String[] { f1.getCanonicalPath(), f2.getName() });
+            target.setIncludes(new String[] { f1.getAbsolutePath(), f2.getName() });
             Assertions.assertFalse(target.getOutput().exists());
             target.run(null, defaultBuildContext);
             Assertions.assertTrue(target.getOutput().exists());
