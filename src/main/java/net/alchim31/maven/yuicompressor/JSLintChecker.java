@@ -21,6 +21,7 @@ package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.codehaus.plexus.util.IOUtil;
@@ -38,10 +39,10 @@ class JSLintChecker {
     /**
      * Instantiates a new JS lint checker.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    public JSLintChecker() throws Exception {
+    public JSLintChecker() throws IOException {
         File jslint = File.createTempFile("jslint", ".js");
         jslint.deleteOnExit();
         try (InputStream in = getClass().getResourceAsStream("/jslint.js");

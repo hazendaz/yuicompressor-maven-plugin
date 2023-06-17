@@ -295,7 +295,7 @@ public class BasicRhinoShell extends ScriptableObject {
             return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
         } catch (RuntimeException exc) {
             throw exc;
-        } catch (Exception exc) {
+        } catch (IOException exc) {
             throw new RuntimeException("wrap: " + exc.getMessage(), exc);
         }
     }
@@ -375,12 +375,9 @@ public class BasicRhinoShell extends ScriptableObject {
                         }
                         source = source + newline + "\n";
                         lineno++;
-                        // Continue collecting as long as more lines
-                        // are needed to complete the current
-                        // statement. stringIsCompilableUnit is also
-                        // true if the source statement will result in
-                        // any error other than one that might be
-                        // resolved by appending more source.
+                        // Continue collecting as long as more lines are needed to complete the current statement.
+                        // stringIsCompilableUnit is also true if the source statement will result in any error other
+                        // than one that might be resolved by appending more source.
                         if (cx.stringIsCompilableUnit(source)) {
                             break;
                         }
@@ -390,15 +387,14 @@ public class BasicRhinoShell extends ScriptableObject {
                         logger.info("{}", Context.toString(result));
                     }
                 } catch (WrappedException e) {
-                    // Some form of exception was caught by JavaScript and
-                    // propagated up.
+                    // Some form of exception was caught by JavaScript and propagated up.
                     logger.info(e.getWrappedException().toString());
                     logger.error("", e);
                 } catch (EvaluatorException | JavaScriptException e) {
                     // Some form of JavaScript error.
                     logger.info("js: {}", e.getMessage());
-                } catch (IOException ioe) {
-                    logger.info(ioe.toString());
+                } catch (IOException e) {
+                    logger.info(e.toString());
                 }
                 if (quitting) {
                     // The user executed the quit() function.
@@ -408,9 +404,8 @@ public class BasicRhinoShell extends ScriptableObject {
             logger.info("");
         } else {
             try (BufferedReader in = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
-                // Here we evaluate the entire contents of the file as
-                // a script. Text is printed only if the print() function
-                // is called.
+                // Here we evaluate the entire contents of the file as a script. Text is printed only if the
+                // print() function is called.
                 cx.evaluateReader(this, in, filename, 1, null);
             } catch (WrappedException e) {
                 logger.info(e.getWrappedException().toString());

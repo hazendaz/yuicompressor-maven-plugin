@@ -20,6 +20,7 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.maven.model.Resource;
@@ -128,15 +129,18 @@ public abstract class MojoSupport extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().debug("run of yuicompressor-maven-plugin skipped");
+            return;
+        }
+
+        if (failOnWarning) {
+            jswarn = true;
+        }
+
+        jsErrorReporter_ = new ErrorReporter4Mojo(getLog(), jswarn, buildContext);
+
         try {
-            if (skip) {
-                getLog().debug("run of yuicompressor-maven-plugin skipped");
-                return;
-            }
-            if (failOnWarning) {
-                jswarn = true;
-            }
-            jsErrorReporter_ = new ErrorReporter4Mojo(getLog(), jswarn, buildContext);
             beforeProcess();
             processDir(sourceDirectory, outputDirectory, null, useProcessedResources);
             if (!excludeResources) {
@@ -153,16 +157,14 @@ public abstract class MojoSupport extends AbstractMojo {
                 processDir(warSourceDirectory, webappDirectory, null, useProcessedResources);
             }
             afterProcess();
-            getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(),
-                    jsErrorReporter_.getErrorCnt()));
-            if (failOnWarning && jsErrorReporter_.getWarningCnt() > 0) {
-                throw new MojoFailureException(
-                        "warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
-            }
-        } catch (RuntimeException | MojoFailureException | MojoExecutionException e) {
-            throw e;
         } catch (Exception e) {
             throw new MojoExecutionException("wrap: " + e.getMessage(), e);
+        }
+
+        getLog().info(String.format("nb warnings: %d, nb errors: %d", jsErrorReporter_.getWarningCnt(),
+                jsErrorReporter_.getErrorCnt()));
+        if (failOnWarning && jsErrorReporter_.getWarningCnt() > 0) {
+            throw new MojoFailureException("warnings on " + this.getClass().getSimpleName() + "=> failure ! (see log)");
         }
     }
 
@@ -170,27 +172,24 @@ public abstract class MojoSupport extends AbstractMojo {
      * Gets the default includes.
      *
      * @return the default includes
-     *
-     * @throws Exception
-     *             the exception
      */
-    protected abstract String[] getDefaultIncludes() throws Exception;
+    protected abstract String[] getDefaultIncludes();
 
     /**
      * Before process.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    protected abstract void beforeProcess() throws Exception;
+    protected abstract void beforeProcess() throws IOException;
 
     /**
      * After process.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    protected abstract void afterProcess() throws Exception;
+    protected abstract void afterProcess() throws IOException;
 
     /**
      * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than
@@ -205,11 +204,15 @@ public abstract class MojoSupport extends AbstractMojo {
      * @param destAsSource
      *            the dest as source
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
+     * @throws MojoFailureException
+     *             the Mojo Failure Exception
+     * @throws MojoExecutionException
+     *             the Mojo Execution Exception
      */
     private void processDir(File srcRoot, File destRoot, List<String> srcExcludes, boolean destAsSource)
-            throws Exception {
+            throws IOException, MojoFailureException, MojoExecutionException {
         if (srcRoot == null) {
             return;
         }
@@ -271,8 +274,10 @@ public abstract class MojoSupport extends AbstractMojo {
      * @param src
      *            the src
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
+     * @throws MojoExecutionException
+     *             the mojo execution exception
      */
-    protected abstract void processFile(SourceFile src) throws Exception;
+    protected abstract void processFile(SourceFile src) throws IOException, MojoExecutionException;
 }

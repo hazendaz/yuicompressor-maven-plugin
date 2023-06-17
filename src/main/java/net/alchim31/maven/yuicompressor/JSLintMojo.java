@@ -19,6 +19,8 @@
  */
 package net.alchim31.maven.yuicompressor;
 
+import java.io.IOException;
+
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
@@ -36,21 +38,21 @@ public class JSLintMojo extends MojoSupport {
     private JSLintChecker jslint_;
 
     @Override
-    protected String[] getDefaultIncludes() throws Exception {
+    protected String[] getDefaultIncludes() {
         return new String[] { "**/**.js" };
     }
 
     @Override
-    public void beforeProcess() throws Exception {
+    public void beforeProcess() throws IOException {
         jslint_ = new JSLintChecker();
     }
 
     @Override
-    public void afterProcess() throws Exception {
+    public void afterProcess() {
     }
 
     @Override
-    protected void processFile(SourceFile src) throws Exception {
+    protected void processFile(SourceFile src) {
         getLog().info("check file :" + src.toFile());
         jslint_.check(src.toFile(), jsErrorReporter_);
     }

@@ -52,11 +52,8 @@ public class SourceFile {
      *            the name
      * @param destAsSource
      *            the dest as source
-     *
-     * @throws Exception
-     *             the exception
      */
-    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) throws Exception {
+    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {
         srcRoot_ = srcRoot;
         destRoot_ = destRoot;
         destAsSource_ = destAsSource;

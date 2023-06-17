@@ -22,6 +22,7 @@ package net.alchim31.maven.yuicompressor;
 import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -46,11 +47,11 @@ public class AggregationTestCase {
     /**
      * Setup the temporarily directory.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() throws IOException {
         dir_ = File.createTempFile(this.getClass().getName(), "-test");
         dir_.delete();
         dir_.mkdirs();
@@ -59,22 +60,22 @@ public class AggregationTestCase {
     /**
      * Destroy the temporary directory.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDown() throws IOException {
         FileUtils.deleteDirectory(dir_);
     }
 
     /**
      * Test 0 to 1.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void test0to1() throws Exception {
+    void test0to1() throws IOException {
         Aggregation target = new Aggregation();
         target.output = new File(dir_, "output.js");
 
@@ -96,11 +97,11 @@ public class AggregationTestCase {
     /**
      * Test 1 to 1.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void test1to1() throws Exception {
+    void test1to1() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
         Aggregation target = new Aggregation();
@@ -116,11 +117,11 @@ public class AggregationTestCase {
     /**
      * Test 2 to 1.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void test2to1() throws Exception {
+    void test2to1() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -147,11 +148,11 @@ public class AggregationTestCase {
     /**
      * Test no duplicate aggregation.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void testNoDuplicateAggregation() throws Exception {
+    void testNoDuplicateAggregation() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -178,11 +179,11 @@ public class AggregationTestCase {
     /**
      * Test 2 to 1 order.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void test2to1Order() throws Exception {
+    void test2to1Order() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -202,11 +203,11 @@ public class AggregationTestCase {
     /**
      * Test 2 to 1 with new line.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void test2to1WithNewLine() throws Exception {
+    void test2to1WithNewLine() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -228,11 +229,11 @@ public class AggregationTestCase {
     /**
      * Test absolute path from inside.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void testAbsolutePathFromInside() throws Exception {
+    void testAbsolutePathFromInside() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 
@@ -252,11 +253,11 @@ public class AggregationTestCase {
     /**
      * Test absolute path from outside.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void testAbsolutePathFromOutside() throws Exception {
+    void testAbsolutePathFromOutside() throws IOException {
         File f1 = File.createTempFile("test-01", ".js");
         try {
             FileUtils.fileWrite(f1.getCanonicalPath(), "1");
@@ -280,11 +281,11 @@ public class AggregationTestCase {
     /**
      * Test auto exclude wildcards.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     @Test
-    void testAutoExcludeWildcards() throws Exception {
+    void testAutoExcludeWildcards() throws IOException {
         File f1 = new File(dir_, "01.js");
         FileUtils.fileWrite(f1.getCanonicalPath(), "1");
 

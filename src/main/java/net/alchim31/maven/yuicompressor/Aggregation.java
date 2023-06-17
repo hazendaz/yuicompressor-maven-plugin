@@ -21,8 +21,10 @@ package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,16 +34,11 @@ import java.util.Set;
 import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.IOUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class Aggregation.
  */
 public class Aggregation {
-
-    /** The Constant Logger. */
-    private static final Logger logger = LoggerFactory.getLogger(Aggregation.class);
 
     /** The input dir. */
     public File inputDir;
@@ -80,10 +77,10 @@ public class Aggregation {
      *
      * @return the list
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext) throws Exception {
+    public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext) throws IOException {
         return this.run(previouslyIncludedFiles, buildContext, null);
     }
 
@@ -99,11 +96,11 @@ public class Aggregation {
      *
      * @return the list
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     public List<File> run(Collection<File> previouslyIncludedFiles, BuildContext buildContext,
-            Set<String> incrementalFiles) throws Exception {
+            Set<String> incrementalFiles) throws IOException {
         defineInputDir();
 
         List<File> files;
@@ -134,8 +131,8 @@ public class Aggregation {
                         }
                     }
                     if (removeIncluded) {
-                        if (file.exists() && file.delete()) {
-                            logger.warn("unable to delete file: {}", file);
+                        if (file.exists()) {
+                            Files.delete(file.toPath());
                         }
                         buildContext.refresh(file);
                     }
@@ -169,10 +166,10 @@ public class Aggregation {
     /**
      * Define input dir.
      *
-     * @throws Exception
+     * @throws IOException
      *             the exception
      */
-    private void defineInputDir() throws Exception {
+    private void defineInputDir() throws IOException {
         if (inputDir == null) {
             inputDir = output.getParentFile();
         }
@@ -194,11 +191,11 @@ public class Aggregation {
      *
      * @return the included files
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
     private List<File> getIncludedFiles(Collection<File> previouslyIncludedFiles, BuildContext buildContext,
-            Set<String> incrementalFiles) throws Exception {
+            Set<String> incrementalFiles) throws IOException {
         List<File> filesToAggregate = new ArrayList<>();
         if (includes != null) {
             for (String include : includes) {
@@ -236,12 +233,8 @@ public class Aggregation {
      *            the included files
      * @param previouslyIncludedFiles
      *            the previously included files
-     *
-     * @throws Exception
-     *             the exception
      */
-    private void addInto(String include, List<File> includedFiles, Collection<File> previouslyIncludedFiles)
-            throws Exception {
+    private void addInto(String include, List<File> includedFiles, Collection<File> previouslyIncludedFiles) {
         if (include.indexOf('*') > -1) {
             DirectoryScanner scanner = newScanner();
             scanner.setIncludes(new String[] { include });
@@ -270,11 +263,8 @@ public class Aggregation {
      * New scanner.
      *
      * @return the directory scanner
-     *
-     * @throws Exception
-     *             the exception
      */
-    private DirectoryScanner newScanner() throws Exception {
+    private DirectoryScanner newScanner() {
         DirectoryScanner scanner = new DirectoryScanner();
         scanner.setBasedir(inputDir);
         if (excludes != null && excludes.length != 0) {

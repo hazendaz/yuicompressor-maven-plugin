@@ -44,10 +44,6 @@ import org.codehaus.plexus.util.IOUtil;
 
 /**
  * Apply compression on JS and CSS (using YUI Compressor).
- *
- * @author David Bernard
- *
- * @since 2007-08-28
  */
 @Mojo(name = "compress", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
 public class YuiCompressorMojo extends MojoSupport {
@@ -146,12 +142,12 @@ public class YuiCompressorMojo extends MojoSupport {
     private Set<String> incrementalFiles;
 
     @Override
-    protected String[] getDefaultIncludes() throws Exception {
+    protected String[] getDefaultIncludes() {
         return new String[] { "**/*.css", "**/*.js" };
     }
 
     @Override
-    public void beforeProcess() throws Exception {
+    public void beforeProcess() throws IOException {
         if (nosuffix) {
             suffix = "";
         }
@@ -162,7 +158,7 @@ public class YuiCompressorMojo extends MojoSupport {
     }
 
     @Override
-    protected void afterProcess() throws Exception {
+    protected void afterProcess() throws IOException {
         if (statistics && inSizeTotal_ > 0) {
             getLog().info(String.format("total input (%db) -> output (%db)[%d%%]", inSizeTotal_, outSizeTotal_,
                     outSizeTotal_ * 100 / inSizeTotal_));
@@ -176,10 +172,10 @@ public class YuiCompressorMojo extends MojoSupport {
     /**
      * Aggregate.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    private void aggregate() throws Exception {
+    private void aggregate() throws IOException {
         if (aggregations != null) {
             Set<File> previouslyIncludedFiles = new HashSet<>();
             for (Aggregation aggregation : aggregations) {
@@ -206,7 +202,7 @@ public class YuiCompressorMojo extends MojoSupport {
     }
 
     @Override
-    protected void processFile(SourceFile src) throws Exception {
+    protected void processFile(SourceFile src) throws IOException, MojoExecutionException {
         File inFile = src.toFile();
         getLog().debug("on incremental build only compress if input file has Delta");
         if (buildContext.isIncremental()) {
@@ -308,9 +304,6 @@ public class YuiCompressorMojo extends MojoSupport {
      *            the in
      * @param out
      *            the out
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
      */
     private void compressCss(InputStreamReader in, OutputStreamWriter out) throws IOException {
         try {
@@ -331,10 +324,10 @@ public class YuiCompressorMojo extends MojoSupport {
      *
      * @return the file
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             the IO exception
      */
-    protected File gzipIfRequested(File file) throws Exception {
+    protected File gzipIfRequested(File file) throws IOException {
         if (!gzip || file == null || !file.exists() || ".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
             return null;
         }
@@ -360,11 +353,8 @@ public class YuiCompressorMojo extends MojoSupport {
      *            the file X
      *
      * @return the long
-     *
-     * @throws Exception
-     *             the exception
      */
-    protected long ratioOfSize(File file100, File fileX) throws Exception {
+    protected long ratioOfSize(File file100, File fileX) {
         long v100 = Math.max(file100.length(), 1);
         long vX = Math.max(fileX.length(), 1);
         return vX * 100 / v100;
