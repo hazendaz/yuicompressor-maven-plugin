@@ -133,7 +133,7 @@
   <properties>
     <!-- Maven Artifacts -->
     <invoker-plugin.version>3.6.0</invoker-plugin.version>
-    <maven.version>3.9.2</maven.version>
+    <maven.version>3.9.3</maven.version>
     <maven-plugin.version>3.9.0</maven-plugin.version>
 
     <!-- Velocity -->
