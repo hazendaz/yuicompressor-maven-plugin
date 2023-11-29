@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>YuiCompressorMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">YUI Compressor Maven Mojo</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">YuiCompressorMojo.java</span></div><h1>YuiCompressorMojo.java</h1><pre class="source lang-java linenums">/*
+ * YuiCompressor Maven plugin
+ *
+ * Copyright 2012-2023 Hazendaz.
+ *
+ * Licensed under the GNU Lesser General Public License (LGPL),
+ * version 2.1 or later (the &quot;License&quot;).
+ * You may not use this file except in compliance with the License.
+ * You may read the licence in the 'lgpl.txt' file in the root folder of
+ * project or obtain a copy at
+ *
+ *     https://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.alchim31.maven.yuicompressor;
+
+import com.yahoo.platform.yui.compressor.CssCompressor;
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.zip.GZIPOutputStream;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
+
+/**
+ * Apply compression on JS and CSS (using YUI Compressor).
+ */
+@Mojo(name = &quot;compress&quot;, defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
+<span class="nc" id="L49">public class YuiCompressorMojo extends MojoSupport {</span>
+
+    /**
+     * Read the input file using &quot;encoding&quot;.
+     */
+    @Parameter(defaultValue = &quot;${project.build.sourceEncoding}&quot;, property = &quot;file.encoding&quot;)
+    private String encoding;
+
+    /**
+     * The output filename suffix.
+     */
+    @Parameter(defaultValue = &quot;-min&quot;, property = &quot;maven.yuicompressor.suffix&quot;)
+    private String suffix;
+
+    /**
+     * If no &quot;suffix&quot; must be add to output filename (maven's configuration manage empty suffix like default).
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.nosuffix&quot;)
+    private boolean nosuffix;
+
+    /**
+     * Insert line breaks in output after the specified column number.
+     */
+    @Parameter(defaultValue = &quot;-1&quot;, property = &quot;maven.yuicompressor.linebreakpos&quot;)
+    private int linebreakpos;
+
+    /** [js only] No compression. */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.nocompress&quot;)
+    private boolean nocompress;
+
+    /**
+     * [js only] Minify only, do not obfuscate.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.nomunge&quot;)
+    private boolean nomunge;
+
+    /**
+     * [js only] Preserve unnecessary semicolons.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.preserveAllSemiColons&quot;)
+    private boolean preserveAllSemiColons;
+
+    /**
+     * [js only] disable all micro optimizations.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.disableOptimizations&quot;)
+    private boolean disableOptimizations;
+
+    /**
+     * force the compression of every files, else if compressed file already exists and is younger than source file,
+     * nothing is done.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.force&quot;)
+    private boolean force;
+
+    /**
+     * a list of aggregation/concatenation to do after processing, for example to create big js files that contain
+     * several small js files. Aggregation could be done on any type of file (js, css, ..).
+     */
+    @Parameter
+    private Aggregation[] aggregations;
+
+    /**
+     * request to create a gzipped version of the yuicompressed/aggregation files.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.gzip&quot;)
+    private boolean gzip;
+
+    /** gzip level. */
+    @Parameter(defaultValue = &quot;9&quot;, property = &quot;maven.yuicompressor.level&quot;)
+    private int level;
+
+    /**
+     * show statistics (compression ratio).
+     */
+    @Parameter(defaultValue = &quot;true&quot;, property = &quot;maven.yuicompressor.statistics&quot;)
+    private boolean statistics;
+
+    /** aggregate files before minify. */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.preProcessAggregates&quot;)
+    private boolean preProcessAggregates;
+
+    /** use the input file as output when the compressed file is larger than the original. */
+    @Parameter(defaultValue = &quot;true&quot;, property = &quot;maven.yuicompressor.useSmallestFile&quot;)
+    private boolean useSmallestFile;
+
+    /** The in size total. */
+    private long inSizeTotal;
+
+    /** The out size total. */
+    private long outSizeTotal;
+
+    /** Keep track of updated files for aggregation on incremental builds. */
+    private Set&lt;String&gt; incrementalFiles;
+
+    @Override
+    protected String[] getDefaultIncludes() {
+<span class="nc" id="L146">        return new String[] { &quot;**/*.css&quot;, &quot;**/*.js&quot; };</span>
+    }
+
+    @Override
+    public void beforeProcess() throws IOException {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (nosuffix) {</span>
+<span class="nc" id="L152">            suffix = &quot;&quot;;</span>
+        }
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (preProcessAggregates) {</span>
+<span class="nc" id="L156">            aggregate();</span>
+        }
+<span class="nc" id="L158">    }</span>
+
+    @Override
+    protected void afterProcess() throws IOException {
+<span class="nc bnc" id="L162" title="All 4 branches missed.">        if (statistics &amp;&amp; inSizeTotal &gt; 0) {</span>
+<span class="nc" id="L163">            getLog().info(String.format(&quot;total input (%db) -&gt; output (%db)[%d%%]&quot;, inSizeTotal, outSizeTotal,</span>
+<span class="nc" id="L164">                    outSizeTotal * 100 / inSizeTotal));</span>
+        }
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (!preProcessAggregates) {</span>
+<span class="nc" id="L168">            aggregate();</span>
+        }
+<span class="nc" id="L170">    }</span>
+
+    /**
+     * Aggregate.
+     *
+     * @throws IOException
+     *             the IO exception
+     */
+    private void aggregate() throws IOException {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (aggregations != null) {</span>
+<span class="nc" id="L180">            Set&lt;File&gt; previouslyIncludedFiles = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            for (Aggregation aggregation : aggregations) {</span>
+<span class="nc" id="L182">                getLog().info(&quot;generate aggregation : &quot; + aggregation.getOutput());</span>
+<span class="nc" id="L183">                Collection&lt;File&gt; aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext,</span>
+                        incrementalFiles);
+<span class="nc" id="L185">                previouslyIncludedFiles.addAll(aggregatedFiles);</span>
+
+<span class="nc" id="L187">                File gzipped = gzipIfRequested(aggregation.getOutput());</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                if (statistics) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                    if (gzipped != null) {</span>
+<span class="nc" id="L190">                        getLog().info(String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, aggregation.getOutput().getName(),</span>
+<span class="nc" id="L191">                                aggregation.getOutput().length(), gzipped.getName(), gzipped.length(),</span>
+<span class="nc" id="L192">                                ratioOfSize(aggregation.getOutput(), gzipped)));</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                    } else if (aggregation.getOutput().exists()) {</span>
+<span class="nc" id="L194">                        getLog().info(String.format(&quot;%s (%db)&quot;, aggregation.getOutput().getName(),</span>
+<span class="nc" id="L195">                                aggregation.getOutput().length()));</span>
+                    } else {
+<span class="nc" id="L197">                        getLog().warn(String.format(&quot;%s not created&quot;, aggregation.getOutput().getName()));</span>
+                    }
+                }
+            }
+        }
+<span class="nc" id="L202">    }</span>
+
+    @Override
+    protected void processFile(SourceFile src) throws IOException, MojoExecutionException {
+<span class="nc" id="L206">        File inFile = src.toFile();</span>
+<span class="nc" id="L207">        getLog().debug(&quot;on incremental build only compress if input file has Delta&quot;);</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">            if (!buildContext.hasDelta(inFile)) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">                if (getLog().isInfoEnabled()) {</span>
+<span class="nc" id="L211">                    getLog().info(&quot;nothing to do, &quot; + inFile + &quot; has no Delta&quot;);</span>
+                }
+<span class="nc" id="L213">                return;</span>
+            }
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            if (incrementalFiles == null) {</span>
+<span class="nc" id="L216">                incrementalFiles = new HashSet&lt;&gt;();</span>
+            }
+        }
+
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        if (getLog().isDebugEnabled()) {</span>
+<span class="nc" id="L221">            getLog().debug(&quot;compress file :&quot; + src.toFile() + &quot; to &quot; + src.toDestFile(suffix));</span>
+        }
+
+<span class="nc" id="L224">        File outFile = src.toDestFile(suffix);</span>
+<span class="nc bnc" id="L225" title="All 4 branches missed.">        if (!nosuffix &amp;&amp; isMinifiedFile(inFile)) {</span>
+<span class="nc" id="L226">            return;</span>
+        }
+<span class="nc" id="L228">        getLog().debug(&quot;only compress if input file is younger than existing output file&quot;);</span>
+<span class="nc bnc" id="L229" title="All 6 branches missed.">        if (!force &amp;&amp; outFile.exists() &amp;&amp; outFile.lastModified() &gt; inFile.lastModified()) {</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">            if (getLog().isInfoEnabled()) {</span>
+<span class="nc" id="L231">                getLog().info(&quot;nothing to do, &quot; + outFile</span>
+                        + &quot; is younger than original, use 'force' option or clean your target&quot;);
+            }
+<span class="nc" id="L234">            return;</span>
+        }
+<span class="nc" id="L236">        File outFileTmp = new File(outFile.getCanonicalFile() + &quot;.tmp&quot;);</span>
+<span class="nc" id="L237">        FileUtils.forceDelete(outFileTmp);</span>
+
+<span class="nc bnc" id="L239" title="All 4 branches missed.">        if (!outFile.getParentFile().exists() &amp;&amp; !outFile.getParentFile().mkdirs()) {</span>
+<span class="nc" id="L240">            throw new MojoExecutionException(&quot;Cannot create resource output directory: &quot; + outFile.getParentFile());</span>
+        }
+<span class="nc" id="L242">        getLog().debug(&quot;use a temporary outputfile (in case in == out)&quot;);</span>
+
+<span class="nc" id="L244">        try (InputStreamReader in = new InputStreamReader(new FileInputStream(inFile), Charset.forName(encoding));</span>
+                /* outFileTmp will be deleted create with FileOutputStream */
+<span class="nc" id="L246">                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outFileTmp),</span>
+<span class="nc" id="L247">                        Charset.forName(encoding));) {</span>
+
+<span class="nc" id="L249">            getLog().debug(&quot;start compression&quot;);</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">            if (nocompress) {</span>
+<span class="nc" id="L251">                getLog().info(&quot;No compression is enabled&quot;);</span>
+<span class="nc" id="L252">                IOUtil.copy(in, out);</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            } else if (&quot;.js&quot;.equalsIgnoreCase(src.getExtension())) {</span>
+<span class="nc" id="L254">                JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">                compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons, disableOptimizations);</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">            } else if (&quot;.css&quot;.equalsIgnoreCase(src.getExtension())) {</span>
+<span class="nc" id="L257">                compressCss(in, out);</span>
+            }
+<span class="nc" id="L259">            getLog().debug(&quot;end compression&quot;);</span>
+        }
+
+<span class="nc bnc" id="L262" title="All 4 branches missed.">        boolean outputIgnored = useSmallestFile &amp;&amp; inFile.length() &lt; outFile.length();</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">        if (outputIgnored) {</span>
+<span class="nc" id="L264">            FileUtils.forceDelete(outFileTmp);</span>
+<span class="nc" id="L265">            FileUtils.copyFile(inFile, outFile);</span>
+<span class="nc" id="L266">            getLog().debug(&quot;output greater than input, using original instead&quot;);</span>
+        } else {
+<span class="nc" id="L268">            FileUtils.forceDelete(outFile);</span>
+<span class="nc" id="L269">            FileUtils.rename(outFileTmp, outFile);</span>
+<span class="nc" id="L270">            buildContext.refresh(outFile);</span>
+        }
+
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
+<span class="nc" id="L274">            incrementalFiles.add(outFile.getCanonicalPath());</span>
+        }
+
+<span class="nc" id="L277">        File gzipped = gzipIfRequested(outFile);</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (statistics) {</span>
+<span class="nc" id="L279">            inSizeTotal += inFile.length();</span>
+<span class="nc" id="L280">            outSizeTotal += outFile.length();</span>
+
+            String fileStatistics;
+<span class="nc bnc" id="L283" title="All 2 branches missed.">            if (outputIgnored) {</span>
+<span class="nc" id="L284">                fileStatistics = String.format(</span>
+<span class="nc" id="L285">                        &quot;%s (%db) -&gt; %s (%db)[compressed output discarded (exceeded input size)]&quot;, inFile.getName(),</span>
+<span class="nc" id="L286">                        inFile.length(), outFile.getName(), outFile.length());</span>
+            } else {
+<span class="nc" id="L288">                fileStatistics = String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, inFile.getName(), inFile.length(),</span>
+<span class="nc" id="L289">                        outFile.getName(), outFile.length(), ratioOfSize(inFile, outFile));</span>
+            }
+
+<span class="nc bnc" id="L292" title="All 2 branches missed.">            if (gzipped != null) {</span>
+<span class="nc" id="L293">                fileStatistics = fileStatistics + String.format(&quot; -&gt; %s (%db)[%d%%]&quot;, gzipped.getName(),</span>
+<span class="nc" id="L294">                        gzipped.length(), ratioOfSize(inFile, gzipped));</span>
+            }
+<span class="nc" id="L296">            getLog().info(fileStatistics);</span>
+        }
+<span class="nc" id="L298">    }</span>
+
+    /**
+     * Compress css.
+     *
+     * @param in
+     *            the in
+     * @param out
+     *            the out
+     */
+    private void compressCss(InputStreamReader in, OutputStreamWriter out) throws IOException {
+        try {
+<span class="nc" id="L310">            CssCompressor compressor = new CssCompressor(in);</span>
+<span class="nc" id="L311">            compressor.compress(out, linebreakpos);</span>
+<span class="nc" id="L312">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L313">            throw new IllegalArgumentException(</span>
+                    &quot;Unexpected characters found in CSS file. Ensure that the CSS file does not contain '$', and try again&quot;,
+                    e);
+<span class="nc" id="L316">        }</span>
+<span class="nc" id="L317">    }</span>
+
+    /**
+     * Gzip if requested.
+     *
+     * @param file
+     *            the file
+     *
+     * @return the file
+     *
+     * @throws IOException
+     *             the IO exception
+     */
+    protected File gzipIfRequested(File file) throws IOException {
+<span class="nc bnc" id="L331" title="All 8 branches missed.">        if (!gzip || file == null || !file.exists() || &quot;.gz&quot;.equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {</span>
+<span class="nc" id="L332">            return null;</span>
+        }
+<span class="nc" id="L334">        File gzipped = new File(file.getCanonicalPath() + &quot;.gz&quot;);</span>
+<span class="nc" id="L335">        getLog().debug(String.format(&quot;create gzip version : %s&quot;, gzipped.getName()));</span>
+<span class="nc" id="L336">        try (FileInputStream in = new FileInputStream(file);</span>
+<span class="nc" id="L337">                GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {</span>
+                    {
+<span class="nc" id="L339">                        def.setLevel(level);</span>
+<span class="nc" id="L340">                    }</span>
+                };) {
+<span class="nc" id="L342">            IOUtil.copy(in, out);</span>
+        }
+<span class="nc" id="L344">        return gzipped;</span>
+    }
+
+    /**
+     * Ratio of size.
+     *
+     * @param file100
+     *            the file 100
+     * @param fileX
+     *            the file X
+     *
+     * @return the long
+     */
+    protected long ratioOfSize(File file100, File fileX) {
+<span class="nc" id="L358">        long v100 = Math.max(file100.length(), 1);</span>
+<span class="nc" id="L359">        long vX = Math.max(fileX.length(), 1);</span>
+<span class="nc" id="L360">        return vX * 100 / v100;</span>
+    }
+
+    /**
+     * Checks if is minified file.
+     *
+     * @param inFile
+     *            the in file
+     *
+     * @return true, if is minified file
+     */
+    private boolean isMinifiedFile(File inFile) {
+<span class="nc" id="L372">        String filename = inFile.getName().toLowerCase(Locale.getDefault());</span>
+<span class="nc bnc" id="L373" title="All 4 branches missed.">        return filename.endsWith(suffix + &quot;.js&quot;) || filename.endsWith(suffix + &quot;.css&quot;);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"net.alchim31.maven.yuicompressor","c":"AggregationTestCase","l":"AggregationTestCase()","u":"%3Cinit%3E()"}];updateSearchResults();

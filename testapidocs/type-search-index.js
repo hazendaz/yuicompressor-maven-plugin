@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"net.alchim31.maven.yuicompressor","l":"AggregationTestCase"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"}];updateSearchResults();

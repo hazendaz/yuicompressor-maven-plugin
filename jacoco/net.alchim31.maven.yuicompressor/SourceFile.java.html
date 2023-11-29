@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">YUI Compressor Maven Mojo</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">SourceFile.java</span></div><h1>SourceFile.java</h1><pre class="source lang-java linenums">/*
+ * YuiCompressor Maven plugin
+ *
+ * Copyright 2012-2023 Hazendaz.
+ *
+ * Licensed under the GNU Lesser General Public License (LGPL),
+ * version 2.1 or later (the &quot;License&quot;).
+ * You may not use this file except in compliance with the License.
+ * You may read the licence in the 'lgpl.txt' file in the root folder of
+ * project or obtain a copy at
+ *
+ *     https://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.alchim31.maven.yuicompressor;
+
+import java.io.File;
+
+/**
+ * The Class SourceFile.
+ */
+public class SourceFile {
+
+    /** The src root. */
+    private File srcRoot;
+
+    /** The dest root. */
+    private File destRoot;
+
+    /** The dest as source. */
+    private boolean destAsSource;
+
+    /** The rpath. */
+    private String rpath;
+
+    /** The extension. */
+    private String extension;
+
+    /**
+     * Instantiates a new source file.
+     *
+     * @param srcRoot
+     *            the src root
+     * @param destRoot
+     *            the dest root
+     * @param name
+     *            the name
+     * @param destAsSource
+     *            the dest as source
+     */
+<span class="nc" id="L56">    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {</span>
+<span class="nc" id="L57">        this.srcRoot = srcRoot;</span>
+<span class="nc" id="L58">        this.destRoot = destRoot;</span>
+<span class="nc" id="L59">        this.destAsSource = destAsSource;</span>
+<span class="nc" id="L60">        this.rpath = name;</span>
+<span class="nc" id="L61">        int sep = this.rpath.lastIndexOf('.');</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (sep &gt; 0) {</span>
+<span class="nc" id="L63">            this.extension = this.rpath.substring(sep);</span>
+<span class="nc" id="L64">            this.rpath = rpath.substring(0, sep);</span>
+        } else {
+<span class="nc" id="L66">            this.extension = &quot;&quot;;</span>
+        }
+<span class="nc" id="L68">    }</span>
+
+    /**
+     * To file.
+     *
+     * @return the file
+     */
+    public File toFile() {
+<span class="nc" id="L76">        String frpath = rpath + extension;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (destAsSource) {</span>
+<span class="nc" id="L78">            File defaultDest = new File(destRoot, frpath);</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
+<span class="nc" id="L80">                return defaultDest;</span>
+            }
+        }
+<span class="nc" id="L83">        return new File(srcRoot, frpath);</span>
+    }
+
+    /**
+     * To dest file.
+     *
+     * @param suffix
+     *            the suffix
+     *
+     * @return the file
+     */
+    public File toDestFile(String suffix) {
+<span class="nc" id="L95">        return new File(destRoot, rpath + suffix + extension);</span>
+    }
+
+    /**
+     * Gets the extension.
+     *
+     * @return the extension
+     */
+    public String getExtension() {
+<span class="nc" id="L104">        return extension;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

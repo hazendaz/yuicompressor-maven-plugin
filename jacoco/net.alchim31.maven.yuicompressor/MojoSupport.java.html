@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MojoSupport.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">YUI Compressor Maven Mojo</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">MojoSupport.java</span></div><h1>MojoSupport.java</h1><pre class="source lang-java linenums">/*
+ * YuiCompressor Maven plugin
+ *
+ * Copyright 2012-2023 Hazendaz.
+ *
+ * Licensed under the GNU Lesser General Public License (LGPL),
+ * version 2.1 or later (the &quot;License&quot;).
+ * You may not use this file except in compliance with the License.
+ * You may read the licence in the 'lgpl.txt' file in the root folder of
+ * project or obtain a copy at
+ *
+ *     https://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.alchim31.maven.yuicompressor;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.build.BuildContext;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.Scanner;
+
+/**
+ * Common class for mojos.
+ */
+<span class="nc" id="L40">public abstract class MojoSupport extends AbstractMojo {</span>
+
+    /** The Constant EMPTY_STRING_ARRAY. */
+<span class="nc" id="L43">    private static final String[] EMPTY_STRING_ARRAY = {};</span>
+
+    /**
+     * Javascript source directory. (result will be put to outputDirectory).
+     */
+    @Parameter(defaultValue = &quot;${project.build.sourceDirectory}/../js&quot;)
+    private File sourceDirectory;
+
+    /**
+     * Single directory for extra files to include in the WAR.
+     */
+    @Parameter(defaultValue = &quot;${project.basedir}/src/main/webapp&quot;)
+    private File warSourceDirectory;
+
+    /**
+     * The directory where the webapp is built.
+     */
+    @Parameter(defaultValue = &quot;${project.build.directory}/${project.build.finalName}&quot;)
+    private File webappDirectory;
+
+    /**
+     * The output directory into which to copy the resources.
+     */
+    @Parameter(defaultValue = &quot;${project.build.outputDirectory}&quot;, required = true)
+    private File outputDirectory;
+
+    /**
+     * The list of resources we want to transfer.
+     */
+    @Parameter(defaultValue = &quot;${project.resources}&quot;, required = true, readonly = true)
+    private List&lt;Resource&gt; resources;
+
+    /** list of additional excludes. */
+    @Parameter
+    private List&lt;String&gt; excludes;
+
+    /** Use processed resources if available. */
+    @Parameter(defaultValue = &quot;false&quot;)
+    private boolean useProcessedResources;
+
+    /** list of additional includes. */
+    @Parameter
+    private List&lt;String&gt; includes;
+
+    /** Excludes files from webapp directory. */
+    @Parameter
+    private boolean excludeWarSourceDirectory;
+
+    /**
+     * Excludes files from resources directories.
+     */
+    @Parameter(defaultValue = &quot;false&quot;)
+    private boolean excludeResources;
+
+    /** Maven Project. */
+    @Parameter(defaultValue = &quot;${project}&quot;, readonly = true, required = true)
+    protected MavenProject project;
+
+    /** [js only] Display possible errors in the code. */
+    @Parameter(defaultValue = &quot;true&quot;, property = &quot;maven.yuicompressor.jswarn&quot;)
+    protected boolean jswarn;
+
+    /**
+     * Whether to skip execution.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.skip&quot;)
+    private boolean skip;
+
+    /**
+     * Define if plugin must stop/fail on warnings.
+     */
+    @Parameter(defaultValue = &quot;false&quot;, property = &quot;maven.yuicompressor.failOnWarning&quot;)
+    protected boolean failOnWarning;
+
+    /**
+     * Build Context.
+     */
+    @Component
+    protected BuildContext buildContext;
+
+    /** The js error reporter. */
+    protected ErrorReporter4Mojo jsErrorReporter;
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (skip) {</span>
+<span class="nc" id="L129">            getLog().debug(&quot;run of yuicompressor-maven-plugin skipped&quot;);</span>
+<span class="nc" id="L130">            return;</span>
+        }
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (failOnWarning) {</span>
+<span class="nc" id="L134">            jswarn = true;</span>
+        }
+
+<span class="nc" id="L137">        jsErrorReporter = new ErrorReporter4Mojo(getLog(), jswarn, buildContext);</span>
+
+        try {
+<span class="nc" id="L140">            beforeProcess();</span>
+<span class="nc" id="L141">            processDir(sourceDirectory, outputDirectory, null, useProcessedResources);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (!excludeResources) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                for (Resource resource : resources) {</span>
+<span class="nc" id="L144">                    File destRoot = outputDirectory;</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">                    if (resource.getTargetPath() != null) {</span>
+<span class="nc" id="L146">                        destRoot = new File(outputDirectory, resource.getTargetPath());</span>
+                    }
+<span class="nc" id="L148">                    processDir(new File(resource.getDirectory()), destRoot, resource.getExcludes(),</span>
+                            useProcessedResources);
+<span class="nc" id="L150">                }</span>
+            }
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (!excludeWarSourceDirectory) {</span>
+<span class="nc" id="L153">                processDir(warSourceDirectory, webappDirectory, null, useProcessedResources);</span>
+            }
+<span class="nc" id="L155">            afterProcess();</span>
+<span class="nc" id="L156">        } catch (Exception e) {</span>
+<span class="nc" id="L157">            throw new MojoExecutionException(&quot;wrap: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L158">        }</span>
+
+<span class="nc" id="L160">        getLog().info(String.format(&quot;nb warnings: %d, nb errors: %d&quot;, jsErrorReporter.getWarningCnt(),</span>
+<span class="nc" id="L161">                jsErrorReporter.getErrorCnt()));</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">        if (failOnWarning &amp;&amp; jsErrorReporter.getWarningCnt() &gt; 0) {</span>
+<span class="nc" id="L163">            throw new MojoFailureException(&quot;warnings on &quot; + this.getClass().getSimpleName() + &quot;=&gt; failure ! (see log)&quot;);</span>
+        }
+<span class="nc" id="L165">    }</span>
+
+    /**
+     * Gets the default includes.
+     *
+     * @return the default includes
+     */
+    protected abstract String[] getDefaultIncludes();
+
+    /**
+     * Before process.
+     *
+     * @throws IOException
+     *             the IO exception
+     */
+    protected abstract void beforeProcess() throws IOException;
+
+    /**
+     * After process.
+     *
+     * @throws IOException
+     *             the IO exception
+     */
+    protected abstract void afterProcess() throws IOException;
+
+    /**
+     * Force to use defaultIncludes (ignore srcIncludes) to avoid processing resources/includes from other type than
+     * *.css or *.js see https://github.com/davidB/yuicompressor-maven-plugin/issues/19
+     *
+     * @param srcRoot
+     *            the src root
+     * @param destRoot
+     *            the dest root
+     * @param srcExcludes
+     *            the src excludes
+     * @param destAsSource
+     *            the dest as source
+     *
+     * @throws IOException
+     *             the IO exception
+     * @throws MojoFailureException
+     *             the Mojo Failure Exception
+     * @throws MojoExecutionException
+     *             the Mojo Execution Exception
+     */
+    private void processDir(File srcRoot, File destRoot, List&lt;String&gt; srcExcludes, boolean destAsSource)
+            throws IOException, MojoFailureException, MojoExecutionException {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        if (srcRoot == null) {</span>
+<span class="nc" id="L213">            return;</span>
+        }
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        if (!srcRoot.exists()) {</span>
+<span class="nc" id="L216">            buildContext.addMessage(srcRoot, 0, 0, &quot;Directory &quot; + srcRoot.getPath() + &quot; does not exist&quot;,</span>
+                    BuildContext.SEVERITY_WARNING, null);
+<span class="nc" id="L218">            getLog().info(&quot;Directory &quot; + srcRoot.getPath() + &quot; does not exist&quot;);</span>
+<span class="nc" id="L219">            return;</span>
+        }
+<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (destRoot == null) {</span>
+<span class="nc" id="L222">            throw new MojoFailureException(&quot;destination directory for &quot; + srcRoot + &quot; is null&quot;);</span>
+        }
+        Scanner scanner;
+<span class="nc bnc" id="L225" title="All 2 branches missed.">        if (!buildContext.isIncremental()) {</span>
+<span class="nc" id="L226">            DirectoryScanner dScanner = new DirectoryScanner();</span>
+<span class="nc" id="L227">            dScanner.setBasedir(srcRoot);</span>
+<span class="nc" id="L228">            scanner = dScanner;</span>
+<span class="nc" id="L229">        } else {</span>
+<span class="nc" id="L230">            scanner = buildContext.newScanner(srcRoot);</span>
+        }
+
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        if (includes == null) {</span>
+<span class="nc" id="L234">            scanner.setIncludes(getDefaultIncludes());</span>
+        } else {
+<span class="nc" id="L236">            scanner.setIncludes(includes.toArray(new String[0]));</span>
+        }
+
+<span class="nc bnc" id="L239" title="All 4 branches missed.">        if (srcExcludes != null &amp;&amp; !srcExcludes.isEmpty()) {</span>
+<span class="nc" id="L240">            scanner.setExcludes(srcExcludes.toArray(EMPTY_STRING_ARRAY));</span>
+        }
+<span class="nc bnc" id="L242" title="All 4 branches missed.">        if (excludes != null &amp;&amp; !excludes.isEmpty()) {</span>
+<span class="nc" id="L243">            scanner.setExcludes(excludes.toArray(EMPTY_STRING_ARRAY));</span>
+        }
+<span class="nc" id="L245">        scanner.addDefaultExcludes();</span>
+
+<span class="nc" id="L247">        scanner.scan();</span>
+
+<span class="nc" id="L249">        String[] includedFiles = scanner.getIncludedFiles();</span>
+<span class="nc bnc" id="L250" title="All 4 branches missed.">        if (includedFiles == null || includedFiles.length == 0) {</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            if (buildContext.isIncremental()) {</span>
+<span class="nc" id="L252">                getLog().info(&quot;No files have changed, so skipping the processing&quot;);</span>
+            } else {
+<span class="nc" id="L254">                getLog().info(&quot;No files to be processed&quot;);</span>
+            }
+<span class="nc" id="L256">            return;</span>
+        }
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        for (String name : includedFiles) {</span>
+<span class="nc" id="L259">            SourceFile src = new SourceFile(srcRoot, destRoot, name, destAsSource);</span>
+<span class="nc" id="L260">            jsErrorReporter.setDefaultFileName(&quot;...&quot;</span>
+<span class="nc" id="L261">                    + src.toFile().getCanonicalPath().substring(src.toFile().getCanonicalPath().lastIndexOf('/') + 1));</span>
+<span class="nc" id="L262">            jsErrorReporter.setFile(src.toFile());</span>
+<span class="nc" id="L263">            processFile(src);</span>
+        }
+<span class="nc" id="L265">    }</span>
+
+    /**
+     * Process file.
+     *
+     * @param src
+     *            the src
+     *
+     * @throws IOException
+     *             the IO exception
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     */
+    protected abstract void processFile(SourceFile src) throws IOException, MojoExecutionException;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

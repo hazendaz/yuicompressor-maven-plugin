@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorReporter4Mojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">YUI Compressor Maven Mojo</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">ErrorReporter4Mojo.java</span></div><h1>ErrorReporter4Mojo.java</h1><pre class="source lang-java linenums">/*
+ * YuiCompressor Maven plugin
+ *
+ * Copyright 2012-2023 Hazendaz.
+ *
+ * Licensed under the GNU Lesser General Public License (LGPL),
+ * version 2.1 or later (the &quot;License&quot;).
+ * You may not use this file except in compliance with the License.
+ * You may read the licence in the 'lgpl.txt' file in the root folder of
+ * project or obtain a copy at
+ *
+ *     https://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.alchim31.maven.yuicompressor;
+
+import java.io.File;
+
+import org.apache.maven.plugin.logging.Log;
+import org.codehaus.plexus.build.BuildContext;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
+
+/**
+ * The Class ErrorReporter4Mojo.
+ */
+public class ErrorReporter4Mojo implements ErrorReporter {
+
+    /** The default filename. */
+    private String defaultFilename;
+
+    /** The accept warn. */
+    private boolean acceptWarn;
+
+    /** The log. */
+    private Log log;
+
+    /** The warning cnt. */
+    private int warningCnt;
+
+    /** The error cnt. */
+    private int errorCnt;
+
+    /** The build context. */
+    private BuildContext buildContext;
+
+    /** The source file. */
+    private File sourceFile;
+
+    /**
+     * Instantiates a new error reporter 4 mojo.
+     *
+     * @param log
+     *            the log
+     * @param jswarn
+     *            the jswarn
+     * @param buildContext
+     *            the build context
+     */
+<span class="nc" id="L65">    public ErrorReporter4Mojo(Log log, boolean jswarn, BuildContext buildContext) {</span>
+<span class="nc" id="L66">        this.log = log;</span>
+<span class="nc" id="L67">        this.acceptWarn = jswarn;</span>
+<span class="nc" id="L68">        this.buildContext = buildContext;</span>
+<span class="nc" id="L69">    }</span>
+
+    /**
+     * Sets the default file name.
+     *
+     * @param v
+     *            the new default file name
+     */
+    public void setDefaultFileName(String v) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (v.length() == 0) {</span>
+<span class="nc" id="L79">            v = null;</span>
+        }
+<span class="nc" id="L81">        defaultFilename = v;</span>
+<span class="nc" id="L82">    }</span>
+
+    /**
+     * Gets the error cnt.
+     *
+     * @return the error cnt
+     */
+    public int getErrorCnt() {
+<span class="nc" id="L90">        return errorCnt;</span>
+    }
+
+    /**
+     * Gets the warning cnt.
+     *
+     * @return the warning cnt
+     */
+    public int getWarningCnt() {
+<span class="nc" id="L99">        return warningCnt;</span>
+    }
+
+    @Override
+    public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
+<span class="nc" id="L104">        String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);</span>
+<span class="nc" id="L105">        buildContext.addMessage(sourceFile, line, lineOffset, message, BuildContext.SEVERITY_ERROR, null);</span>
+<span class="nc" id="L106">        log.error(fullMessage);</span>
+<span class="nc" id="L107">        errorCnt++;</span>
+<span class="nc" id="L108">    }</span>
+
+    @Override
+    public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource,
+            int lineOffset) {
+<span class="nc" id="L113">        error(message, sourceName, line, lineSource, lineOffset);</span>
+<span class="nc" id="L114">        throw new EvaluatorException(message, sourceName, line, lineSource, lineOffset);</span>
+    }
+
+    @Override
+    public void warning(String message, String sourceName, int line, String lineSource, int lineOffset) {
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (acceptWarn) {</span>
+<span class="nc" id="L120">            String fullMessage = newMessage(message, sourceName, line, lineSource, lineOffset);</span>
+<span class="nc" id="L121">            buildContext.addMessage(sourceFile, line, lineOffset, message, BuildContext.SEVERITY_WARNING, null);</span>
+<span class="nc" id="L122">            log.warn(fullMessage);</span>
+<span class="nc" id="L123">            warningCnt++;</span>
+        }
+<span class="nc" id="L125">    }</span>
+
+    /**
+     * New message.
+     *
+     * @param message
+     *            the message
+     * @param sourceName
+     *            the source name
+     * @param line
+     *            the line
+     * @param lineSource
+     *            the line source
+     * @param lineOffset
+     *            the line offset
+     *
+     * @return the string
+     */
+    private String newMessage(String message, String sourceName, int line, String lineSource, int lineOffset) {
+<span class="nc" id="L144">        StringBuilder back = new StringBuilder();</span>
+<span class="nc bnc" id="L145" title="All 4 branches missed.">        if (sourceName == null || sourceName.length() == 0) {</span>
+<span class="nc" id="L146">            sourceName = defaultFilename;</span>
+        }
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (sourceName != null) {</span>
+<span class="nc" id="L149">            back.append(sourceName).append(&quot;:line &quot;).append(line).append(&quot;:column &quot;).append(lineOffset).append(':');</span>
+        }
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        if (message != null &amp;&amp; message.length() != 0) {</span>
+<span class="nc" id="L152">            back.append(message);</span>
+        } else {
+<span class="nc" id="L154">            back.append(&quot;unknown error&quot;);</span>
+        }
+<span class="nc bnc" id="L156" title="All 4 branches missed.">        if (lineSource != null &amp;&amp; lineSource.length() != 0) {</span>
+<span class="nc" id="L157">            back.append(&quot;\n\t&quot;).append(lineSource);</span>
+        }
+<span class="nc" id="L159">        return back.toString();</span>
+    }
+
+    /**
+     * Sets the file.
+     *
+     * @param file
+     *            the new file
+     */
+    public void setFile(File file) {
+<span class="nc" id="L169">        sourceFile = file;</span>
+<span class="nc" id="L170">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

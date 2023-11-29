@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JSLintMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">YUI Compressor Maven Mojo</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">JSLintMojo.java</span></div><h1>JSLintMojo.java</h1><pre class="source lang-java linenums">/*
+ * YuiCompressor Maven plugin
+ *
+ * Copyright 2012-2023 Hazendaz.
+ *
+ * Licensed under the GNU Lesser General Public License (LGPL),
+ * version 2.1 or later (the &quot;License&quot;).
+ * You may not use this file except in compliance with the License.
+ * You may read the licence in the 'lgpl.txt' file in the root folder of
+ * project or obtain a copy at
+ *
+ *     https://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.alchim31.maven.yuicompressor;
+
+import java.io.IOException;
+
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+
+/**
+ * Check JS files with jslint.
+ *
+ * @author David Bernard
+ *
+ * @since 2007-08-29
+ */
+@Mojo(name = &quot;jslint&quot;, defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
+<span class="nc" id="L35">public class JSLintMojo extends MojoSupport {</span>
+
+    /** The jslint. */
+    private JSLintChecker jslint;
+
+    @Override
+    protected String[] getDefaultIncludes() {
+<span class="nc" id="L42">        return new String[] { &quot;**/**.js&quot; };</span>
+    }
+
+    @Override
+    public void beforeProcess() throws IOException {
+<span class="nc" id="L47">        jslint = new JSLintChecker();</span>
+<span class="nc" id="L48">    }</span>
+
+    @Override
+    public void afterProcess() {
+        // Do nothing
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    protected void processFile(SourceFile src) throws IOException {
+<span class="nc" id="L57">        getLog().info(&quot;check file :&quot; + src.toFile());</span>
+<span class="nc" id="L58">        jslint.check(src.toFile(), jsErrorReporter);</span>
+<span class="nc" id="L59">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
