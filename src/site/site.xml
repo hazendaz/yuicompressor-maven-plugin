@@ -20,10 +20,10 @@
     limitations under the License.
 
 -->
-<project name="${project.name}">
-  <bannerLeft>
+<site name="${project.name}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
+  <bannerLeft href="${project.url">
     <name>${project.name}</name>
-    <href>${project.url}</href>
   </bannerLeft>
   <publishDate position="left" format="yyyy-MM-dd HH:mm" />
   <version position="left"/>
@@ -62,4 +62,4 @@
 
     <menu ref="reports"/>
   </body>
-</project>
+</site>
