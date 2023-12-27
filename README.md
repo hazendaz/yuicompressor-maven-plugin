@@ -15,7 +15,7 @@ This repository is a restore of the original plugin as it was archived and usage
 
 ## Documentation
 
-Full documentation is available under following link:  https://davidb.github.io/yuicompressor-maven-plugin/
+Full documentation is available under following link:  https://hazendaz.github.io/yuicompressor-maven-plugin/
 
 Summary of the project history can be found in [CHANGELOG](https://github.com/hazendaz/yuicompressor-maven-plugin/blob/master/CHANGELOG.md)
 
