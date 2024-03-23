@@ -3,7 +3,7 @@
 
     YuiCompressor Maven plugin
 
-    Copyright 2012-2023 Hazendaz.
+    Copyright 2012-2024 Hazendaz.
 
     Licensed under the GNU Lesser General Public License (LGPL),
     version 2.1 or later (the "License").
@@ -22,271 +22,269 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.github.hazendaz</groupId>
-    <artifactId>base-parent</artifactId>
-    <version>44</version>
-    <relativePath />
-  </parent>
+    <parent>
+        <groupId>com.github.hazendaz</groupId>
+        <artifactId>base-parent</artifactId>
+        <version>44</version>
+        <relativePath />
+    </parent>
 
-  <groupId>com.github.hazendaz.maven</groupId>
-  <artifactId>yuicompressor-maven-plugin</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
-  <packaging>maven-plugin</packaging>
+    <groupId>com.github.hazendaz.maven</groupId>
+    <artifactId>yuicompressor-maven-plugin</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
 
-  <name>YUI Compressor Maven Mojo</name>
-  <description>
-    To compress (Minify + Ofuscate) Javascript files and CSS
+    <name>YUI Compressor Maven Mojo</name>
+    <description>To compress (Minify + Ofuscate) Javascript files and CSS
     files (using YUI Compressor from Julien Lecomte) and/or to check
-    Javascript files with jslint.
-  </description>
-  <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
-  <inceptionYear>2012</inceptionYear>
-  <licenses>
-    <license>
-      <name>GNU Lesser General Public License</name>
-      <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
-    </license>
-  </licenses>
-
-  <prerequisites>
-    <maven>3.3.9</maven>
-  </prerequisites>
-
-  <scm>
-    <connection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</developerConnection>
-    <tag>HEAD</tag>
+    Javascript files with jslint.</description>
     <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
-  </scm>
+    <inceptionYear>2012</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+        </license>
+    </licenses>
 
-  <issueManagement>
-    <system>github</system>
-    <url>https://github.com/hazendaz/yuicompressor-maven-plugin/issues/</url>
-  </issueManagement>
-  <ciManagement>
-    <system>Github</system>
-    <url>https://github.com/hazendaz/yuicompressor-maven-plugin/actions</url>
-  </ciManagement>
-  <distributionManagement>
-    <site>
-      <id>gh-pages-scm</id>
-      <name>GitHub Pages</name>
-      <url>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</url>
-    </site>
-  </distributionManagement>
+    <developers>
+        <developer>
+            <id>david.bernard</id>
+            <name>David Bernard</name>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
-  <developers>
-    <developer>
-      <id>david.bernard</id>
-      <name>David Bernard</name>
-      <timezone>+1</timezone>
-      <roles>
-        <role>Developer</role>
-      </roles>
-    </developer>
-  </developers>
+    <contributors>
+        <contributor>
+            <name>Piotr Kuczynski</name>
+            <email>piotr.kuczynski@gmail.com</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>+1</timezone>
+        </contributor>
+        <contributor>
+            <name>Dave Hughes</name>
+            <email>dlh3@sfu.ca</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>-8</timezone>
+        </contributor>
+        <contributor>
+            <name>Aneesh Joseph</name>
+            <email>admin@coderplus.com</email>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+            <timezone>+5.5</timezone>
+        </contributor>
+        <contributor>
+            <name>Jeremy Landis</name>
+            <email>jeremylandis@hotmail.com</email>
+            <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+            <organization>hazendaz</organization>
+            <organizationUrl>https://github.com/hazendaz</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>-5</timezone>
+            <properties>
+                <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+            </properties>
+        </contributor>
+    </contributors>
 
-  <contributors>
-    <contributor>
-      <name>Piotr Kuczynski</name>
-      <email>piotr.kuczynski@gmail.com</email>
-      <roles>
-        <role>Contributor</role>
-      </roles>
-      <timezone>+1</timezone>
-    </contributor>
-    <contributor>
-      <name>Dave Hughes</name>
-      <email>dlh3@sfu.ca</email>
-      <roles>
-        <role>Contributor</role>
-      </roles>
-      <timezone>-8</timezone>
-    </contributor>
-    <contributor>
-      <name>Aneesh Joseph</name>
-      <email>admin@coderplus.com</email>
-      <roles>
-        <role>Contributor</role>
-      </roles>
-      <timezone>+5.5</timezone>
-    </contributor>
-    <contributor>
-      <name>Jeremy Landis</name>
-      <email>jeremylandis@hotmail.com</email>
-      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
-      <organization>hazendaz</organization>
-      <organizationUrl>https://github.com/hazendaz</organizationUrl>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>-5</timezone>
-      <properties>
-        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
-      </properties>
-    </contributor>
-  </contributors>
+    <prerequisites>
+        <maven>3.3.9</maven>
+    </prerequisites>
 
-  <properties>
-    <!-- Maven Artifacts -->
-    <invoker-plugin.version>3.6.0</invoker-plugin.version>
-    <maven.version>3.9.6</maven.version>
-    <maven-plugin.version>3.11.0</maven-plugin.version>
+    <scm>
+        <connection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
+    </scm>
 
-    <!-- Velocity -->
-    <runtime.log>${project.build.directory}/velocity.log</runtime.log>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/hazendaz/yuicompressor-maven-plugin/issues/</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Github</system>
+        <url>https://github.com/hazendaz/yuicompressor-maven-plugin/actions</url>
+    </ciManagement>
+    <distributionManagement>
+        <site>
+            <id>gh-pages-scm</id>
+            <name>GitHub Pages</name>
+            <url>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</url>
+        </site>
+    </distributionManagement>
 
-    <!-- Automatic Module Name -->
-    <module.name>com.github.hazendaz.yuicompressor.maven.plugin</module.name>
+    <properties>
+        <!-- Maven Artifacts -->
+        <invoker-plugin.version>3.6.0</invoker-plugin.version>
+        <maven.version>3.9.6</maven.version>
+        <maven-plugin.version>3.11.0</maven-plugin.version>
 
-    <!-- Reproducible Builds -->
-    <project.build.outputTimestamp>1701226942</project.build.outputTimestamp>
-  </properties>
+        <!-- Velocity -->
+        <runtime.log>${project.build.directory}/velocity.log</runtime.log>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.yahoo.platform.yui</groupId>
-      <artifactId>yuicompressor</artifactId>
-      <!-- 2.4.8 seems to have issue on windows : https://github.com/yui/yuicompressor/issues/78 -->
-      <!-- 2.4.8 failed to process empty file (demo01) : https://github.com/yui/yuicompressor/issues/130 -->
-      <version>2.4.7</version>
-      <exclusions>
-          <exclusion>
-              <groupId>rhino</groupId>
-              <artifactId>js</artifactId>
-          </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-        <groupId>org.mozilla</groupId>
-        <artifactId>rhino</artifactId>
-        <version>1.7.14</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.plugin-tools</groupId>
-      <artifactId>maven-plugin-annotations</artifactId>
-      <version>${maven-plugin.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.10.2</version>
-      <scope>test</scope>
-    </dependency>
+        <!-- Automatic Module Name -->
+        <module.name>com.github.hazendaz.yuicompressor.maven.plugin</module.name>
 
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
-      <version>1.1.0</version>
-    </dependency>
+        <!-- Reproducible Builds -->
+        <project.build.outputTimestamp>1701226942</project.build.outputTimestamp>
+    </properties>
 
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>2.0.12</version>
-        <scope>compile</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>2.0.12</version>
-        <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>com.yahoo.platform.yui</groupId>
+            <artifactId>yuicompressor</artifactId>
+            <!-- 2.4.8 seems to have issue on windows : https://github.com/yui/yuicompressor/issues/78 -->
+            <!-- 2.4.8 failed to process empty file (demo01) : https://github.com/yui/yuicompressor/issues/130 -->
+            <version>2.4.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>rhino</groupId>
+                    <artifactId>js</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mozilla</groupId>
+            <artifactId>rhino</artifactId>
+            <version>1.7.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>${maven-plugin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${maven.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <templateFile>${project.basedir}/src/site/template-site.vm</templateFile>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>${maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>help-goal</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-build-api</artifactId>
+            <version>1.1.0</version>
+        </dependency>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-report-plugin</artifactId>
-        <version>${maven-plugin.version}</version>
-      </plugin>
-    </plugins>
-  </reporting>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <profiles>
-    <profile>
-      <id>integration-tests</id>
-      <activation>
-        <property>
-          <name>maven.test.skip</name>
-          <value>!true</value>
-        </property>
-      </activation>
-      <build>
+    <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-invoker-plugin</artifactId>
-            <version>${invoker-plugin.version}</version>
-            <configuration>
-              <streamLogs>true</streamLogs>
-              <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
-              <pomIncludes>
-                <pomInclude>**/pom.xml</pomInclude>
-              </pomIncludes>
-              <preBuildHookScript>setup.groovy</preBuildHookScript>
-              <postBuildHookScript>validate.groovy</postBuildHookScript>
-            </configuration>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <goals>
-                  <goal>install</goal>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <templateFile>${project.basedir}/src/site/template-site.vm</templateFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-descriptor</id>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>help-goal</id>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-report-plugin</artifactId>
+                <version>${maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <property>
+                    <name>maven.test.skip</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-invoker-plugin</artifactId>
+                        <version>${invoker-plugin.version}</version>
+                        <configuration>
+                            <streamLogs>true</streamLogs>
+                            <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
+                            <pomIncludes>
+                                <pomInclude>**/pom.xml</pomInclude>
+                            </pomIncludes>
+                            <preBuildHookScript>setup.groovy</preBuildHookScript>
+                            <postBuildHookScript>validate.groovy</postBuildHookScript>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>install</goal>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
