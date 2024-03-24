@@ -26,14 +26,20 @@
   <publishDate position="left" format="yyyy-MM-dd HH:mm" />
   <version position="left"/>
   <poweredBy>
-    <logo name="Click here to lend your support to: yuicompressor-maven-plugin and make a donation at www.pledgie.com !" href='http://www.pledgie.com/campaigns/13361' img='http://www.pledgie.com/campaigns/13361.png?skin_name=chrome'/>
-    <logo name="Build with Maven 2" href="http://maven.apache.org" img="images/logos/maven-feather.png" />
-    <logo name="CC-GNU LGPL" href="http://creativecommons.org/licenses/LGPL/2.1/" img="http://creativecommons.org/images/public/cc-LGPL-a.png" />
+    <logo name="Click here to lend your support to: yuicompressor-maven-plugin and make a donation at www.pledgie.com !" href='http://www.pledgie.com/campaigns/13361'>
+        <image src="http://www.pledgie.com/campaigns/13361.png?skin_name=chrome" />
+    </logo>
+    <logo name="Build with Maven 2" href="http://maven.apache.org">
+        <image src="images/logos/maven-feather.png" />
+    </logo>
+    <logo name="CC-GNU LGPL" href="http://creativecommons.org/licenses/LGPL/2.1/">
+        <image src="https://creativecommons.org/images/public/cc-LGPL-a.png" />
+    </logo>
   </poweredBy>
 
   <body>
     <links>
-      <item name="changelog/scm" href="http://github.com/davidB/yuicompressor-maven-plugin/"/>
+      <item name="changelog/scm" href="https://github.com/hazendaz/yuicompressor-maven-plugin/"/>
       <!--item name="sourceforge" href="http://sf.net/projects/alchim" /-->
     </links>
 
@@ -53,8 +59,8 @@
     </menu>
 
     <menu name="Links">
-      <item name="YUI Compressor" href="http://developer.yahoo.com/yui/compressor/" />
-      <item name="JSLint" href="http://jslint.com/" />
+      <item name="YUI Compressor" href="https://github.com/yui/yuicompressor" />
+      <item name="JSLint" href="https://jslint.com/" />
       <item name="Others..." href="links.html"/>
     </menu>
 
