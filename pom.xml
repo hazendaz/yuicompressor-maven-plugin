@@ -36,7 +36,7 @@
     <version>2.0.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>YUI Compressor Maven Mojo</name>
+    <name>yuicompressor-maven-plugin</name>
     <description>To compress (Minify + Ofuscate) Javascript files and CSS
     files (using YUI Compressor from Julien Lecomte) and/or to check
     Javascript files with jslint.</description>
