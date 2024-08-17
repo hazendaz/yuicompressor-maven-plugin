@@ -132,7 +132,7 @@
         <!-- Maven Artifacts -->
         <invoker-plugin.version>3.7.0</invoker-plugin.version>
         <maven.version>3.9.8</maven.version>
-        <maven-plugin.version>3.13.1</maven-plugin.version>
+        <maven-plugin.version>3.14.0</maven-plugin.version>
 
         <!-- Velocity -->
         <runtime.log>${project.build.directory}/velocity.log</runtime.log>
