@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>JSLintMojo xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * YuiCompressor Maven plugin</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2023 Hazendaz.</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2024 Hazendaz.</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Licensed under the GNU Lesser General Public License (LGPL),</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * version 2.1 or later (the "License").</em>
@@ -34,40 +34,36 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Check JS files with jslint.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * @author David Bernard</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * @since 2007-08-29</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  @Mojo(name = <span class="jxr_string">"jslint"</span>, defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = <strong class="jxr_keyword">true</strong>, threadSafe = <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="JSLintMojo" href="../../../../net/alchim31/maven/yuicompressor/JSLintMojo.html#JSLintMojo">JSLintMojo</a> <strong class="jxr_keyword">extends</strong> <a name="MojoSupport" href="../../../../net/alchim31/maven/yuicompressor/MojoSupport.html#MojoSupport">MojoSupport</a> {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_javadoccomment">/** The jslint. */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <a name="JSLintChecker" href="../../../../net/alchim31/maven/yuicompressor/JSLintChecker.html#JSLintChecker">JSLintChecker</a> jslint;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>      @Override
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>      <strong class="jxr_keyword">protected</strong> String[] getDefaultIncludes() {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"**/**.js"</span> };
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      }
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Override
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> beforeProcess() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          jslint = <strong class="jxr_keyword">new</strong> <a name="JSLintChecker" href="../../../../net/alchim31/maven/yuicompressor/JSLintChecker.html#JSLintChecker">JSLintChecker</a>();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Override
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> afterProcess() {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <em class="jxr_comment">// Do nothing</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      }
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      @Override
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processFile(<a name="SourceFile" href="../../../../net/alchim31/maven/yuicompressor/SourceFile.html#SourceFile">SourceFile</a> src) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>          getLog().info(<span class="jxr_string">"check file :"</span> + src.toFile());
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          jslint.check(src.toFile(), jsErrorReporter);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      }
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  }
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @Mojo(name = <span class="jxr_string">"jslint"</span>, defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = <strong class="jxr_keyword">true</strong>, threadSafe = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="JSLintMojo" href="../../../../net/alchim31/maven/yuicompressor/JSLintMojo.html#JSLintMojo">JSLintMojo</a> <strong class="jxr_keyword">extends</strong> <a name="MojoSupport" href="../../../../net/alchim31/maven/yuicompressor/MojoSupport.html#MojoSupport">MojoSupport</a> {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <em class="jxr_javadoccomment">/** The jslint. */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>      <strong class="jxr_keyword">private</strong> <a name="JSLintChecker" href="../../../../net/alchim31/maven/yuicompressor/JSLintChecker.html#JSLintChecker">JSLintChecker</a> jslint;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      @Override
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <strong class="jxr_keyword">protected</strong> String[] getDefaultIncludes() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"**/**.js"</span> };
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      }
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>      @Override
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> beforeProcess() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          jslint = <strong class="jxr_keyword">new</strong> <a name="JSLintChecker" href="../../../../net/alchim31/maven/yuicompressor/JSLintChecker.html#JSLintChecker">JSLintChecker</a>();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>      }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      @Override
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> afterProcess() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <em class="jxr_comment">// Do nothing</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      @Override
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processFile(<a name="SourceFile" href="../../../../net/alchim31/maven/yuicompressor/SourceFile.html#SourceFile">SourceFile</a> src) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          getLog().info(<span class="jxr_string">"check file :"</span> + src.toFile());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          jslint.check(src.toFile(), jsErrorReporter);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2012&#x2013;2023 <a href="https://github.com/hazendaz/">hazendaz</a>. All rights reserved.</div>
+<div id="footer">© 2012–2024 <a href="https://github.com/hazendaz/">hazendaz</a></div>
 </body>
 </html>

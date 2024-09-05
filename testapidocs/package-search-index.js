@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"net.alchim31.maven.yuicompressor"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"com.github.hazendaz.yuicompressor.maven.plugin","l":"net.alchim31.maven.yuicompressor"}];updateSearchResults();

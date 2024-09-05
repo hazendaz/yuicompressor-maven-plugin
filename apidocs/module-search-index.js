@@ -1,1 +1,1 @@
-moduleSearchIndex = [];updateSearchResults();
+moduleSearchIndex = [{"l":"com.github.hazendaz.yuicompressor.maven.plugin"}];updateSearchResults();
