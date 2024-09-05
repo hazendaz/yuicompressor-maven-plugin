@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2024 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -42,10 +42,10 @@ public class AggregationTestCase {
 
     /** The dir. */
     @TempDir
-    private File dir;
+    File dir;
 
     /** The default build context. */
-    private DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
+    DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
 
     /**
      * Test 0 to 1.
