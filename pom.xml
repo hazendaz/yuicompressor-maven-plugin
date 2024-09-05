@@ -129,6 +129,10 @@
     </distributionManagement>
 
     <properties>
+        <!-- Java Runtime Requirements -->
+        <java.version>11</java.version>
+        <java.release.version>11</java.release.version>
+
         <!-- Maven Artifacts -->
         <invoker-plugin.version>3.8.0</invoker-plugin.version>
         <maven.version>3.9.9</maven.version>
