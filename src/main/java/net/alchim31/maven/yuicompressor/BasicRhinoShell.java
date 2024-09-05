@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2024 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -78,9 +78,7 @@ import org.slf4j.LoggerFactory;
  * Can execute scripts interactively or in batch mode at the command line. An example of controlling the JavaScript
  * engine.
  * <p>
- * Based on Rhino (2007-08-30).
- *
- * @author Norris Boyd
+ * Based on Rhino.
  *
  * @see <a href="http://lxr.mozilla.org/mozilla/source/js/rhino/examples/BasicRhinoShell.java">Basic Rhino Shell</a>
  */

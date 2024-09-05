@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2024 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -26,10 +26,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Check JS files with jslint.
- *
- * @author David Bernard
- *
- * @since 2007-08-29
  */
 @Mojo(name = "jslint", defaultPhase = LifecyclePhase.PROCESS_RESOURCES, requiresProject = true, threadSafe = true)
 public class JSLintMojo extends MojoSupport {
