@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2024 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -59,7 +59,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ErrorReporter;
@@ -290,7 +290,7 @@ public class BasicRhinoShell extends ScriptableObject {
      */
     public String readFile(String path) {
         try {
-            return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+            return new String(Files.readAllBytes(Path.of(path)), StandardCharsets.UTF_8);
         } catch (RuntimeException exc) {
             throw exc;
         } catch (IOException exc) {
@@ -400,7 +400,7 @@ public class BasicRhinoShell extends ScriptableObject {
             } while (!hitEOF);
             logger.info("");
         } else {
-            try (BufferedReader in = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
+            try (BufferedReader in = Files.newBufferedReader(Path.of(filename), StandardCharsets.UTF_8)) {
                 // Here we evaluate the entire contents of the file as a script. Text is printed only if the
                 // print() function is called.
                 cx.evaluateReader(this, in, filename, 1, null);

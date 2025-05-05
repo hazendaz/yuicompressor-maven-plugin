@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -75,12 +75,12 @@ public class SourceFile {
     public File toFile() {
         String frpath = rpath + extension;
         if (destAsSource) {
-            File defaultDest = new File(destRoot, frpath);
+            File defaultDest = destRoot.toPath().resolve(frpath).toFile();
             if (defaultDest.exists() && defaultDest.canRead()) {
                 return defaultDest;
             }
         }
-        return new File(srcRoot, frpath);
+        return srcRoot.toPath().resolve(frpath).toFile();
     }
 
     /**
@@ -92,7 +92,7 @@ public class SourceFile {
      * @return the file
      */
     public File toDestFile(String suffix) {
-        return new File(destRoot, rpath + suffix + extension);
+        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();
     }
 
     /**

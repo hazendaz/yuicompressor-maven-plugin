@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -21,6 +21,7 @@ package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,27 +30,27 @@ import org.apache.commons.io.FileUtils;
 
 public class ResourcesTest {
 
-    private File outputDir_ = new File("target/classes");
+    private File outputDir = Path.of("target/classes").toFile();
 
     @Test
     public void testSimpleResources() throws IOException {
-        File r01 = new File(outputDir_, "file_r01.js");
+        File r01 = outputDir.toPath().resolve("file_r01.js").toFile();
         assertExists(r01);
         assertNoComments(r01);
 
-        File r02 = new File(outputDir_, "file_r02.js");
+        File r02 = outputDir.toPath().resolve("file_r02.js").toFile();
         assertExists(r02);
         assertNoComments(r02);
     }
 
     @Test
     public void testResourcesWithFilter() throws IOException {
-        File r01 = new File(outputDir_, "file_rf01.js");
+        File r01 = outputDir.toPath().resolve("file_rf01.js").toFile();
         assertExists(r01);
         assertNoComments(r01);
         assertNoFilteringValue(r01);
 
-        File r02 = new File(outputDir_, "file_rf02.js");
+        File r02 = outputDir.toPath().resolve("file_rf02.js").toFile();
         assertExists(r02);
         assertNoComments(r02);
         assertNoFilteringValue(r02);
@@ -57,14 +58,14 @@ public class ResourcesTest {
 
     @Test
     public void testResourcesWithTargetPath() throws IOException {
-        File r01 = new File(outputDir_, "redirect/file_rr01.js");
+        File r01 = outputDir.toPath().resolve("redirect/file_rr01.js").toFile();
         assertExists(r01);
-        assertNotExists(new File(outputDir_, "file_rr01.js"));
+        assertNotExists(outputDir.toPath().resolve("file_rr01.js").toFile());
         assertNoComments(r01);
 
-        File r02 = new File(outputDir_, "redirect/file_rr02.js");
+        File r02 = outputDir.toPath().resolve("redirect/file_rr02.js").toFile();
         assertExists(r02);
-        assertNotExists(new File(outputDir_, "file_rr02.js"));
+        assertNotExists(outputDir.toPath().resolve("file_rr02.js").toFile());
         assertNoComments(r02);
     }
 

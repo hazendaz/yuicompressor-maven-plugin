@@ -21,6 +21,7 @@ package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -144,9 +145,9 @@ public abstract class MojoSupport extends AbstractMojo {
                 for (Resource resource : resources) {
                     File destRoot = outputDirectory;
                     if (resource.getTargetPath() != null) {
-                        destRoot = new File(outputDirectory, resource.getTargetPath());
+                        destRoot = outputDirectory.toPath().resolve(resource.getTargetPath()).toFile();
                     }
-                    processDir(new File(resource.getDirectory()), destRoot, resource.getExcludes(),
+                    processDir(Path.of(resource.getDirectory()).toFile(), destRoot, resource.getExcludes(),
                             useProcessedResources);
                 }
             }

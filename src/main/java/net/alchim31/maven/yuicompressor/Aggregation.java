@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -20,11 +20,12 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -167,7 +168,7 @@ public class Aggregation {
                     if (file.getCanonicalPath().equals(output.getCanonicalPath())) {
                         continue;
                     }
-                    try (FileInputStream in = new FileInputStream(file)) {
+                    try (InputStream in = Files.newInputStream(file.toPath())) {
                         if (insertFileHeader) {
                             out.write(createFileHeader(file).getBytes(StandardCharsets.UTF_8));
                         }
@@ -291,16 +292,16 @@ public class Aggregation {
             String[] rpaths = scanner.getIncludedFiles();
             Arrays.sort(rpaths);
             for (String rpath : rpaths) {
-                File file = new File(scanner.getBasedir(), rpath);
+                File file = scanner.getBasedir().toPath().resolve(rpath).toFile();
                 if (!includedFiles.contains(file)
                         && (previouslyIncludedFiles == null || !previouslyIncludedFiles.contains(file))) {
                     includedFiles.add(file);
                 }
             }
         } else {
-            File file = new File(include);
+            File file = Path.of(include).toFile();
             if (!file.isAbsolute()) {
-                file = new File(inputDir, include);
+                file = inputDir.toPath().resolve(include).toFile();
             }
             if (!includedFiles.contains(file)) {
                 includedFiles.add(file);

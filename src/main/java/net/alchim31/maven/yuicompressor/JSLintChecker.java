@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -20,9 +20,10 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 
 import org.codehaus.plexus.util.IOUtil;
 import org.mozilla.javascript.ErrorReporter;
@@ -46,7 +47,7 @@ class JSLintChecker {
         File jslint = File.createTempFile("jslint", ".js");
         jslint.deleteOnExit();
         try (InputStream in = getClass().getResourceAsStream("/jslint.js");
-                FileOutputStream out = new FileOutputStream(jslint)) {
+                OutputStream out = Files.newOutputStream(jslint.toPath())) {
             IOUtil.copy(in, out);
         }
         jslintPath = jslint.getCanonicalPath();

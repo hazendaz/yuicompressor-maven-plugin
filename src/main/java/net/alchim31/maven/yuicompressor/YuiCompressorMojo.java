@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -23,12 +23,13 @@ import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -233,7 +234,7 @@ public class YuiCompressorMojo extends MojoSupport {
             }
             return;
         }
-        File outFileTmp = new File(outFile.getCanonicalFile() + ".tmp");
+        File outFileTmp = Path.of(outFile.getCanonicalPath() + ".tmp").toFile();
         FileUtils.forceDelete(outFileTmp);
 
         if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
@@ -241,9 +242,10 @@ public class YuiCompressorMojo extends MojoSupport {
         }
         getLog().debug("use a temporary outputfile (in case in == out)");
 
-        try (InputStreamReader in = new InputStreamReader(new FileInputStream(inFile), Charset.forName(encoding));
+        try (InputStreamReader in = new InputStreamReader(Files.newInputStream(inFile.toPath()),
+                Charset.forName(encoding));
                 /* outFileTmp will be deleted create with FileOutputStream */
-                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outFileTmp),
+                OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(outFileTmp.toPath()),
                         Charset.forName(encoding));) {
 
             getLog().debug("start compression");
@@ -331,9 +333,9 @@ public class YuiCompressorMojo extends MojoSupport {
         if (!gzip || file == null || !file.exists() || ".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
             return null;
         }
-        File gzipped = new File(file.getCanonicalPath() + ".gz");
+        File gzipped = Path.of(file.getCanonicalFile() + ".gz").toFile();
         getLog().debug(String.format("create gzip version : %s", gzipped.getName()));
-        try (FileInputStream in = new FileInputStream(file);
+        try (InputStream in = Files.newInputStream(file.toPath());
                 GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {
                     {
                         def.setLevel(level);
