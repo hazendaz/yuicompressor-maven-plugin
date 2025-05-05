@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2024 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -46,7 +46,7 @@ public abstract class MojoSupport extends AbstractMojo {
     /**
      * Javascript source directory. (result will be put to outputDirectory).
      */
-    @Parameter(defaultValue = "${project.build.sourceDirectory}/../js")
+    @Parameter(defaultValue = "${project.basedir}/src/main/js")
     private File sourceDirectory;
 
     /**
