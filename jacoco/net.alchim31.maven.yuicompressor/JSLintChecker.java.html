@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JSLintChecker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yuicompressor-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">JSLintChecker.java</span></div><h1>JSLintChecker.java</h1><pre class="source lang-java linenums">/*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the &quot;License&quot;).
@@ -20,9 +20,10 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 
 import org.codehaus.plexus.util.IOUtil;
 import org.mozilla.javascript.ErrorReporter;
@@ -42,15 +43,15 @@ class JSLintChecker {
      * @throws IOException
      *             the IO exception
      */
-<span class="nc" id="L45">    public JSLintChecker() throws IOException {</span>
-<span class="nc" id="L46">        File jslint = File.createTempFile(&quot;jslint&quot;, &quot;.js&quot;);</span>
-<span class="nc" id="L47">        jslint.deleteOnExit();</span>
-<span class="nc" id="L48">        try (InputStream in = getClass().getResourceAsStream(&quot;/jslint.js&quot;);</span>
-<span class="nc" id="L49">                FileOutputStream out = new FileOutputStream(jslint)) {</span>
-<span class="nc" id="L50">            IOUtil.copy(in, out);</span>
+<span class="nc" id="L46">    public JSLintChecker() throws IOException {</span>
+<span class="nc" id="L47">        File jslint = File.createTempFile(&quot;jslint&quot;, &quot;.js&quot;);</span>
+<span class="nc" id="L48">        jslint.deleteOnExit();</span>
+<span class="nc" id="L49">        try (InputStream in = getClass().getResourceAsStream(&quot;/jslint.js&quot;);</span>
+<span class="nc" id="L50">                OutputStream out = Files.newOutputStream(jslint.toPath())) {</span>
+<span class="nc" id="L51">            IOUtil.copy(in, out);</span>
         }
-<span class="nc" id="L52">        jslintPath = jslint.getCanonicalPath();</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L53">        jslintPath = jslint.getCanonicalPath();</span>
+<span class="nc" id="L54">    }</span>
 
     /**
      * Check.
@@ -64,10 +65,10 @@ class JSLintChecker {
      *             the IO exception
      */
     public void check(File jsFile, ErrorReporter reporter) throws IOException {
-<span class="nc" id="L67">        String[] args = new String[2];</span>
-<span class="nc" id="L68">        args[0] = jslintPath;</span>
-<span class="nc" id="L69">        args[1] = jsFile.getCanonicalPath();</span>
-<span class="nc" id="L70">        BasicRhinoShell.exec(args, reporter);</span>
-<span class="nc" id="L71">    }</span>
+<span class="nc" id="L68">        String[] args = new String[2];</span>
+<span class="nc" id="L69">        args[0] = jslintPath;</span>
+<span class="nc" id="L70">        args[1] = jsFile.getCanonicalPath();</span>
+<span class="nc" id="L71">        BasicRhinoShell.exec(args, reporter);</span>
+<span class="nc" id="L72">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

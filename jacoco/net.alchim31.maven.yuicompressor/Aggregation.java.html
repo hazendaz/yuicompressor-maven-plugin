@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Aggregation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yuicompressor-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">Aggregation.java</span></div><h1>Aggregation.java</h1><pre class="source lang-java linenums">/*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the &quot;License&quot;).
@@ -20,11 +20,12 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +39,7 @@ import org.codehaus.plexus.util.IOUtil;
 /**
  * The Class Aggregation.
  */
-<span class="fc" id="L41">public class Aggregation {</span>
+<span class="fc" id="L42">public class Aggregation {</span>
 
     /** The input dir. */
     private File inputDir;
@@ -73,7 +74,7 @@ import org.codehaus.plexus.util.IOUtil;
      * @return the output
      */
     public File getOutput() {
-<span class="fc" id="L76">        return output;</span>
+<span class="fc" id="L77">        return output;</span>
     }
 
     /**
@@ -83,8 +84,8 @@ import org.codehaus.plexus.util.IOUtil;
      *            the new output
      */
     public void setOutput(File output) {
-<span class="fc" id="L86">        this.output = output;</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L87">        this.output = output;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Sets the includes.
@@ -93,8 +94,8 @@ import org.codehaus.plexus.util.IOUtil;
      *            the new includes
      */
     public void setIncludes(String[] includes) {
-<span class="fc" id="L96">        this.includes = includes;</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L97">        this.includes = includes;</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Sets the insert new line.
@@ -103,8 +104,8 @@ import org.codehaus.plexus.util.IOUtil;
      *            the new insert new line
      */
     public void setInsertNewLine(boolean insertNewLine) {
-<span class="fc" id="L106">        this.insertNewLine = insertNewLine;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L107">        this.insertNewLine = insertNewLine;</span>
+<span class="fc" id="L108">    }</span>
 
     /**
      * Sets the auto exclude wildcards.
@@ -113,8 +114,8 @@ import org.codehaus.plexus.util.IOUtil;
      *            the new auto exclude wildcards
      */
     public void setAutoExcludeWildcards(boolean autoExcludeWildcards) {
-<span class="fc" id="L116">        this.autoExcludeWildcards = autoExcludeWildcards;</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L117">        this.autoExcludeWildcards = autoExcludeWildcards;</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Run.
@@ -130,7 +131,7 @@ import org.codehaus.plexus.util.IOUtil;
      *             the IO exception
      */
     public List&lt;File&gt; run(Collection&lt;File&gt; previouslyIncludedFiles, BuildContext buildContext) throws IOException {
-<span class="fc" id="L133">        return this.run(previouslyIncludedFiles, buildContext, null);</span>
+<span class="fc" id="L134">        return this.run(previouslyIncludedFiles, buildContext, null);</span>
     }
 
     /**
@@ -150,45 +151,45 @@ import org.codehaus.plexus.util.IOUtil;
      */
     public List&lt;File&gt; run(Collection&lt;File&gt; previouslyIncludedFiles, BuildContext buildContext,
             Set&lt;String&gt; incrementalFiles) throws IOException {
-<span class="fc" id="L153">        defineInputDir();</span>
+<span class="fc" id="L154">        defineInputDir();</span>
 
         List&lt;File&gt; files;
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (autoExcludeWildcards) {</span>
-<span class="fc" id="L157">            files = getIncludedFiles(previouslyIncludedFiles, buildContext, incrementalFiles);</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (autoExcludeWildcards) {</span>
+<span class="fc" id="L158">            files = getIncludedFiles(previouslyIncludedFiles, buildContext, incrementalFiles);</span>
         } else {
-<span class="fc" id="L159">            files = getIncludedFiles(null, buildContext, incrementalFiles);</span>
+<span class="fc" id="L160">            files = getIncludedFiles(null, buildContext, incrementalFiles);</span>
         }
 
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (!files.isEmpty()) {</span>
-<span class="fc" id="L163">            output = output.getCanonicalFile();</span>
-<span class="fc" id="L164">            output.getParentFile().mkdirs();</span>
-<span class="fc" id="L165">            try (OutputStream out = buildContext.newFileOutputStream(output)) {</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                for (File file : files) {</span>
-<span class="pc bpc" id="L167" title="1 of 2 branches missed.">                    if (file.getCanonicalPath().equals(output.getCanonicalPath())) {</span>
-<span class="nc" id="L168">                        continue;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (!files.isEmpty()) {</span>
+<span class="fc" id="L164">            output = output.getCanonicalFile();</span>
+<span class="fc" id="L165">            output.getParentFile().mkdirs();</span>
+<span class="fc" id="L166">            try (OutputStream out = buildContext.newFileOutputStream(output)) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                for (File file : files) {</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">                    if (file.getCanonicalPath().equals(output.getCanonicalPath())) {</span>
+<span class="nc" id="L169">                        continue;</span>
                     }
-<span class="fc" id="L170">                    try (FileInputStream in = new FileInputStream(file)) {</span>
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">                        if (insertFileHeader) {</span>
-<span class="nc" id="L172">                            out.write(createFileHeader(file).getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L171">                    try (InputStream in = Files.newInputStream(file.toPath())) {</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">                        if (insertFileHeader) {</span>
+<span class="nc" id="L173">                            out.write(createFileHeader(file).getBytes(StandardCharsets.UTF_8));</span>
                         }
-<span class="fc" id="L174">                        IOUtil.copy(in, out);</span>
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                        if (fixLastSemicolon) {</span>
-<span class="nc" id="L176">                            out.write(';');</span>
+<span class="fc" id="L175">                        IOUtil.copy(in, out);</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                        if (fixLastSemicolon) {</span>
+<span class="nc" id="L177">                            out.write(';');</span>
                         }
-<span class="fc bfc" id="L178" title="All 2 branches covered.">                        if (insertNewLine) {</span>
-<span class="fc" id="L179">                            out.write('\n');</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">                        if (insertNewLine) {</span>
+<span class="fc" id="L180">                            out.write('\n');</span>
                         }
                     }
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                    if (removeIncluded) {</span>
-<span class="nc bnc" id="L183" title="All 2 branches missed.">                        if (file.exists()) {</span>
-<span class="nc" id="L184">                            Files.delete(file.toPath());</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">                    if (removeIncluded) {</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                        if (file.exists()) {</span>
+<span class="nc" id="L185">                            Files.delete(file.toPath());</span>
                         }
-<span class="nc" id="L186">                        buildContext.refresh(file);</span>
+<span class="nc" id="L187">                        buildContext.refresh(file);</span>
                     }
-<span class="fc" id="L188">                }</span>
+<span class="fc" id="L189">                }</span>
             }
         }
-<span class="fc" id="L191">        return files;</span>
+<span class="fc" id="L192">        return files;</span>
     }
 
     /**
@@ -200,16 +201,16 @@ import org.codehaus.plexus.util.IOUtil;
      * @return the string
      */
     private String createFileHeader(File file) {
-<span class="nc" id="L203">        StringBuilder header = new StringBuilder();</span>
-<span class="nc" id="L204">        header.append(&quot;/*&quot;);</span>
-<span class="nc" id="L205">        header.append(file.getName());</span>
-<span class="nc" id="L206">        header.append(&quot;*/&quot;);</span>
+<span class="nc" id="L204">        StringBuilder header = new StringBuilder();</span>
+<span class="nc" id="L205">        header.append(&quot;/*&quot;);</span>
+<span class="nc" id="L206">        header.append(file.getName());</span>
+<span class="nc" id="L207">        header.append(&quot;*/&quot;);</span>
 
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        if (insertNewLine) {</span>
-<span class="nc" id="L209">            header.append('\n');</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (insertNewLine) {</span>
+<span class="nc" id="L210">            header.append('\n');</span>
         }
 
-<span class="nc" id="L212">        return header.toString();</span>
+<span class="nc" id="L213">        return header.toString();</span>
     }
 
     /**
@@ -219,14 +220,14 @@ import org.codehaus.plexus.util.IOUtil;
      *             the exception
      */
     private void defineInputDir() throws IOException {
-<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (inputDir == null) {</span>
-<span class="fc" id="L223">            inputDir = output.getParentFile();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (inputDir == null) {</span>
+<span class="fc" id="L224">            inputDir = output.getParentFile();</span>
         }
-<span class="fc" id="L225">        inputDir = inputDir.getCanonicalFile();</span>
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if (!inputDir.isDirectory()) {</span>
-<span class="nc" id="L227">            throw new IllegalStateException(&quot;input directory not found: &quot; + inputDir);</span>
+<span class="fc" id="L226">        inputDir = inputDir.getCanonicalFile();</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (!inputDir.isDirectory()) {</span>
+<span class="nc" id="L228">            throw new IllegalStateException(&quot;input directory not found: &quot; + inputDir);</span>
         }
-<span class="fc" id="L229">    }</span>
+<span class="fc" id="L230">    }</span>
 
     /**
      * Gets the included files.
@@ -245,31 +246,31 @@ import org.codehaus.plexus.util.IOUtil;
      */
     private List&lt;File&gt; getIncludedFiles(Collection&lt;File&gt; previouslyIncludedFiles, BuildContext buildContext,
             Set&lt;String&gt; incrementalFiles) throws IOException {
-<span class="fc" id="L248">        List&lt;File&gt; filesToAggregate = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (includes != null) {</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            for (String include : includes) {</span>
-<span class="fc" id="L251">                addInto(include, filesToAggregate, previouslyIncludedFiles);</span>
+<span class="fc" id="L249">        List&lt;File&gt; filesToAggregate = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (includes != null) {</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">            for (String include : includes) {</span>
+<span class="fc" id="L252">                addInto(include, filesToAggregate, previouslyIncludedFiles);</span>
             }
         }
 
         // If build is incremental with no delta, then don't include for aggregation
-<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (!buildContext.isIncremental()) {</span>
-<span class="fc" id="L257">            return filesToAggregate;</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">        if (!buildContext.isIncremental()) {</span>
+<span class="fc" id="L258">            return filesToAggregate;</span>
         }
-<span class="nc bnc" id="L259" title="All 2 branches missed.">        if (incrementalFiles != null) {</span>
-<span class="nc" id="L260">            boolean aggregateMustBeUpdated = false;</span>
-<span class="nc bnc" id="L261" title="All 2 branches missed.">            for (File file : filesToAggregate) {</span>
-<span class="nc bnc" id="L262" title="All 2 branches missed.">                if (incrementalFiles.contains(file.getCanonicalPath())) {</span>
-<span class="nc" id="L263">                    aggregateMustBeUpdated = true;</span>
-<span class="nc" id="L264">                    break;</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        if (incrementalFiles != null) {</span>
+<span class="nc" id="L261">            boolean aggregateMustBeUpdated = false;</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">            for (File file : filesToAggregate) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                if (incrementalFiles.contains(file.getCanonicalPath())) {</span>
+<span class="nc" id="L264">                    aggregateMustBeUpdated = true;</span>
+<span class="nc" id="L265">                    break;</span>
                 }
-<span class="nc" id="L266">            }</span>
+<span class="nc" id="L267">            }</span>
 
-<span class="nc bnc" id="L268" title="All 2 branches missed.">            if (aggregateMustBeUpdated) {</span>
-<span class="nc" id="L269">                return filesToAggregate;</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">            if (aggregateMustBeUpdated) {</span>
+<span class="nc" id="L270">                return filesToAggregate;</span>
             }
         }
-<span class="nc" id="L272">        return new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L273">        return new ArrayList&lt;&gt;();</span>
 
     }
 
@@ -284,29 +285,29 @@ import org.codehaus.plexus.util.IOUtil;
      *            the previously included files
      */
     private void addInto(String include, List&lt;File&gt; includedFiles, Collection&lt;File&gt; previouslyIncludedFiles) {
-<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (include.indexOf('*') &gt; -1) {</span>
-<span class="fc" id="L288">            DirectoryScanner scanner = newScanner();</span>
-<span class="fc" id="L289">            scanner.setIncludes(new String[] { include });</span>
-<span class="fc" id="L290">            scanner.scan();</span>
-<span class="fc" id="L291">            String[] rpaths = scanner.getIncludedFiles();</span>
-<span class="fc" id="L292">            Arrays.sort(rpaths);</span>
-<span class="fc bfc" id="L293" title="All 2 branches covered.">            for (String rpath : rpaths) {</span>
-<span class="fc" id="L294">                File file = new File(scanner.getBasedir(), rpath);</span>
-<span class="fc bfc" id="L295" title="All 4 branches covered.">                if (!includedFiles.contains(file)</span>
-<span class="fc bfc" id="L296" title="All 2 branches covered.">                        &amp;&amp; (previouslyIncludedFiles == null || !previouslyIncludedFiles.contains(file))) {</span>
-<span class="fc" id="L297">                    includedFiles.add(file);</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (include.indexOf('*') &gt; -1) {</span>
+<span class="fc" id="L289">            DirectoryScanner scanner = newScanner();</span>
+<span class="fc" id="L290">            scanner.setIncludes(new String[] { include });</span>
+<span class="fc" id="L291">            scanner.scan();</span>
+<span class="fc" id="L292">            String[] rpaths = scanner.getIncludedFiles();</span>
+<span class="fc" id="L293">            Arrays.sort(rpaths);</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">            for (String rpath : rpaths) {</span>
+<span class="fc" id="L295">                File file = scanner.getBasedir().toPath().resolve(rpath).toFile();</span>
+<span class="fc bfc" id="L296" title="All 4 branches covered.">                if (!includedFiles.contains(file)</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">                        &amp;&amp; (previouslyIncludedFiles == null || !previouslyIncludedFiles.contains(file))) {</span>
+<span class="fc" id="L298">                    includedFiles.add(file);</span>
                 }
             }
-<span class="fc" id="L300">        } else {</span>
-<span class="fc" id="L301">            File file = new File(include);</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">            if (!file.isAbsolute()) {</span>
-<span class="fc" id="L303">                file = new File(inputDir, include);</span>
+<span class="fc" id="L301">        } else {</span>
+<span class="fc" id="L302">            File file = Path.of(include).toFile();</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">            if (!file.isAbsolute()) {</span>
+<span class="fc" id="L304">                file = inputDir.toPath().resolve(include).toFile();</span>
             }
-<span class="fc bfc" id="L305" title="All 2 branches covered.">            if (!includedFiles.contains(file)) {</span>
-<span class="fc" id="L306">                includedFiles.add(file);</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">            if (!includedFiles.contains(file)) {</span>
+<span class="fc" id="L307">                includedFiles.add(file);</span>
             }
         }
-<span class="fc" id="L309">    }</span>
+<span class="fc" id="L310">    }</span>
 
     /**
      * New scanner.
@@ -314,13 +315,13 @@ import org.codehaus.plexus.util.IOUtil;
      * @return the directory scanner
      */
     private DirectoryScanner newScanner() {
-<span class="fc" id="L317">        DirectoryScanner scanner = new DirectoryScanner();</span>
-<span class="fc" id="L318">        scanner.setBasedir(inputDir);</span>
-<span class="pc bpc" id="L319" title="3 of 4 branches missed.">        if (excludes != null &amp;&amp; excludes.length != 0) {</span>
-<span class="nc" id="L320">            scanner.setExcludes(excludes);</span>
+<span class="fc" id="L318">        DirectoryScanner scanner = new DirectoryScanner();</span>
+<span class="fc" id="L319">        scanner.setBasedir(inputDir);</span>
+<span class="pc bpc" id="L320" title="3 of 4 branches missed.">        if (excludes != null &amp;&amp; excludes.length != 0) {</span>
+<span class="nc" id="L321">            scanner.setExcludes(excludes);</span>
         }
-<span class="fc" id="L322">        scanner.addDefaultExcludes();</span>
-<span class="fc" id="L323">        return scanner;</span>
+<span class="fc" id="L323">        scanner.addDefaultExcludes();</span>
+<span class="fc" id="L324">        return scanner;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

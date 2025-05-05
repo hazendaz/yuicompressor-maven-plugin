@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * YuiCompressor Maven plugin</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2023 Hazendaz.</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2025 Hazendaz.</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Licensed under the GNU Lesser General Public License (LGPL),</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * version 2.1 or later (the "License").</em>
@@ -83,12 +83,12 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">public</strong> File toFile() {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          String frpath = rpath + extension;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">if</strong> (destAsSource) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              File defaultDest = <strong class="jxr_keyword">new</strong> File(destRoot, frpath);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              File defaultDest = destRoot.toPath().resolve(frpath).toFile();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">if</strong> (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>                  <strong class="jxr_keyword">return</strong> defaultDest;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>              }
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(srcRoot, frpath);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">return</strong> srcRoot.toPath().resolve(frpath).toFile();
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <em class="jxr_javadoccomment">/**</em>
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return the file</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>      <strong class="jxr_keyword">public</strong> File toDestFile(String suffix) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(destRoot, rpath + suffix + extension);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> destRoot.toPath().resolve(rpath + suffix + extension).toFile();
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>      <em class="jxr_javadoccomment">/**</em>
@@ -114,6 +114,6 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> }
 </pre>
 <hr/>
-<div id="footer">© 2012–2024 <a href="https://github.com/hazendaz/">hazendaz</a></div>
+<div id="footer">© 2012–2025 <a href="https://github.com/hazendaz/">hazendaz</a></div>
 </body>
 </html>

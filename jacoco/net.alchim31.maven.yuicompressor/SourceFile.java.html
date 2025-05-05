@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yuicompressor-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">SourceFile.java</span></div><h1>SourceFile.java</h1><pre class="source lang-java linenums">/*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2023 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the &quot;License&quot;).
@@ -75,12 +75,12 @@ public class SourceFile {
     public File toFile() {
 <span class="nc" id="L76">        String frpath = rpath + extension;</span>
 <span class="nc bnc" id="L77" title="All 2 branches missed.">        if (destAsSource) {</span>
-<span class="nc" id="L78">            File defaultDest = new File(destRoot, frpath);</span>
+<span class="nc" id="L78">            File defaultDest = destRoot.toPath().resolve(frpath).toFile();</span>
 <span class="nc bnc" id="L79" title="All 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
 <span class="nc" id="L80">                return defaultDest;</span>
             }
         }
-<span class="nc" id="L83">        return new File(srcRoot, frpath);</span>
+<span class="nc" id="L83">        return srcRoot.toPath().resolve(frpath).toFile();</span>
     }
 
     /**
@@ -92,7 +92,7 @@ public class SourceFile {
      * @return the file
      */
     public File toDestFile(String suffix) {
-<span class="nc" id="L95">        return new File(destRoot, rpath + suffix + extension);</span>
+<span class="nc" id="L95">        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();</span>
     }
 
     /**
@@ -104,4 +104,4 @@ public class SourceFile {
 <span class="nc" id="L104">        return extension;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

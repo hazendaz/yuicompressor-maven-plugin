@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * YuiCompressor Maven plugin</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2024 Hazendaz.</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright 2012-2025 Hazendaz.</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Licensed under the GNU Lesser General Public License (LGPL),</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * version 2.1 or later (the "License").</em>
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">import</strong> java.io.InputStreamReader;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.StandardCharsets;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Files;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Paths;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">import</strong> org.mozilla.javascript.Context;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> org.mozilla.javascript.ErrorReporter;
@@ -298,7 +298,7 @@
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>     <strong class="jxr_keyword">public</strong> String readFile(String path) {
 <a class="jxr_linenumber" name="L292" href="#L292">292</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(Path.of(path)), StandardCharsets.UTF_8);
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>         } <strong class="jxr_keyword">catch</strong> (RuntimeException exc) {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>             <strong class="jxr_keyword">throw</strong> exc;
 <a class="jxr_linenumber" name="L296" href="#L296">296</a>         } <strong class="jxr_keyword">catch</strong> (IOException exc) {
@@ -408,7 +408,7 @@
 <a class="jxr_linenumber" name="L400" href="#L400">400</a>             } <strong class="jxr_keyword">while</strong> (!hitEOF);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a>             logger.info(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>             <strong class="jxr_keyword">try</strong> (BufferedReader in = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>             <strong class="jxr_keyword">try</strong> (BufferedReader in = Files.newBufferedReader(Path.of(filename), StandardCharsets.UTF_8)) {
 <a class="jxr_linenumber" name="L404" href="#L404">404</a>                 <em class="jxr_comment">// Here we evaluate the entire contents of the file as a script. Text is printed only if the</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a>                 <em class="jxr_comment">// print() function is called.</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a>                 cx.evaluateReader(<strong class="jxr_keyword">this</strong>, in, filename, 1, <strong class="jxr_keyword">null</strong>);
@@ -436,6 +436,6 @@
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> }
 </pre>
 <hr/>
-<div id="footer">© 2012–2024 <a href="https://github.com/hazendaz/">hazendaz</a></div>
+<div id="footer">© 2012–2025 <a href="https://github.com/hazendaz/">hazendaz</a></div>
 </body>
 </html>

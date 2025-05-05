@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BasicRhinoShell.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yuicompressor-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">BasicRhinoShell.java</span></div><h1>BasicRhinoShell.java</h1><pre class="source lang-java linenums">/*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2024 Hazendaz.
+ * Copyright 2012-2025 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the &quot;License&quot;).
@@ -59,7 +59,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ErrorReporter;
@@ -290,7 +290,7 @@ import org.slf4j.LoggerFactory;
      */
     public String readFile(String path) {
         try {
-<span class="nc" id="L293">            return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);</span>
+<span class="nc" id="L293">            return new String(Files.readAllBytes(Path.of(path)), StandardCharsets.UTF_8);</span>
 <span class="nc" id="L294">        } catch (RuntimeException exc) {</span>
 <span class="nc" id="L295">            throw exc;</span>
 <span class="nc" id="L296">        } catch (IOException exc) {</span>
@@ -400,7 +400,7 @@ import org.slf4j.LoggerFactory;
 <span class="nc bnc" id="L400" title="All 2 branches missed.">            } while (!hitEOF);</span>
 <span class="nc" id="L401">            logger.info(&quot;&quot;);</span>
 <span class="nc" id="L402">        } else {</span>
-<span class="nc" id="L403">            try (BufferedReader in = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {</span>
+<span class="nc" id="L403">            try (BufferedReader in = Files.newBufferedReader(Path.of(filename), StandardCharsets.UTF_8)) {</span>
                 // Here we evaluate the entire contents of the file as a script. Text is printed only if the
                 // print() function is called.
 <span class="nc" id="L406">                cx.evaluateReader(this, in, filename, 1, null);</span>
@@ -426,4 +426,4 @@ import org.slf4j.LoggerFactory;
 <span class="nc" id="L426">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
