@@ -250,14 +250,24 @@ public class YuiCompressorMojo extends MojoSupport {
                         Charset.forName(encoding));) {
 
             getLog().debug("start compression");
-            if (nocompress) {
-                getLog().info("No compression is enabled");
-                IOUtil.copy(in, out);
-            } else if (".js".equalsIgnoreCase(src.getExtension())) {
-                JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);
-                compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons, disableOptimizations);
-            } else if (".css".equalsIgnoreCase(src.getExtension())) {
-                compressCss(in, out);
+            try {
+                if (nocompress) {
+                    getLog().info("No compression is enabled");
+                    IOUtil.copy(in, out);
+                } else if (".js".equalsIgnoreCase(src.getExtension())) {
+                    JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);
+                    compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons,
+                            disableOptimizations);
+                } else if (".css".equalsIgnoreCase(src.getExtension())) {
+                    compressCss(in, out);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // This catch exists to not fail the build on YUICompressor bugs.
+                // 2.4.8 seems to have issue on windows : https://github.com/yui/yuicompressor/issues/78
+                // 2.4.8 failed to process empty file (demo01) : https://github.com/yui/yuicompressor/issues/130
+                getLog().warn("YUICompressor failed on file: " + inFile.getName()
+                        + " due to IndexOutOfBoundsException. Skipping this file.");
+                return;
             }
             getLog().debug("end compression");
         }
