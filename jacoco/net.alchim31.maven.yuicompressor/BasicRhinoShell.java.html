@@ -82,13 +82,13 @@ import org.slf4j.LoggerFactory;
  *
  * @see &lt;a href=&quot;http://lxr.mozilla.org/mozilla/source/js/rhino/examples/BasicRhinoShell.java&quot;&gt;Basic Rhino Shell&lt;/a&gt;
  */
-<span class="nc" id="L85">public class BasicRhinoShell extends ScriptableObject {</span>
+<span class="fc" id="L85">public class BasicRhinoShell extends ScriptableObject {</span>
 
     /** The Constant serial version uid. */
     private static final long serialVersionUID = 1L;
 
     /** The Constant logger. */
-<span class="nc" id="L91">    private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);</span>
+<span class="fc" id="L91">    private static final Logger logger = LoggerFactory.getLogger(BasicRhinoShell.class);</span>
 
     /** The quitting. */
     private boolean quitting;
@@ -157,26 +157,26 @@ import org.slf4j.LoggerFactory;
      * @return the string[]
      */
     public static String[] processOptions(Context cx, String[] args) {
-<span class="nc bnc" id="L160" title="All 2 branches missed.">        for (int i = 0; i &lt; args.length; i++) {</span>
-<span class="nc" id="L161">            String arg = args[i];</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">            if (!arg.startsWith(&quot;-&quot;)) {</span>
-<span class="nc" id="L163">                String[] result = new String[args.length - i];</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                for (int j = i; j &lt; args.length; j++) {</span>
-<span class="nc" id="L165">                    result[j - i] = args[j];</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc" id="L161">            String arg = args[i];</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (!arg.startsWith(&quot;-&quot;)) {</span>
+<span class="fc" id="L163">                String[] result = new String[args.length - i];</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">                for (int j = i; j &lt; args.length; j++) {</span>
+<span class="fc" id="L165">                    result[j - i] = args[j];</span>
                 }
-<span class="nc" id="L167">                return result;</span>
+<span class="fc" id="L167">                return result;</span>
             }
-<span class="nc bnc" id="L169" title="All 2 branches missed.">            if (arg.equals(&quot;-version&quot;)) {</span>
-<span class="nc" id="L170">                i++;</span>
-<span class="nc bnc" id="L171" title="All 2 branches missed.">                if (i == args.length) {</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (arg.equals(&quot;-version&quot;)) {</span>
+<span class="fc" id="L170">                i++;</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">                if (i == args.length) {</span>
 <span class="nc" id="L172">                    usage(arg);</span>
                 }
-<span class="nc" id="L174">                double d = Context.toNumber(args[i]);</span>
-<span class="nc bnc" id="L175" title="All 2 branches missed.">                if (Double.isNaN(d)) {</span>
+<span class="fc" id="L174">                double d = Context.toNumber(args[i]);</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                if (Double.isNaN(d)) {</span>
 <span class="nc" id="L176">                    usage(arg);</span>
                 }
-<span class="nc" id="L178">                cx.setLanguageVersion((int) d);</span>
-<span class="nc" id="L179">                continue;</span>
+<span class="fc" id="L178">                cx.setLanguageVersion((int) d);</span>
+<span class="fc" id="L179">                continue;</span>
             }
 <span class="nc" id="L181">            usage(arg);</span>
         }
@@ -202,23 +202,23 @@ import org.slf4j.LoggerFactory;
      * This method is defined as a JavaScript function.
      */
     public void help() {
-<span class="nc" id="L205">        p(&quot;&quot;);</span>
-<span class="nc" id="L206">        p(&quot;Command                Description&quot;);</span>
-<span class="nc" id="L207">        p(&quot;=======                ===========&quot;);</span>
-<span class="nc" id="L208">        p(&quot;help()                 Display usage and help messages. &quot;);</span>
-<span class="nc" id="L209">        p(&quot;defineClass(className) Define an extension using the Java class&quot;);</span>
-<span class="nc" id="L210">        p(&quot;                       named with the string argument. &quot;);</span>
-<span class="nc" id="L211">        p(&quot;                       Uses ScriptableObject.defineClass(). &quot;);</span>
-<span class="nc" id="L212">        p(&quot;load(['foo.js', ...])  Load JavaScript source files named by &quot;);</span>
-<span class="nc" id="L213">        p(&quot;                       string arguments. &quot;);</span>
-<span class="nc" id="L214">        p(&quot;loadClass(className)   Load a class named by a string argument.&quot;);</span>
-<span class="nc" id="L215">        p(&quot;                       The class must be a script compiled to a&quot;);</span>
-<span class="nc" id="L216">        p(&quot;                       class file. &quot;);</span>
-<span class="nc" id="L217">        p(&quot;print([expr ...])      Evaluate and print expressions. &quot;);</span>
-<span class="nc" id="L218">        p(&quot;quit()                 Quit the BasicRhinoShell. &quot;);</span>
-<span class="nc" id="L219">        p(&quot;version([number])      Get or set the JavaScript version number.&quot;);</span>
-<span class="nc" id="L220">        p(&quot;&quot;);</span>
-<span class="nc" id="L221">    }</span>
+<span class="fc" id="L205">        p(&quot;&quot;);</span>
+<span class="fc" id="L206">        p(&quot;Command                Description&quot;);</span>
+<span class="fc" id="L207">        p(&quot;=======                ===========&quot;);</span>
+<span class="fc" id="L208">        p(&quot;help()                 Display usage and help messages. &quot;);</span>
+<span class="fc" id="L209">        p(&quot;defineClass(className) Define an extension using the Java class&quot;);</span>
+<span class="fc" id="L210">        p(&quot;                       named with the string argument. &quot;);</span>
+<span class="fc" id="L211">        p(&quot;                       Uses ScriptableObject.defineClass(). &quot;);</span>
+<span class="fc" id="L212">        p(&quot;load(['foo.js', ...])  Load JavaScript source files named by &quot;);</span>
+<span class="fc" id="L213">        p(&quot;                       string arguments. &quot;);</span>
+<span class="fc" id="L214">        p(&quot;loadClass(className)   Load a class named by a string argument.&quot;);</span>
+<span class="fc" id="L215">        p(&quot;                       The class must be a script compiled to a&quot;);</span>
+<span class="fc" id="L216">        p(&quot;                       class file. &quot;);</span>
+<span class="fc" id="L217">        p(&quot;print([expr ...])      Evaluate and print expressions. &quot;);</span>
+<span class="fc" id="L218">        p(&quot;quit()                 Quit the BasicRhinoShell. &quot;);</span>
+<span class="fc" id="L219">        p(&quot;version([number])      Get or set the JavaScript version number.&quot;);</span>
+<span class="fc" id="L220">        p(&quot;&quot;);</span>
+<span class="fc" id="L221">    }</span>
 
     /**
      * Print the string values of its arguments.
@@ -236,18 +236,18 @@ import org.slf4j.LoggerFactory;
      *            the fun obj
      */
     public static void print(Context cx, Scriptable thisObj, Object[] args, Function funObj) {
-<span class="nc bnc" id="L239" title="All 2 branches missed.">        for (int i = 0; i &lt; args.length; i++) {</span>
-<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (i &gt; 0) {</span>
-<span class="nc" id="L241">                logger.info(&quot;&quot;);</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if (i &gt; 0) {</span>
+<span class="fc" id="L241">                logger.info(&quot;&quot;);</span>
             }
 
             // Convert the arbitrary JavaScript value into a string form.
-<span class="nc" id="L245">            String s = Context.toString(args[i]);</span>
+<span class="fc" id="L245">            String s = Context.toString(args[i]);</span>
 
-<span class="nc" id="L247">            logger.info(s);</span>
+<span class="fc" id="L247">            logger.info(s);</span>
         }
-<span class="nc" id="L249">        logger.info(&quot;&quot;);</span>
-<span class="nc" id="L250">    }</span>
+<span class="fc" id="L249">        logger.info(&quot;&quot;);</span>
+<span class="fc" id="L250">    }</span>
 
     /**
      * Quit the BasicRhinoShell.
@@ -257,8 +257,8 @@ import org.slf4j.LoggerFactory;
      * This method is defined as a JavaScript function.
      */
     public void quit() {
-<span class="nc" id="L260">        quitting = true;</span>
-<span class="nc" id="L261">    }</span>
+<span class="fc" id="L260">        quitting = true;</span>
+<span class="fc" id="L261">    }</span>
 
     /**
      * Warn.
@@ -273,12 +273,12 @@ import org.slf4j.LoggerFactory;
      *            the fun obj
      */
     public static void warn(Context cx, Scriptable thisObj, Object[] args, Function funObj) {
-<span class="nc" id="L276">        String message = Context.toString(args[0]);</span>
-<span class="nc" id="L277">        int line = (int) Context.toNumber(args[1]);</span>
-<span class="nc" id="L278">        String source = Context.toString(args[2]);</span>
-<span class="nc" id="L279">        int column = (int) Context.toNumber(args[3]);</span>
-<span class="nc" id="L280">        cx.getErrorReporter().warning(message, null, line, source, column);</span>
-<span class="nc" id="L281">    }</span>
+<span class="fc" id="L276">        String message = Context.toString(args[0]);</span>
+<span class="fc" id="L277">        int line = (int) Context.toNumber(args[1]);</span>
+<span class="fc" id="L278">        String source = Context.toString(args[2]);</span>
+<span class="fc" id="L279">        int column = (int) Context.toNumber(args[3]);</span>
+<span class="fc" id="L280">        cx.getErrorReporter().warning(message, null, line, source, column);</span>
+<span class="fc" id="L281">    }</span>
 
     /**
      * This method is defined as a JavaScript function.
@@ -290,11 +290,11 @@ import org.slf4j.LoggerFactory;
      */
     public String readFile(String path) {
         try {
-<span class="nc" id="L293">            return new String(Files.readAllBytes(Path.of(path)), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L293">            return new String(Files.readAllBytes(Path.of(path)), StandardCharsets.UTF_8);</span>
 <span class="nc" id="L294">        } catch (RuntimeException exc) {</span>
 <span class="nc" id="L295">            throw exc;</span>
-<span class="nc" id="L296">        } catch (IOException exc) {</span>
-<span class="nc" id="L297">            throw new RuntimeException(&quot;wrap: &quot; + exc.getMessage(), exc);</span>
+<span class="fc" id="L296">        } catch (IOException exc) {</span>
+<span class="fc" id="L297">            throw new RuntimeException(&quot;wrap: &quot; + exc.getMessage(), exc);</span>
         }
     }
 
@@ -315,12 +315,12 @@ import org.slf4j.LoggerFactory;
      * @return the double
      */
     public static double version(Context cx, Scriptable thisObj, Object[] args, Function funObj) {
-<span class="nc" id="L318">        double result = cx.getLanguageVersion();</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">        if (args.length &gt; 0) {</span>
-<span class="nc" id="L320">            double d = Context.toNumber(args[0]);</span>
-<span class="nc" id="L321">            cx.setLanguageVersion((int) d);</span>
+<span class="fc" id="L318">        double result = cx.getLanguageVersion();</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (args.length &gt; 0) {</span>
+<span class="fc" id="L320">            double d = Context.toNumber(args[0]);</span>
+<span class="fc" id="L321">            cx.setLanguageVersion((int) d);</span>
         }
-<span class="nc" id="L323">        return result;</span>
+<span class="fc" id="L323">        return result;</span>
     }
 
     /**
@@ -422,8 +422,8 @@ import org.slf4j.LoggerFactory;
      *            the s
      */
     private static void p(String s) {
-<span class="nc" id="L425">        logger.info(s);</span>
-<span class="nc" id="L426">    }</span>
+<span class="fc" id="L425">        logger.info(s);</span>
+<span class="fc" id="L426">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

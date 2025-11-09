@@ -53,19 +53,19 @@ public class SourceFile {
      * @param destAsSource
      *            the dest as source
      */
-<span class="nc" id="L56">    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {</span>
-<span class="nc" id="L57">        this.srcRoot = srcRoot;</span>
-<span class="nc" id="L58">        this.destRoot = destRoot;</span>
-<span class="nc" id="L59">        this.destAsSource = destAsSource;</span>
-<span class="nc" id="L60">        this.rpath = name;</span>
-<span class="nc" id="L61">        int sep = this.rpath.lastIndexOf('.');</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (sep &gt; 0) {</span>
-<span class="nc" id="L63">            this.extension = this.rpath.substring(sep);</span>
-<span class="nc" id="L64">            this.rpath = rpath.substring(0, sep);</span>
+<span class="fc" id="L56">    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {</span>
+<span class="fc" id="L57">        this.srcRoot = srcRoot;</span>
+<span class="fc" id="L58">        this.destRoot = destRoot;</span>
+<span class="fc" id="L59">        this.destAsSource = destAsSource;</span>
+<span class="fc" id="L60">        this.rpath = name;</span>
+<span class="fc" id="L61">        int sep = this.rpath.lastIndexOf('.');</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (sep &gt; 0) {</span>
+<span class="fc" id="L63">            this.extension = this.rpath.substring(sep);</span>
+<span class="fc" id="L64">            this.rpath = rpath.substring(0, sep);</span>
         } else {
-<span class="nc" id="L66">            this.extension = &quot;&quot;;</span>
+<span class="fc" id="L66">            this.extension = &quot;&quot;;</span>
         }
-<span class="nc" id="L68">    }</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * To file.
@@ -73,14 +73,14 @@ public class SourceFile {
      * @return the file
      */
     public File toFile() {
-<span class="nc" id="L76">        String frpath = rpath + extension;</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (destAsSource) {</span>
-<span class="nc" id="L78">            File defaultDest = destRoot.toPath().resolve(frpath).toFile();</span>
-<span class="nc bnc" id="L79" title="All 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
-<span class="nc" id="L80">                return defaultDest;</span>
+<span class="fc" id="L76">        String frpath = rpath + extension;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (destAsSource) {</span>
+<span class="fc" id="L78">            File defaultDest = destRoot.toPath().resolve(frpath).toFile();</span>
+<span class="pc bpc" id="L79" title="1 of 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
+<span class="fc" id="L80">                return defaultDest;</span>
             }
         }
-<span class="nc" id="L83">        return srcRoot.toPath().resolve(frpath).toFile();</span>
+<span class="fc" id="L83">        return srcRoot.toPath().resolve(frpath).toFile();</span>
     }
 
     /**
@@ -92,7 +92,7 @@ public class SourceFile {
      * @return the file
      */
     public File toDestFile(String suffix) {
-<span class="nc" id="L95">        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();</span>
+<span class="fc" id="L95">        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();</span>
     }
 
     /**
@@ -101,7 +101,7 @@ public class SourceFile {
      * @return the extension
      */
     public String getExtension() {
-<span class="nc" id="L104">        return extension;</span>
+<span class="fc" id="L104">        return extension;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -43,15 +43,15 @@ class JSLintChecker {
      * @throws IOException
      *             the IO exception
      */
-<span class="nc" id="L46">    public JSLintChecker() throws IOException {</span>
-<span class="nc" id="L47">        File jslint = File.createTempFile(&quot;jslint&quot;, &quot;.js&quot;);</span>
-<span class="nc" id="L48">        jslint.deleteOnExit();</span>
-<span class="nc" id="L49">        try (InputStream in = getClass().getResourceAsStream(&quot;/jslint.js&quot;);</span>
-<span class="nc" id="L50">                OutputStream out = Files.newOutputStream(jslint.toPath())) {</span>
-<span class="nc" id="L51">            IOUtil.copy(in, out);</span>
+<span class="fc" id="L46">    public JSLintChecker() throws IOException {</span>
+<span class="fc" id="L47">        File jslint = File.createTempFile(&quot;jslint&quot;, &quot;.js&quot;);</span>
+<span class="fc" id="L48">        jslint.deleteOnExit();</span>
+<span class="fc" id="L49">        try (InputStream in = getClass().getResourceAsStream(&quot;/jslint.js&quot;);</span>
+<span class="fc" id="L50">                OutputStream out = Files.newOutputStream(jslint.toPath())) {</span>
+<span class="fc" id="L51">            IOUtil.copy(in, out);</span>
         }
-<span class="nc" id="L53">        jslintPath = jslint.getCanonicalPath();</span>
-<span class="nc" id="L54">    }</span>
+<span class="fc" id="L53">        jslintPath = jslint.getCanonicalPath();</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Check.
@@ -65,10 +65,10 @@ class JSLintChecker {
      *             the IO exception
      */
     public void check(File jsFile, ErrorReporter reporter) throws IOException {
-<span class="nc" id="L68">        String[] args = new String[2];</span>
-<span class="nc" id="L69">        args[0] = jslintPath;</span>
-<span class="nc" id="L70">        args[1] = jsFile.getCanonicalPath();</span>
-<span class="nc" id="L71">        BasicRhinoShell.exec(args, reporter);</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L68">        String[] args = new String[2];</span>
+<span class="fc" id="L69">        args[0] = jslintPath;</span>
+<span class="fc" id="L70">        args[1] = jsFile.getCanonicalPath();</span>
+<span class="fc" id="L71">        BasicRhinoShell.exec(args, reporter);</span>
+<span class="fc" id="L72">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

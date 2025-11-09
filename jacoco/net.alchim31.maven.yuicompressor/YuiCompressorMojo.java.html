@@ -177,127 +177,138 @@ import org.codehaus.plexus.util.IOUtil;
      *             the IO exception
      */
     private void aggregate() throws IOException {
-<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (aggregations != null) {</span>
-<span class="nc" id="L181">            Set&lt;File&gt; previouslyIncludedFiles = new HashSet&lt;&gt;();</span>
-<span class="nc bnc" id="L182" title="All 2 branches missed.">            for (Aggregation aggregation : aggregations) {</span>
-<span class="nc" id="L183">                getLog().info(&quot;generate aggregation : &quot; + aggregation.getOutput());</span>
-<span class="nc" id="L184">                Collection&lt;File&gt; aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext,</span>
-                        incrementalFiles);
-<span class="nc" id="L186">                previouslyIncludedFiles.addAll(aggregatedFiles);</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (aggregations == null) {</span>
+<span class="nc" id="L181">            return;</span>
+        }
 
-<span class="nc" id="L188">                File gzipped = gzipIfRequested(aggregation.getOutput());</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">                if (statistics) {</span>
-<span class="nc bnc" id="L190" title="All 2 branches missed.">                    if (gzipped != null) {</span>
-<span class="nc" id="L191">                        getLog().info(String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, aggregation.getOutput().getName(),</span>
-<span class="nc" id="L192">                                aggregation.getOutput().length(), gzipped.getName(), gzipped.length(),</span>
-<span class="nc" id="L193">                                ratioOfSize(aggregation.getOutput(), gzipped)));</span>
-<span class="nc bnc" id="L194" title="All 2 branches missed.">                    } else if (aggregation.getOutput().exists()) {</span>
-<span class="nc" id="L195">                        getLog().info(String.format(&quot;%s (%db)&quot;, aggregation.getOutput().getName(),</span>
-<span class="nc" id="L196">                                aggregation.getOutput().length()));</span>
-                    } else {
-<span class="nc" id="L198">                        getLog().warn(String.format(&quot;%s not created&quot;, aggregation.getOutput().getName()));</span>
-                    }
+<span class="nc" id="L184">        Set&lt;File&gt; previouslyIncludedFiles = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        for (Aggregation aggregation : aggregations) {</span>
+<span class="nc" id="L186">            getLog().info(&quot;generate aggregation : &quot; + aggregation.getOutput());</span>
+<span class="nc" id="L187">            Collection&lt;File&gt; aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext, incrementalFiles);</span>
+<span class="nc" id="L188">            previouslyIncludedFiles.addAll(aggregatedFiles);</span>
+
+<span class="nc" id="L190">            File gzipped = gzipIfRequested(aggregation.getOutput());</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            if (statistics) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (gzipped != null) {</span>
+<span class="nc" id="L193">                    getLog().info(String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, aggregation.getOutput().getName(),</span>
+<span class="nc" id="L194">                            aggregation.getOutput().length(), gzipped.getName(), gzipped.length(),</span>
+<span class="nc" id="L195">                            ratioOfSize(aggregation.getOutput(), gzipped)));</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                } else if (aggregation.getOutput().exists()) {</span>
+<span class="nc" id="L197">                    getLog().info(String.format(&quot;%s (%db)&quot;, aggregation.getOutput().getName(),</span>
+<span class="nc" id="L198">                            aggregation.getOutput().length()));</span>
+                } else {
+<span class="nc" id="L200">                    getLog().warn(String.format(&quot;%s not created&quot;, aggregation.getOutput().getName()));</span>
                 }
             }
         }
-<span class="nc" id="L203">    }</span>
+<span class="nc" id="L204">    }</span>
 
     @Override
     protected void processFile(SourceFile src) throws IOException, MojoExecutionException {
-<span class="nc" id="L207">        File inFile = src.toFile();</span>
-<span class="nc" id="L208">        getLog().debug(&quot;on incremental build only compress if input file has Delta&quot;);</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
-<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (!buildContext.hasDelta(inFile)) {</span>
-<span class="nc bnc" id="L211" title="All 2 branches missed.">                if (getLog().isInfoEnabled()) {</span>
-<span class="nc" id="L212">                    getLog().info(&quot;nothing to do, &quot; + inFile + &quot; has no Delta&quot;);</span>
+<span class="nc" id="L208">        File inFile = src.toFile();</span>
+<span class="nc" id="L209">        getLog().debug(&quot;on incremental build only compress if input file has Delta&quot;);</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">            if (!buildContext.hasDelta(inFile)) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (getLog().isInfoEnabled()) {</span>
+<span class="nc" id="L213">                    getLog().info(&quot;nothing to do, &quot; + inFile + &quot; has no Delta&quot;);</span>
                 }
-<span class="nc" id="L214">                return;</span>
+<span class="nc" id="L215">                return;</span>
             }
-<span class="nc bnc" id="L216" title="All 2 branches missed.">            if (incrementalFiles == null) {</span>
-<span class="nc" id="L217">                incrementalFiles = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (incrementalFiles == null) {</span>
+<span class="nc" id="L218">                incrementalFiles = new HashSet&lt;&gt;();</span>
             }
         }
 
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        if (getLog().isDebugEnabled()) {</span>
-<span class="nc" id="L222">            getLog().debug(&quot;compress file :&quot; + src.toFile() + &quot; to &quot; + src.toDestFile(suffix));</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (getLog().isDebugEnabled()) {</span>
+<span class="nc" id="L223">            getLog().debug(&quot;compress file :&quot; + src.toFile() + &quot; to &quot; + src.toDestFile(suffix));</span>
         }
 
-<span class="nc" id="L225">        File outFile = src.toDestFile(suffix);</span>
-<span class="nc bnc" id="L226" title="All 4 branches missed.">        if (!nosuffix &amp;&amp; isMinifiedFile(inFile)) {</span>
-<span class="nc" id="L227">            return;</span>
+<span class="nc" id="L226">        File outFile = src.toDestFile(suffix);</span>
+<span class="nc bnc" id="L227" title="All 4 branches missed.">        if (!nosuffix &amp;&amp; isMinifiedFile(inFile)) {</span>
+<span class="nc" id="L228">            return;</span>
         }
-<span class="nc" id="L229">        getLog().debug(&quot;only compress if input file is younger than existing output file&quot;);</span>
-<span class="nc bnc" id="L230" title="All 6 branches missed.">        if (!force &amp;&amp; outFile.exists() &amp;&amp; outFile.lastModified() &gt; inFile.lastModified()) {</span>
-<span class="nc bnc" id="L231" title="All 2 branches missed.">            if (getLog().isInfoEnabled()) {</span>
-<span class="nc" id="L232">                getLog().info(&quot;nothing to do, &quot; + outFile</span>
+<span class="nc" id="L230">        getLog().debug(&quot;only compress if input file is younger than existing output file&quot;);</span>
+<span class="nc bnc" id="L231" title="All 6 branches missed.">        if (!force &amp;&amp; outFile.exists() &amp;&amp; outFile.lastModified() &gt; inFile.lastModified()) {</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">            if (getLog().isInfoEnabled()) {</span>
+<span class="nc" id="L233">                getLog().info(&quot;nothing to do, &quot; + outFile</span>
                         + &quot; is younger than original, use 'force' option or clean your target&quot;);
             }
-<span class="nc" id="L235">            return;</span>
+<span class="nc" id="L236">            return;</span>
         }
-<span class="nc" id="L237">        File outFileTmp = Path.of(outFile.getCanonicalPath() + &quot;.tmp&quot;).toFile();</span>
-<span class="nc" id="L238">        FileUtils.forceDelete(outFileTmp);</span>
+<span class="nc" id="L238">        File outFileTmp = Path.of(outFile.getCanonicalPath() + &quot;.tmp&quot;).toFile();</span>
+<span class="nc" id="L239">        FileUtils.forceDelete(outFileTmp);</span>
 
-<span class="nc bnc" id="L240" title="All 4 branches missed.">        if (!outFile.getParentFile().exists() &amp;&amp; !outFile.getParentFile().mkdirs()) {</span>
-<span class="nc" id="L241">            throw new MojoExecutionException(&quot;Cannot create resource output directory: &quot; + outFile.getParentFile());</span>
+<span class="nc bnc" id="L241" title="All 4 branches missed.">        if (!outFile.getParentFile().exists() &amp;&amp; !outFile.getParentFile().mkdirs()) {</span>
+<span class="nc" id="L242">            throw new MojoExecutionException(&quot;Cannot create resource output directory: &quot; + outFile.getParentFile());</span>
         }
-<span class="nc" id="L243">        getLog().debug(&quot;use a temporary outputfile (in case in == out)&quot;);</span>
+<span class="nc" id="L244">        getLog().debug(&quot;use a temporary outputfile (in case in == out)&quot;);</span>
 
-<span class="nc" id="L245">        try (InputStreamReader in = new InputStreamReader(Files.newInputStream(inFile.toPath()),</span>
-<span class="nc" id="L246">                Charset.forName(encoding));</span>
+<span class="nc" id="L246">        try (InputStreamReader in = new InputStreamReader(Files.newInputStream(inFile.toPath()),</span>
+<span class="nc" id="L247">                Charset.forName(encoding));</span>
                 /* outFileTmp will be deleted create with FileOutputStream */
-<span class="nc" id="L248">                OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(outFileTmp.toPath()),</span>
-<span class="nc" id="L249">                        Charset.forName(encoding));) {</span>
+<span class="nc" id="L249">                OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(outFileTmp.toPath()),</span>
+<span class="nc" id="L250">                        Charset.forName(encoding));) {</span>
 
-<span class="nc" id="L251">            getLog().debug(&quot;start compression&quot;);</span>
-<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (nocompress) {</span>
-<span class="nc" id="L253">                getLog().info(&quot;No compression is enabled&quot;);</span>
-<span class="nc" id="L254">                IOUtil.copy(in, out);</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">            } else if (&quot;.js&quot;.equalsIgnoreCase(src.getExtension())) {</span>
-<span class="nc" id="L256">                JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">                compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons, disableOptimizations);</span>
-<span class="nc bnc" id="L258" title="All 2 branches missed.">            } else if (&quot;.css&quot;.equalsIgnoreCase(src.getExtension())) {</span>
-<span class="nc" id="L259">                compressCss(in, out);</span>
-            }
-<span class="nc" id="L261">            getLog().debug(&quot;end compression&quot;);</span>
-        }
+<span class="nc" id="L252">            getLog().debug(&quot;start compression&quot;);</span>
+            try {
+<span class="nc bnc" id="L254" title="All 2 branches missed.">                if (nocompress) {</span>
+<span class="nc" id="L255">                    getLog().info(&quot;No compression is enabled&quot;);</span>
+<span class="nc" id="L256">                    IOUtil.copy(in, out);</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">                } else if (&quot;.js&quot;.equalsIgnoreCase(src.getExtension())) {</span>
+<span class="nc" id="L258">                    JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">                    compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons,</span>
+                            disableOptimizations);
+<span class="nc bnc" id="L261" title="All 2 branches missed.">                } else if (&quot;.css&quot;.equalsIgnoreCase(src.getExtension())) {</span>
+<span class="nc" id="L262">                    compressCss(in, out);</span>
+                }
+<span class="nc" id="L264">            } catch (IndexOutOfBoundsException e) {</span>
+                // This catch exists to not fail the build on YUICompressor bugs.
+                // 2.4.8 seems to have issue on windows : https://github.com/yui/yuicompressor/issues/78
+                // 2.4.8 failed to process empty file (demo01) : https://github.com/yui/yuicompressor/issues/130
+<span class="nc" id="L268">                getLog().warn(&quot;YUICompressor failed on file: &quot; + inFile.getName()</span>
+                        + &quot; due to IndexOutOfBoundsException. Skipping this file.&quot;);
+<span class="nc" id="L270">                return;</span>
+<span class="nc" id="L271">            }</span>
+<span class="nc" id="L272">            getLog().debug(&quot;end compression&quot;);</span>
+<span class="nc" id="L273">        }</span>
 
-<span class="nc bnc" id="L264" title="All 4 branches missed.">        boolean outputIgnored = useSmallestFile &amp;&amp; inFile.length() &lt; outFile.length();</span>
-<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (outputIgnored) {</span>
-<span class="nc" id="L266">            FileUtils.forceDelete(outFileTmp);</span>
-<span class="nc" id="L267">            FileUtils.copyFile(inFile, outFile);</span>
-<span class="nc" id="L268">            getLog().debug(&quot;output greater than input, using original instead&quot;);</span>
+<span class="nc bnc" id="L275" title="All 4 branches missed.">        boolean outputIgnored = useSmallestFile &amp;&amp; inFile.length() &lt; outFile.length();</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if (outputIgnored) {</span>
+<span class="nc" id="L277">            FileUtils.forceDelete(outFileTmp);</span>
+<span class="nc" id="L278">            FileUtils.copyFile(inFile, outFile);</span>
+<span class="nc" id="L279">            getLog().debug(&quot;output greater than input, using original instead&quot;);</span>
         } else {
-<span class="nc" id="L270">            FileUtils.forceDelete(outFile);</span>
-<span class="nc" id="L271">            FileUtils.rename(outFileTmp, outFile);</span>
-<span class="nc" id="L272">            buildContext.refresh(outFile);</span>
+<span class="nc" id="L281">            FileUtils.forceDelete(outFile);</span>
+<span class="nc" id="L282">            FileUtils.rename(outFileTmp, outFile);</span>
+<span class="nc" id="L283">            buildContext.refresh(outFile);</span>
         }
 
-<span class="nc bnc" id="L275" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
-<span class="nc" id="L276">            incrementalFiles.add(outFile.getCanonicalPath());</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        if (buildContext.isIncremental()) {</span>
+<span class="nc" id="L287">            incrementalFiles.add(outFile.getCanonicalPath());</span>
         }
 
-<span class="nc" id="L279">        File gzipped = gzipIfRequested(outFile);</span>
-<span class="nc bnc" id="L280" title="All 2 branches missed.">        if (statistics) {</span>
-<span class="nc" id="L281">            inSizeTotal += inFile.length();</span>
-<span class="nc" id="L282">            outSizeTotal += outFile.length();</span>
+<span class="nc" id="L290">        File gzipped = gzipIfRequested(outFile);</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        if (statistics) {</span>
+<span class="nc" id="L292">            inSizeTotal += inFile.length();</span>
+<span class="nc" id="L293">            outSizeTotal += outFile.length();</span>
 
             String fileStatistics;
-<span class="nc bnc" id="L285" title="All 2 branches missed.">            if (outputIgnored) {</span>
-<span class="nc" id="L286">                fileStatistics = String.format(</span>
-<span class="nc" id="L287">                        &quot;%s (%db) -&gt; %s (%db)[compressed output discarded (exceeded input size)]&quot;, inFile.getName(),</span>
-<span class="nc" id="L288">                        inFile.length(), outFile.getName(), outFile.length());</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">            if (outputIgnored) {</span>
+<span class="nc" id="L297">                fileStatistics = String.format(</span>
+<span class="nc" id="L298">                        &quot;%s (%db) -&gt; %s (%db)[compressed output discarded (exceeded input size)]&quot;, inFile.getName(),</span>
+<span class="nc" id="L299">                        inFile.length(), outFile.getName(), outFile.length());</span>
             } else {
-<span class="nc" id="L290">                fileStatistics = String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, inFile.getName(), inFile.length(),</span>
-<span class="nc" id="L291">                        outFile.getName(), outFile.length(), ratioOfSize(inFile, outFile));</span>
+<span class="nc" id="L301">                fileStatistics = String.format(&quot;%s (%db) -&gt; %s (%db)[%d%%]&quot;, inFile.getName(), inFile.length(),</span>
+<span class="nc" id="L302">                        outFile.getName(), outFile.length(), ratioOfSize(inFile, outFile));</span>
             }
 
-<span class="nc bnc" id="L294" title="All 2 branches missed.">            if (gzipped != null) {</span>
-<span class="nc" id="L295">                fileStatistics = fileStatistics + String.format(&quot; -&gt; %s (%db)[%d%%]&quot;, gzipped.getName(),</span>
-<span class="nc" id="L296">                        gzipped.length(), ratioOfSize(inFile, gzipped));</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            if (gzipped != null) {</span>
+<span class="nc" id="L306">                fileStatistics = fileStatistics + String.format(&quot; -&gt; %s (%db)[%d%%]&quot;, gzipped.getName(),</span>
+<span class="nc" id="L307">                        gzipped.length(), ratioOfSize(inFile, gzipped));</span>
             }
-<span class="nc" id="L298">            getLog().info(fileStatistics);</span>
+<span class="nc" id="L309">            getLog().info(fileStatistics);</span>
         }
-<span class="nc" id="L300">    }</span>
+<span class="nc" id="L311">    }</span>
 
     /**
      * Compress css.
@@ -309,14 +320,14 @@ import org.codehaus.plexus.util.IOUtil;
      */
     private void compressCss(InputStreamReader in, OutputStreamWriter out) throws IOException {
         try {
-<span class="nc" id="L312">            CssCompressor compressor = new CssCompressor(in);</span>
-<span class="nc" id="L313">            compressor.compress(out, linebreakpos);</span>
-<span class="nc" id="L314">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L315">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L323">            CssCompressor compressor = new CssCompressor(in);</span>
+<span class="nc" id="L324">            compressor.compress(out, linebreakpos);</span>
+<span class="nc" id="L325">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L326">            throw new IllegalArgumentException(</span>
                     &quot;Unexpected characters found in CSS file. Ensure that the CSS file does not contain '$', and try again&quot;,
                     e);
-<span class="nc" id="L318">        }</span>
-<span class="nc" id="L319">    }</span>
+<span class="nc" id="L329">        }</span>
+<span class="nc" id="L330">    }</span>
 
     /**
      * Gzip if requested.
@@ -330,20 +341,20 @@ import org.codehaus.plexus.util.IOUtil;
      *             the IO exception
      */
     protected File gzipIfRequested(File file) throws IOException {
-<span class="nc bnc" id="L333" title="All 8 branches missed.">        if (!gzip || file == null || !file.exists() || &quot;.gz&quot;.equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {</span>
-<span class="nc" id="L334">            return null;</span>
+<span class="nc bnc" id="L344" title="All 8 branches missed.">        if (!gzip || file == null || !file.exists() || &quot;.gz&quot;.equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {</span>
+<span class="nc" id="L345">            return null;</span>
         }
-<span class="nc" id="L336">        File gzipped = Path.of(file.getCanonicalFile() + &quot;.gz&quot;).toFile();</span>
-<span class="nc" id="L337">        getLog().debug(String.format(&quot;create gzip version : %s&quot;, gzipped.getName()));</span>
-<span class="nc" id="L338">        try (InputStream in = Files.newInputStream(file.toPath());</span>
-<span class="nc" id="L339">                GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {</span>
+<span class="nc" id="L347">        File gzipped = Path.of(file.getCanonicalFile() + &quot;.gz&quot;).toFile();</span>
+<span class="nc" id="L348">        getLog().debug(String.format(&quot;create gzip version : %s&quot;, gzipped.getName()));</span>
+<span class="nc" id="L349">        try (InputStream in = Files.newInputStream(file.toPath());</span>
+<span class="nc" id="L350">                GZIPOutputStream out = new GZIPOutputStream(buildContext.newFileOutputStream(gzipped)) {</span>
                     {
-<span class="nc" id="L341">                        def.setLevel(level);</span>
-<span class="nc" id="L342">                    }</span>
+<span class="nc" id="L352">                        def.setLevel(level);</span>
+                    }
                 };) {
-<span class="nc" id="L344">            IOUtil.copy(in, out);</span>
+<span class="nc" id="L355">            IOUtil.copy(in, out);</span>
         }
-<span class="nc" id="L346">        return gzipped;</span>
+<span class="nc" id="L357">        return gzipped;</span>
     }
 
     /**
@@ -357,9 +368,9 @@ import org.codehaus.plexus.util.IOUtil;
      * @return the long
      */
     protected long ratioOfSize(File file100, File fileX) {
-<span class="nc" id="L360">        long v100 = Math.max(file100.length(), 1);</span>
-<span class="nc" id="L361">        long vX = Math.max(fileX.length(), 1);</span>
-<span class="nc" id="L362">        return vX * 100 / v100;</span>
+<span class="nc" id="L371">        long v100 = Math.max(file100.length(), 1);</span>
+<span class="nc" id="L372">        long vX = Math.max(fileX.length(), 1);</span>
+<span class="nc" id="L373">        return vX * 100 / v100;</span>
     }
 
     /**
@@ -371,9 +382,9 @@ import org.codehaus.plexus.util.IOUtil;
      * @return true, if is minified file
      */
     private boolean isMinifiedFile(File inFile) {
-<span class="nc" id="L374">        String filename = inFile.getName().toLowerCase(Locale.getDefault());</span>
-<span class="nc bnc" id="L375" title="All 4 branches missed.">        return filename.endsWith(suffix + &quot;.js&quot;) || filename.endsWith(suffix + &quot;.css&quot;);</span>
+<span class="nc" id="L385">        String filename = inFile.getName().toLowerCase(Locale.getDefault());</span>
+<span class="nc bnc" id="L386" title="All 4 branches missed.">        return filename.endsWith(suffix + &quot;.js&quot;) || filename.endsWith(suffix + &quot;.css&quot;);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
