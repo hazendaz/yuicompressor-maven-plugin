@@ -184,8 +184,7 @@ public class YuiCompressorMojo extends MojoSupport {
         Set<File> previouslyIncludedFiles = new HashSet<>();
         for (Aggregation aggregation : aggregations) {
             getLog().info("generate aggregation : " + aggregation.getOutput());
-            Collection<File> aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext,
-                    incrementalFiles);
+            Collection<File> aggregatedFiles = aggregation.run(previouslyIncludedFiles, buildContext, incrementalFiles);
             previouslyIncludedFiles.addAll(aggregatedFiles);
 
             File gzipped = gzipIfRequested(aggregation.getOutput());
