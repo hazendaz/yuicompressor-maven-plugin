@@ -19,6 +19,8 @@
  */
 package net.alchim31.maven.yuicompressor;
 
+import static org.mockito.Mockito.lenient;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,21 +33,46 @@ import java.util.List;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * The Class AggregationTestCase.
  */
 // Note: public here needed for javadocs to work so don't remove it
+@ExtendWith(MockitoExtension.class)
 public class AggregationTestCase {
 
     /** The dir. */
     @TempDir
     File dir;
 
+    /** The legacy build context. */
+    @Mock
+    BuildContext legacyBuildContext;
+
     /** The default build context. */
-    DefaultBuildContext defaultBuildContext = new DefaultBuildContext();
+    DefaultBuildContext defaultBuildContext;
+
+    /**
+     * Sets the up.
+     *
+     * @throws IOException
+     *             the io exception
+     */
+    @BeforeEach
+    void setUp() throws IOException {
+        // Ensure the mock returns a real OutputStream for output files
+        lenient().when(legacyBuildContext.newFileOutputStream(ArgumentMatchers.any(File.class)))
+                .thenAnswer(invocation -> Files.newOutputStream(((File) invocation.getArgument(0)).toPath()));
+        defaultBuildContext = new DefaultBuildContext(legacyBuildContext);
+    }
 
     /**
      * Test 0 to 1.
