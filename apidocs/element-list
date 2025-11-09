@@ -1,3 +1,2 @@
-module:com.github.hazendaz.yuicompressor.maven.plugin
 com.github.hazendaz.maven.yuicompressor_maven_plugin
 net.alchim31.maven.yuicompressor
