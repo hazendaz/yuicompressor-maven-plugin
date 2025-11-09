@@ -19,8 +19,6 @@
  */
 package net.alchim31.maven.yuicompressor;
 
-import static org.mockito.Mockito.lenient;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +27,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.junit.jupiter.api.Assertions;
@@ -39,6 +36,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
@@ -69,9 +67,9 @@ public class AggregationTestCase {
     @BeforeEach
     void setUp() throws IOException {
         // Ensure the mock returns a real OutputStream for output files
-        lenient().when(legacyBuildContext.newFileOutputStream(ArgumentMatchers.any(File.class)))
+        Mockito.lenient().when(this.legacyBuildContext.newFileOutputStream(ArgumentMatchers.any(File.class)))
                 .thenAnswer(invocation -> Files.newOutputStream(((File) invocation.getArgument(0)).toPath()));
-        defaultBuildContext = new DefaultBuildContext(legacyBuildContext);
+        this.defaultBuildContext = new DefaultBuildContext(this.legacyBuildContext);
     }
 
     /**
@@ -82,21 +80,21 @@ public class AggregationTestCase {
      */
     @Test
     void test0to1() throws IOException {
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertFalse(target.getOutput().exists());
 
         target.setIncludes(new String[] {});
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertFalse(target.getOutput().exists());
 
         target.setIncludes(new String[] { "**/*.js" });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertFalse(target.getOutput().exists());
     }
 
@@ -108,14 +106,14 @@ public class AggregationTestCase {
      */
     @Test
     void test1to1() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
         target.setIncludes(new String[] { f1.getName() });
 
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8),
                 new String(Files.readAllBytes(target.getOutput().toPath()), StandardCharsets.UTF_8));
@@ -129,18 +127,18 @@ public class AggregationTestCase {
      */
     @Test
     void test2to1() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         target.setIncludes(new String[] { f1.getName(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -150,7 +148,7 @@ public class AggregationTestCase {
         target.getOutput().delete();
         target.setIncludes(new String[] { "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -166,18 +164,18 @@ public class AggregationTestCase {
      */
     @Test
     void testNoDuplicateAggregation() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         target.setIncludes(new String[] { f1.getName(), f1.getName(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -187,7 +185,7 @@ public class AggregationTestCase {
         target.getOutput().delete();
         target.setIncludes(new String[] { f1.getName(), "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -203,18 +201,18 @@ public class AggregationTestCase {
      */
     @Test
     void test2to1Order() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "2".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         target.setIncludes(new String[] { f2.getName(), f1.getName() });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8)
@@ -230,19 +228,19 @@ public class AggregationTestCase {
      */
     @Test
     void test2to1WithNewLine() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
         target.setInsertNewLine(true);
         target.setIncludes(new String[] { f1.getName(), f2.getName() });
 
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8) + "\n"
@@ -258,18 +256,18 @@ public class AggregationTestCase {
      */
     @Test
     void testAbsolutePathFromInside() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         target.setIncludes(new String[] { f1.getAbsolutePath(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
-        target.run(null, defaultBuildContext);
+        target.run(null, this.defaultBuildContext);
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
                 new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -285,19 +283,19 @@ public class AggregationTestCase {
      */
     @Test
     void testAbsolutePathFromOutside() throws IOException {
-        File f1 = File.createTempFile("test-01", ".js");
+        final var f1 = File.createTempFile("test-01", ".js");
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        final var target = new Aggregation();
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
         try {
             target.setIncludes(new String[] { f1.getAbsolutePath(), f2.getName() });
             Assertions.assertFalse(target.getOutput().exists());
-            target.run(null, defaultBuildContext);
+            target.run(null, this.defaultBuildContext);
             Assertions.assertTrue(target.getOutput().exists());
             Assertions.assertEquals(
                     new String(Files.readAllBytes(f1.toPath()), StandardCharsets.UTF_8)
@@ -316,23 +314,23 @@ public class AggregationTestCase {
      */
     @Test
     void testAutoExcludeWildcards() throws IOException {
-        File f1 = dir.toPath().resolve("01.js").toFile();
+        final var f1 = this.dir.toPath().resolve("01.js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        File f2 = dir.toPath().resolve("02.js").toFile();
+        final var f2 = this.dir.toPath().resolve("02.js").toFile();
         Files.write(f2.toPath(), "22\n22".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
-        Aggregation target = new Aggregation();
+        final var target = new Aggregation();
         target.setAutoExcludeWildcards(true);
-        target.setOutput(dir.toPath().resolve("output.js").toFile());
+        target.setOutput(this.dir.toPath().resolve("output.js").toFile());
 
-        Collection<File> previouslyIncluded = new HashSet<>();
+        final Collection<File> previouslyIncluded = new HashSet<>();
         previouslyIncluded.add(f1.getCanonicalFile());
 
         target.setIncludes(new String[] { f1.getName(), f2.getName() });
         Assertions.assertFalse(target.getOutput().exists());
         // First call uses path that does not deal with previouslyIncluded so both files are added
-        List<File> content = target.run(previouslyIncluded, defaultBuildContext);
+        final var content = target.run(previouslyIncluded, this.defaultBuildContext);
         Assertions.assertEquals(2, content.size());
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(
@@ -344,7 +342,7 @@ public class AggregationTestCase {
         target.setIncludes(new String[] { "*.js" });
         Assertions.assertFalse(target.getOutput().exists());
         // f1 was in previouslyIncluded so it is not included
-        Assertions.assertEquals(target.run(previouslyIncluded, defaultBuildContext),
+        Assertions.assertEquals(target.run(previouslyIncluded, this.defaultBuildContext),
                 Arrays.asList(f2.getCanonicalFile()));
         Assertions.assertTrue(target.getOutput().exists());
         Assertions.assertEquals(new String(Files.readAllBytes(f2.toPath()), StandardCharsets.UTF_8),
