@@ -33,7 +33,7 @@
 
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>yuicompressor-maven-plugin</artifactId>
-    <version>2.3.1-SNAPSHOT</version>
+    <version>2.3.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>yuicompressor-maven-plugin</name>
@@ -108,7 +108,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/hazendaz/yuicompressor-maven-plugin.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>yuicompressor-maven-plugin-2.3.1</tag>
         <url>https://github.com/hazendaz/yuicompressor-maven-plugin</url>
     </scm>
 
@@ -147,7 +147,7 @@
         <module.name>com.github.hazendaz.yuicompressor.maven.plugin</module.name>
 
         <!-- Reproducible Builds -->
-        <project.build.outputTimestamp>1762716587</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1765156396</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
