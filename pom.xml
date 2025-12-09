@@ -138,7 +138,7 @@
         <maven.version>3.9.11</maven.version>
         <maven-plugin.version>3.15.2</maven-plugin.version>
 
-        <mockito.version>5.20.0</mockito.version>
+        <mockito.version>5.21.0</mockito.version>
 
         <!-- Velocity -->
         <runtime.log>${project.build.directory}/velocity.log</runtime.log>
