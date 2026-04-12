@@ -1,4 +1,4 @@
-/*
+/**
  * YuiCompressor Maven plugin
  *
  * Copyright 2012-2026 Hazendaz.
@@ -17,6 +17,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// compression must remove me
-var artifactId="${pom.artifactId}";
-var ${value.rf01}="rf01";
+/* Test CSS file for unit tests */
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+}

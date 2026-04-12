@@ -1,7 +1,7 @@
 /*
  * YuiCompressor Maven plugin
  *
- * Copyright 2012-2025 Hazendaz.
+ * Copyright 2012-2026 Hazendaz.
  *
  * Licensed under the GNU Lesser General Public License (LGPL),
  * version 2.1 or later (the "License").
@@ -341,7 +341,7 @@ public class YuiCompressorMojo extends MojoSupport {
      *             the IO exception
      */
     protected File gzipIfRequested(File file) throws IOException {
-        if (!gzip || file == null || !file.exists() || ".gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
+        if (!gzip || file == null || !file.exists() || "gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
             return null;
         }
         File gzipped = Path.of(file.getCanonicalFile() + ".gz").toFile();

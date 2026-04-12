@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    YuiCompressor Maven plugin
+
+    Copyright 2012-2026 Hazendaz.
+
+    Licensed under the GNU Lesser General Public License (LGPL),
+    version 2.1 or later (the "License").
+    You may not use this file except in compliance with the License.
+    You may read the licence in the 'lgpl.txt' file in the root folder of
+    project or obtain a copy at
+
+        https://www.gnu.org/licenses/lgpl-2.1.html
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>test.group</groupId>
+    <artifactId>compress-basic-test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.hazendaz.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>2.3.2-SNAPSHOT</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <statistics>false</statistics>
+                    <excludeResources>true</excludeResources>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <webappDirectory>${basedir}/target/webapp</webappDirectory>
+                    <outputDirectory>${basedir}/target/classes</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

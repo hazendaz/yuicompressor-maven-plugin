@@ -17,6 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// compression must remove me
-var artifactId="${pom.artifactId}";
-var ${value.rf01}="rf01";
+/* Test JavaScript file for unit tests */
+function helloWorld(name) {
+    var greeting = "Hello, " + name + "!";
+    console.log(greeting);
+    return greeting;
+}
