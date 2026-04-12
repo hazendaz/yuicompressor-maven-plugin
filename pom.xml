@@ -160,7 +160,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.yahoo.platform.yui</groupId>
