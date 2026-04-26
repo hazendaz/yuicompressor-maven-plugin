@@ -161,6 +161,101 @@ class BasicRhinoShellTest {
     }
 
     /**
+     * Test exec() with a valid script file executes without throwing.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    void testExec_withValidScriptFile_doesNotThrow() throws Exception {
+        final var content = "var result = 1 + 1;";
+        try (var writer = Files.newBufferedWriter(this.tempFile, StandardCharsets.UTF_8)) {
+            writer.write(content);
+        }
+        final var reporter = Mockito.mock(org.mozilla.javascript.ErrorReporter.class);
+        // Should complete without throwing
+        Assertions.assertDoesNotThrow(() -> BasicRhinoShell.exec(new String[] { this.tempFile.toString() }, reporter),
+                "exec() with a valid script file should not throw");
+    }
+
+    /**
+     * Test exec() with an empty argument list (would trigger interactive mode with stdin) – we just test no exception
+     * for a simple evaluation scenario by providing a trivial script.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    void testExec_withScriptThatCallsPrint_doesNotThrow() throws Exception {
+        Files.write(this.tempFile, "print('hello');".getBytes(StandardCharsets.UTF_8));
+        final var reporter = Mockito.mock(org.mozilla.javascript.ErrorReporter.class);
+        Assertions.assertDoesNotThrow(() -> BasicRhinoShell.exec(new String[] { this.tempFile.toString() }, reporter),
+                "exec() with a print() call should not throw");
+    }
+
+    /**
+     * Test load() static function – loading a valid script file should not throw.
+     *
+     * @throws Exception
+     *             the exception
+     */
+    @Test
+    void testLoad_withValidFile_doesNotThrow() throws Exception {
+        Files.write(this.tempFile, "var loaded = true;".getBytes(StandardCharsets.UTF_8));
+        final var cx = Context.enter();
+        try {
+            final BasicRhinoShell shell = new BasicRhinoShell();
+            cx.initStandardObjects(shell);
+            final Scriptable scope = shell;
+            final Object[] args = { this.tempFile.toString() };
+            final var funObj = Mockito.mock(Function.class);
+            Assertions.assertDoesNotThrow(() -> BasicRhinoShell.load(cx, scope, args, funObj),
+                    "load() with a valid JS file should not throw");
+        } finally {
+            Context.exit();
+        }
+    }
+
+    /**
+     * Test getClassName() returns "global".
+     */
+    @Test
+    void testGetClassName_returnsGlobal() {
+        final var shell = new BasicRhinoShell();
+        Assertions.assertEquals("global", shell.getClassName(), "getClassName() should return 'global'");
+    }
+
+    /**
+     * Test processOptions with no arguments returns empty array.
+     */
+    @Test
+    void testProcessOptions_noArgs_returnsEmptyArray() {
+        final var cx = Context.enter();
+        try {
+            final String[] result = BasicRhinoShell.processOptions(cx, new String[0]);
+            Assertions.assertEquals(0, result.length, "Empty args should return empty result");
+        } finally {
+            Context.exit();
+        }
+    }
+
+    /**
+     * Test processOptions with a non-flag argument returns the remaining args starting from that argument.
+     */
+    @Test
+    void testProcessOptions_nonFlagArg_returnsRemainingArgs() {
+        final var cx = Context.enter();
+        try {
+            final String[] result = BasicRhinoShell.processOptions(cx, new String[] { "script.js", "arg1" });
+            Assertions.assertEquals(2, result.length, "Expected both remaining args");
+            Assertions.assertEquals("script.js", result[0]);
+            Assertions.assertEquals("arg1", result[1]);
+        } finally {
+            Context.exit();
+        }
+    }
+
+    /**
      * Test version get set.
      */
     @Test
