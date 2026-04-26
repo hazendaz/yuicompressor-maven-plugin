@@ -88,7 +88,7 @@ public class JSLintMojoTest {
         final String[] includes = mojo.getDefaultIncludes();
         Assertions.assertNotNull(includes, "Default includes should not be null");
         Assertions.assertEquals(1, includes.length, "Expected exactly one default include pattern");
-        Assertions.assertEquals("**/**.js", includes[0], "Default include should match **/*.js");
+        Assertions.assertEquals("**/**.js", includes[0], "Default include should match '**/**.js'");
     }
 
     /**
