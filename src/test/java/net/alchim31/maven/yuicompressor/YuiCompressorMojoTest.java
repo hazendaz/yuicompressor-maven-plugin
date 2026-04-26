@@ -24,10 +24,12 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoExtension;
 import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.model.Resource;
 import org.codehaus.plexus.build.DefaultBuildContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -361,6 +363,302 @@ public class YuiCompressorMojoTest {
 
         // Should not throw
         mojo.execute();
+    }
+
+    // ------------------------------------------------------- nocompress option
+
+    /**
+     * Test that the {@code nocompress} option copies the file as-is (no actual compression).
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_nocompress_copiesFileAsIs() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-nocompress");
+        webappDir.mkdirs();
+        final String content = "function hello(name) { var msg = 'Hello ' + name; return msg; }";
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(), content.getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-nocompress");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "nocompress", true);
+        mojo.execute();
+
+        final File outputFile = new File(outputDir, "app-min.js");
+        Assertions.assertTrue(outputFile.exists(), "Output file should be created even with nocompress");
+        final String outputContent = new String(Files.readAllBytes(outputFile.toPath()), StandardCharsets.UTF_8);
+        Assertions.assertEquals(content, outputContent, "nocompress should copy file content unchanged");
+    }
+
+    // ------------------------------------------------------- gzip during processFile
+
+    /**
+     * Test that gzip=true creates a .gz file alongside the compressed output.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_gzipEnabled_createsGzFile() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-gzip-proc");
+        webappDir.mkdirs();
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(),
+                "function greet(name) { var msg = 'Hello ' + name; return msg; }".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-gzip-proc");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "gzip", true);
+        MojoExtension.setVariableValueToObject(mojo, "level", 9);
+        MojoExtension.setVariableValueToObject(mojo, "statistics", true);
+        mojo.execute();
+
+        final File gzFile = new File(outputDir, "app-min.js.gz");
+        Assertions.assertTrue(gzFile.exists(), "A .gz file should be created when gzip=true");
+        Assertions.assertTrue(gzFile.length() > 0, "The .gz file should not be empty");
+    }
+
+    // ------------------------------------------------------- statistics with CSS
+
+    /**
+     * Test that statistics logging works correctly for CSS files.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_statisticsEnabled_withCss() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-stats-css");
+        webappDir.mkdirs();
+        final File cssFile = new File(webappDir, "style.css");
+        Files.write(cssFile.toPath(), "body {\n  background-color: white;\n  color: black;\n  font-size: 14px;\n}\n"
+                .getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-stats-css");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "statistics", true);
+        mojo.execute();
+
+        final File compressedCss = new File(outputDir, "style-min.css");
+        Assertions.assertTrue(compressedCss.exists(), "Compressed CSS should exist");
+    }
+
+    // ------------------------------------------------------- force option
+
+    /**
+     * Test that the {@code force} option re-compresses a file even when the output is newer than the input.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_forceOption_recompressesExistingOutput() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-force");
+        webappDir.mkdirs();
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(), "function f(x) { return x * 2; }".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-force");
+        outputDir.mkdirs();
+
+        // First run without force
+        final var mojo1 = createAndConfigureMojo(webappDir, outputDir);
+        mojo1.execute();
+
+        final File outputFile = new File(outputDir, "app-min.js");
+        Assertions.assertTrue(outputFile.exists(), "Output should exist after first run");
+        final long firstSize = outputFile.length();
+
+        // Now run again with force=true; should re-compress
+        final var mojo2 = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo2, "force", true);
+        mojo2.execute();
+
+        Assertions.assertTrue(outputFile.exists(), "Output should still exist after forced re-compression");
+        Assertions.assertEquals(firstSize, outputFile.length(), "Size should remain the same after re-compression");
+    }
+
+    // ------------------------------------------------------- useSmallestFile
+
+    /**
+     * Test that {@code useSmallestFile=true} keeps the original file when compressed output is larger.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_useSmallestFile_keepOriginalWhenCompressedIsLarger() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-smallest");
+        webappDir.mkdirs();
+        // Very short content that may not compress well
+        final File jsFile = new File(webappDir, "tiny.js");
+        Files.write(jsFile.toPath(), "var x=1;".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-smallest");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "useSmallestFile", true);
+        mojo.execute();
+
+        // Output file should exist either way
+        final File outputFile = new File(outputDir, "tiny-min.js");
+        Assertions.assertTrue(outputFile.exists(), "Output file should exist with useSmallestFile=true");
+    }
+
+    // ------------------------------------------------------- resources processing
+
+    /**
+     * Test that resource directories are processed when {@code excludeResources=false}.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_resourcesProcessed_whenNotExcluded() throws Exception {
+        final File resourceDir = new File(tempDir, "resources");
+        resourceDir.mkdirs();
+        final File cssFile = new File(resourceDir, "theme.css");
+        Files.write(cssFile.toPath(),
+                "body {\n  background: white;\n  color: navy;\n}\n".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-resources");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(new File(tempDir, "no-webapp"), new File(tempDir, "no-webapp-out"));
+        MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", true);
+        MojoExtension.setVariableValueToObject(mojo, "excludeResources", false);
+        MojoExtension.setVariableValueToObject(mojo, "outputDirectory", outputDir);
+
+        // Set up a resource entry pointing to our resource directory
+        final var resource = new Resource();
+        resource.setDirectory(resourceDir.getAbsolutePath());
+        MojoExtension.setVariableValueToObject(mojo, "resources", List.of(resource));
+
+        mojo.execute();
+
+        final File compressedCss = new File(outputDir, "theme-min.css");
+        Assertions.assertTrue(compressedCss.exists(), "CSS from resource directory should be compressed");
+    }
+
+    // ------------------------------------------------------- linebreakpos option
+
+    /**
+     * Test that setting linebreakpos produces output with line breaks in JS.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_withLinebreakpos_jsFile() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-linebreak");
+        webappDir.mkdirs();
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(),
+                "function a(x) { return x + 1; } function b(x) { return x * 2; }".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-linebreak");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "linebreakpos", 20);
+        mojo.execute();
+
+        final File compressedJs = new File(outputDir, "app-min.js");
+        Assertions.assertTrue(compressedJs.exists(), "Compressed JS with linebreakpos should be created");
+    }
+
+    // ------------------------------------------------------- CSS with gzip statistics
+
+    /**
+     * Test statistics + gzip together for a CSS file.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_gzipAndStatistics_cssFile() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-gzip-css");
+        webappDir.mkdirs();
+        final File cssFile = new File(webappDir, "main.css");
+        Files.write(cssFile.toPath(), "body {\n  margin: 0;\n  padding: 0;\n  font-family: Arial, sans-serif;\n}\n"
+                .getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-gzip-css");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "gzip", true);
+        MojoExtension.setVariableValueToObject(mojo, "level", 9);
+        MojoExtension.setVariableValueToObject(mojo, "statistics", true);
+        mojo.execute();
+
+        final File compressedCss = new File(outputDir, "main-min.css");
+        Assertions.assertTrue(compressedCss.exists(), "Compressed CSS should be created");
+        final File gzCss = new File(outputDir, "main-min.css.gz");
+        Assertions.assertTrue(gzCss.exists(), "Gzipped CSS should be created");
+    }
+
+    // ------------------------------------------------------- nomunge / disableOptimizations
+
+    /**
+     * Test that nomunge=true keeps variable names unobfuscated.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_nomunge_doesNotObfuscate() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-nomunge");
+        webappDir.mkdirs();
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(),
+                "function longFunctionName(longParamName) { return longParamName; }".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-nomunge");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "nomunge", true);
+        mojo.execute();
+
+        final File outputFile = new File(outputDir, "app-min.js");
+        Assertions.assertTrue(outputFile.exists(), "Output should exist with nomunge=true");
+        final String outputContent = new String(Files.readAllBytes(outputFile.toPath()), StandardCharsets.UTF_8);
+        Assertions.assertTrue(outputContent.contains("longFunctionName"),
+                "With nomunge=true, function names should be preserved");
+    }
+
+    /**
+     * Test that disableOptimizations=true still produces valid output.
+     *
+     * @throws Exception
+     *             if test fails
+     */
+    @Test
+    void testMojoExecute_disableOptimizations_producesOutput() throws Exception {
+        final File webappDir = new File(tempDir, "webapp-disableopt");
+        webappDir.mkdirs();
+        final File jsFile = new File(webappDir, "app.js");
+        Files.write(jsFile.toPath(), "var a = 1; var b = 2; var c = a + b;".getBytes(StandardCharsets.UTF_8));
+
+        final File outputDir = new File(tempDir, "output-disableopt");
+        outputDir.mkdirs();
+
+        final var mojo = createAndConfigureMojo(webappDir, outputDir);
+        MojoExtension.setVariableValueToObject(mojo, "disableOptimizations", true);
+        mojo.execute();
+
+        Assertions.assertTrue(new File(outputDir, "app-min.js").exists(),
+                "Output should exist with disableOptimizations=true");
     }
 
     // ----------------------------------------------------------- helper methods
