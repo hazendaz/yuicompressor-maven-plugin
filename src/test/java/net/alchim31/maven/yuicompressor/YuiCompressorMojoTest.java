@@ -23,7 +23,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.api.plugin.testing.InjectMojo;
@@ -88,8 +87,8 @@ public class YuiCompressorMojoTest {
     @Test
     void testRatioOfSize_regularFiles() throws Exception {
         final var mojo = new YuiCompressorMojo();
-        final File large = new File(tempDir, "large.js");
-        final File small = new File(tempDir, "small.js");
+        final File large = tempDir.toPath().resolve("large.js").toFile();
+        final File small = tempDir.toPath().resolve("small.js").toFile();
         Files.write(large.toPath(), new byte[100]);
         Files.write(small.toPath(), new byte[50]);
 
@@ -106,8 +105,8 @@ public class YuiCompressorMojoTest {
     @Test
     void testRatioOfSize_emptyBaseFile() throws Exception {
         final var mojo = new YuiCompressorMojo();
-        final File empty = new File(tempDir, "empty.js");
-        final File small = new File(tempDir, "small.js");
+        final File empty = tempDir.toPath().resolve("empty.js").toFile();
+        final File small = tempDir.toPath().resolve("small.js").toFile();
         Files.write(empty.toPath(), new byte[0]);
         Files.write(small.toPath(), new byte[1]);
 
@@ -125,8 +124,8 @@ public class YuiCompressorMojoTest {
     @Test
     void testRatioOfSize_sameSize() throws Exception {
         final var mojo = new YuiCompressorMojo();
-        final File f1 = new File(tempDir, "f1.js");
-        final File f2 = new File(tempDir, "f2.js");
+        final File f1 = tempDir.toPath().resolve("f1.js").toFile();
+        final File f2 = tempDir.toPath().resolve("f2.js").toFile();
         Files.write(f1.toPath(), new byte[200]);
         Files.write(f2.toPath(), new byte[200]);
 
@@ -146,7 +145,7 @@ public class YuiCompressorMojoTest {
         final var mojo = createMojoWithBuildContext();
         MojoExtension.setVariableValueToObject(mojo, "gzip", false);
 
-        final File file = new File(tempDir, "test.js");
+        final File file = tempDir.toPath().resolve("test.js").toFile();
         Files.write(file.toPath(), "var x=1;".getBytes(StandardCharsets.UTF_8));
 
         Assertions.assertNull(mojo.gzipIfRequested(file), "Expected null when gzip is disabled");
@@ -179,7 +178,7 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "gzip", true);
         MojoExtension.setVariableValueToObject(mojo, "level", 9);
 
-        final File missing = new File(tempDir, "nonexistent.js");
+        final File missing = tempDir.toPath().resolve("nonexistent.js").toFile();
         Assertions.assertNull(mojo.gzipIfRequested(missing), "Expected null when file does not exist");
     }
 
@@ -195,7 +194,7 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "gzip", true);
         MojoExtension.setVariableValueToObject(mojo, "level", 9);
 
-        final File gzFile = new File(tempDir, "test.js.gz");
+        final File gzFile = tempDir.toPath().resolve("test.js.gz").toFile();
         Files.write(gzFile.toPath(), new byte[] { 0x1f, (byte) 0x8b });
 
         Assertions.assertNull(mojo.gzipIfRequested(gzFile), "Expected null for already-gzipped file");
@@ -213,7 +212,7 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "gzip", true);
         MojoExtension.setVariableValueToObject(mojo, "level", 9);
 
-        final File jsFile = new File(tempDir, "test.js");
+        final File jsFile = tempDir.toPath().resolve("test.js").toFile();
         Files.write(jsFile.toPath(), "function hello(){}".getBytes(StandardCharsets.UTF_8));
 
         final File gzFile = mojo.gzipIfRequested(jsFile);
@@ -234,7 +233,7 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_skipTrue_doesNotProcess() throws Exception {
-        final var mojo = createAndConfigureMojo(new File(tempDir, "webapp-skip"), new File(tempDir, "output-skip"));
+        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("webapp-skip").toFile(), tempDir.toPath().resolve("output-skip").toFile());
         MojoExtension.setVariableValueToObject(mojo, "skip", true);
 
         // Should complete without any processing (and without NullPointerException)
@@ -249,19 +248,19 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_compressesJsFile() throws Exception {
-        final File webappDir = new File(tempDir, "webapp");
+        final File webappDir = tempDir.toPath().resolve("webapp").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(),
                 "function greet(name) { var msg = 'Hello ' + name; return msg; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output");
+        final File outputDir = tempDir.toPath().resolve("output").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         mojo.execute();
 
-        final File compressedJs = new File(outputDir, "app-min.js");
+        final File compressedJs = outputDir.toPath().resolve("app-min.js").toFile();
         Assertions.assertTrue(compressedJs.exists(), "Compressed JS file should be created");
         Assertions.assertTrue(compressedJs.length() < jsFile.length(),
                 "Compressed file should be smaller than original");
@@ -275,19 +274,19 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_compressesCssFile() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-css");
+        final File webappDir = tempDir.toPath().resolve("webapp-css").toFile();
         webappDir.mkdirs();
-        final File cssFile = new File(webappDir, "style.css");
+        final File cssFile = webappDir.toPath().resolve("style.css").toFile();
         Files.write(cssFile.toPath(), "body {\n  background-color: white;\n  color: black;\n  font-size: 14px;\n}\n"
                 .getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-css");
+        final File outputDir = tempDir.toPath().resolve("output-css").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         mojo.execute();
 
-        final File compressedCss = new File(outputDir, "style-min.css");
+        final File compressedCss = outputDir.toPath().resolve("style-min.css").toFile();
         Assertions.assertTrue(compressedCss.exists(), "Compressed CSS file should be created");
         Assertions.assertTrue(compressedCss.length() < cssFile.length(),
                 "Compressed CSS should be smaller than original");
@@ -301,12 +300,12 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_nosuffix_writesOriginalFilename() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-nosuffix");
+        final File webappDir = tempDir.toPath().resolve("webapp-nosuffix").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(), "function f(x) { return x * 2; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-nosuffix");
+        final File outputDir = tempDir.toPath().resolve("output-nosuffix").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
@@ -314,7 +313,7 @@ public class YuiCompressorMojoTest {
 
         mojo.execute();
 
-        final File outputFile = new File(outputDir, "app.js");
+        final File outputFile = outputDir.toPath().resolve("app.js").toFile();
         Assertions.assertTrue(outputFile.exists(), "Output JS file with original name should be created");
     }
 
@@ -326,19 +325,19 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_alreadyMinifiedFile_isSkipped() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-skipmin");
+        final File webappDir = tempDir.toPath().resolve("webapp-skipmin").toFile();
         webappDir.mkdirs();
-        final File minFile = new File(webappDir, "app-min.js");
+        final File minFile = webappDir.toPath().resolve("app-min.js").toFile();
         Files.write(minFile.toPath(), "function f(x){return x*2;}".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-skipmin");
+        final File outputDir = tempDir.toPath().resolve("output-skipmin").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         mojo.execute();
 
         // app-min.js should not be re-processed (no app-min-min.js created)
-        final File doubleMin = new File(outputDir, "app-min-min.js");
+        final File doubleMin = outputDir.toPath().resolve("app-min-min.js").toFile();
         Assertions.assertFalse(doubleMin.exists(), "Already-minified file should not be double-compressed");
     }
 
@@ -350,12 +349,12 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_statisticsEnabled_doesNotThrow() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-stats");
+        final File webappDir = tempDir.toPath().resolve("webapp-stats").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(), "var x = 1;".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-stats");
+        final File outputDir = tempDir.toPath().resolve("output-stats").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
@@ -375,20 +374,20 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_nocompress_copiesFileAsIs() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-nocompress");
+        final File webappDir = tempDir.toPath().resolve("webapp-nocompress").toFile();
         webappDir.mkdirs();
         final String content = "function hello(name) { var msg = 'Hello ' + name; return msg; }";
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(), content.getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-nocompress");
+        final File outputDir = tempDir.toPath().resolve("output-nocompress").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         MojoExtension.setVariableValueToObject(mojo, "nocompress", true);
         mojo.execute();
 
-        final File outputFile = new File(outputDir, "app-min.js");
+        final File outputFile = outputDir.toPath().resolve("app-min.js").toFile();
         Assertions.assertTrue(outputFile.exists(), "Output file should be created even with nocompress");
         final String outputContent = new String(Files.readAllBytes(outputFile.toPath()), StandardCharsets.UTF_8);
         Assertions.assertEquals(content, outputContent, "nocompress should copy file content unchanged");
@@ -404,13 +403,13 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_gzipEnabled_createsGzFile() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-gzip-proc");
+        final File webappDir = tempDir.toPath().resolve("webapp-gzip-proc").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(),
                 "function greet(name) { var msg = 'Hello ' + name; return msg; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-gzip-proc");
+        final File outputDir = tempDir.toPath().resolve("output-gzip-proc").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
@@ -419,7 +418,7 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "statistics", true);
         mojo.execute();
 
-        final File gzFile = new File(outputDir, "app-min.js.gz");
+        final File gzFile = outputDir.toPath().resolve("app-min.js.gz").toFile();
         Assertions.assertTrue(gzFile.exists(), "A .gz file should be created when gzip=true");
         Assertions.assertTrue(gzFile.length() > 0, "The .gz file should not be empty");
     }
@@ -434,20 +433,20 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_statisticsEnabled_withCss() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-stats-css");
+        final File webappDir = tempDir.toPath().resolve("webapp-stats-css").toFile();
         webappDir.mkdirs();
-        final File cssFile = new File(webappDir, "style.css");
+        final File cssFile = webappDir.toPath().resolve("style.css").toFile();
         Files.write(cssFile.toPath(), "body {\n  background-color: white;\n  color: black;\n  font-size: 14px;\n}\n"
                 .getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-stats-css");
+        final File outputDir = tempDir.toPath().resolve("output-stats-css").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         MojoExtension.setVariableValueToObject(mojo, "statistics", true);
         mojo.execute();
 
-        final File compressedCss = new File(outputDir, "style-min.css");
+        final File compressedCss = outputDir.toPath().resolve("style-min.css").toFile();
         Assertions.assertTrue(compressedCss.exists(), "Compressed CSS should exist");
     }
 
@@ -461,19 +460,19 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_forceOption_recompressesExistingOutput() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-force");
+        final File webappDir = tempDir.toPath().resolve("webapp-force").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(), "function f(x) { return x * 2; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-force");
+        final File outputDir = tempDir.toPath().resolve("output-force").toFile();
         outputDir.mkdirs();
 
         // First run without force
         final var mojo1 = createAndConfigureMojo(webappDir, outputDir);
         mojo1.execute();
 
-        final File outputFile = new File(outputDir, "app-min.js");
+        final File outputFile = outputDir.toPath().resolve("app-min.js").toFile();
         Assertions.assertTrue(outputFile.exists(), "Output should exist after first run");
         final long firstSize = outputFile.length();
 
@@ -496,13 +495,13 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_useSmallestFile_keepOriginalWhenCompressedIsLarger() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-smallest");
+        final File webappDir = tempDir.toPath().resolve("webapp-smallest").toFile();
         webappDir.mkdirs();
         // Very short content that may not compress well
-        final File jsFile = new File(webappDir, "tiny.js");
+        final File jsFile = webappDir.toPath().resolve("tiny.js").toFile();
         Files.write(jsFile.toPath(), "var x=1;".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-smallest");
+        final File outputDir = tempDir.toPath().resolve("output-smallest").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
@@ -510,7 +509,7 @@ public class YuiCompressorMojoTest {
         mojo.execute();
 
         // Output file should exist either way
-        final File outputFile = new File(outputDir, "tiny-min.js");
+        final File outputFile = outputDir.toPath().resolve("tiny-min.js").toFile();
         Assertions.assertTrue(outputFile.exists(), "Output file should exist with useSmallestFile=true");
     }
 
@@ -524,16 +523,16 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_resourcesProcessed_whenNotExcluded() throws Exception {
-        final File resourceDir = new File(tempDir, "resources");
+        final File resourceDir = tempDir.toPath().resolve("resources").toFile();
         resourceDir.mkdirs();
-        final File cssFile = new File(resourceDir, "theme.css");
+        final File cssFile = resourceDir.toPath().resolve("theme.css").toFile();
         Files.write(cssFile.toPath(),
                 "body {\n  background: white;\n  color: navy;\n}\n".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-resources");
+        final File outputDir = tempDir.toPath().resolve("output-resources").toFile();
         outputDir.mkdirs();
 
-        final var mojo = createAndConfigureMojo(new File(tempDir, "no-webapp"), new File(tempDir, "no-webapp-out"));
+        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("no-webapp").toFile(), tempDir.toPath().resolve("no-webapp-out").toFile());
         MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", true);
         MojoExtension.setVariableValueToObject(mojo, "excludeResources", false);
         MojoExtension.setVariableValueToObject(mojo, "outputDirectory", outputDir);
@@ -545,7 +544,7 @@ public class YuiCompressorMojoTest {
 
         mojo.execute();
 
-        final File compressedCss = new File(outputDir, "theme-min.css");
+        final File compressedCss = outputDir.toPath().resolve("theme-min.css").toFile();
         Assertions.assertTrue(compressedCss.exists(), "CSS from resource directory should be compressed");
     }
 
@@ -559,20 +558,20 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_withLinebreakpos_jsFile() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-linebreak");
+        final File webappDir = tempDir.toPath().resolve("webapp-linebreak").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(),
                 "function a(x) { return x + 1; } function b(x) { return x * 2; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-linebreak");
+        final File outputDir = tempDir.toPath().resolve("output-linebreak").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         MojoExtension.setVariableValueToObject(mojo, "linebreakpos", 20);
         mojo.execute();
 
-        final File compressedJs = new File(outputDir, "app-min.js");
+        final File compressedJs = outputDir.toPath().resolve("app-min.js").toFile();
         Assertions.assertTrue(compressedJs.exists(), "Compressed JS with linebreakpos should be created");
     }
 
@@ -586,13 +585,13 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_gzipAndStatistics_cssFile() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-gzip-css");
+        final File webappDir = tempDir.toPath().resolve("webapp-gzip-css").toFile();
         webappDir.mkdirs();
-        final File cssFile = new File(webappDir, "main.css");
+        final File cssFile = webappDir.toPath().resolve("main.css").toFile();
         Files.write(cssFile.toPath(), "body {\n  margin: 0;\n  padding: 0;\n  font-family: Arial, sans-serif;\n}\n"
                 .getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-gzip-css");
+        final File outputDir = tempDir.toPath().resolve("output-gzip-css").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
@@ -601,9 +600,9 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "statistics", true);
         mojo.execute();
 
-        final File compressedCss = new File(outputDir, "main-min.css");
+        final File compressedCss = outputDir.toPath().resolve("main-min.css").toFile();
         Assertions.assertTrue(compressedCss.exists(), "Compressed CSS should be created");
-        final File gzCss = new File(outputDir, "main-min.css.gz");
+        final File gzCss = outputDir.toPath().resolve("main-min.css.gz").toFile();
         Assertions.assertTrue(gzCss.exists(), "Gzipped CSS should be created");
     }
 
@@ -617,20 +616,20 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_nomunge_doesNotObfuscate() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-nomunge");
+        final File webappDir = tempDir.toPath().resolve("webapp-nomunge").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(),
                 "function longFunctionName(longParamName) { return longParamName; }".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-nomunge");
+        final File outputDir = tempDir.toPath().resolve("output-nomunge").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         MojoExtension.setVariableValueToObject(mojo, "nomunge", true);
         mojo.execute();
 
-        final File outputFile = new File(outputDir, "app-min.js");
+        final File outputFile = outputDir.toPath().resolve("app-min.js").toFile();
         Assertions.assertTrue(outputFile.exists(), "Output should exist with nomunge=true");
         final String outputContent = new String(Files.readAllBytes(outputFile.toPath()), StandardCharsets.UTF_8);
         Assertions.assertTrue(outputContent.contains("longFunctionName"),
@@ -645,19 +644,19 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_disableOptimizations_producesOutput() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-disableopt");
+        final File webappDir = tempDir.toPath().resolve("webapp-disableopt").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "app.js");
+        final File jsFile = webappDir.toPath().resolve("app.js").toFile();
         Files.write(jsFile.toPath(), "var a = 1; var b = 2; var c = a + b;".getBytes(StandardCharsets.UTF_8));
 
-        final File outputDir = new File(tempDir, "output-disableopt");
+        final File outputDir = tempDir.toPath().resolve("output-disableopt").toFile();
         outputDir.mkdirs();
 
         final var mojo = createAndConfigureMojo(webappDir, outputDir);
         MojoExtension.setVariableValueToObject(mojo, "disableOptimizations", true);
         mojo.execute();
 
-        Assertions.assertTrue(new File(outputDir, "app-min.js").exists(),
+        Assertions.assertTrue(outputDir.toPath().resolve("app-min.js").toFile().exists(),
                 "Output should exist with disableOptimizations=true");
     }
 
@@ -701,9 +700,9 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", false);
         MojoExtension.setVariableValueToObject(mojo, "warSourceDirectory", warSourceDirectory);
         MojoExtension.setVariableValueToObject(mojo, "webappDirectory", webappDirectory);
-        MojoExtension.setVariableValueToObject(mojo, "outputDirectory", new File(tempDir, "classes"));
-        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", new File(tempDir, "nonexistent-source"));
-        MojoExtension.setVariableValueToObject(mojo, "resources", Collections.emptyList());
+        MojoExtension.setVariableValueToObject(mojo, "outputDirectory", tempDir.toPath().resolve("classes").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", tempDir.toPath().resolve("nonexistent-source").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "resources", List.of());
         return mojo;
     }
 

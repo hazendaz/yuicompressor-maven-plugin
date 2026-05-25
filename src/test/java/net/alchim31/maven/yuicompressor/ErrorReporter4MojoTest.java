@@ -20,6 +20,7 @@
 package net.alchim31.maven.yuicompressor;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.build.BuildContext;
@@ -73,7 +74,7 @@ class ErrorReporter4MojoTest {
      */
     @Test
     void testError_addsBuildContextMessage() {
-        final var file = new File("src.js");
+        final var file = Path.of("src.js").toFile();
         final var reporter = new ErrorReporter4Mojo(log, true, buildContext);
         reporter.setFile(file);
         reporter.error("msg", "src.js", 3, "lineSource", 1);
@@ -119,7 +120,7 @@ class ErrorReporter4MojoTest {
      */
     @Test
     void testWarning_whenAcceptWarnTrue_addsBuildContextMessage() {
-        final var file = new File("src.js");
+        final var file = Path.of("src.js").toFile();
         final var reporter = new ErrorReporter4Mojo(log, true, buildContext);
         reporter.setFile(file);
         reporter.warning("warn", "src.js", 7, "lineSource", 2);
@@ -296,8 +297,8 @@ class ErrorReporter4MojoTest {
      */
     @Test
     void testSetFile_updatesSourceFileForBuildContext() {
-        final var file1 = new File("first.js");
-        final var file2 = new File("second.js");
+        final var file1 = Path.of("first.js").toFile();
+        final var file2 = Path.of("second.js").toFile();
         final var reporter = new ErrorReporter4Mojo(log, true, buildContext);
 
         reporter.setFile(file1);

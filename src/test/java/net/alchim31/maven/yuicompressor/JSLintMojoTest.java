@@ -22,7 +22,7 @@ package net.alchim31.maven.yuicompressor;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.api.plugin.testing.MojoExtension;
 import org.codehaus.plexus.build.DefaultBuildContext;
@@ -51,9 +51,9 @@ public class JSLintMojoTest {
      */
     @Test
     void testMojoExecute_withValidJsFile_doesNotThrow() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-jslint");
+        final File webappDir = tempDir.toPath().resolve("webapp-jslint").toFile();
         webappDir.mkdirs();
-        final File jsFile = new File(webappDir, "simple.js");
+        final File jsFile = webappDir.toPath().resolve("simple.js").toFile();
         Files.write(jsFile.toPath(), "var x = 1;".getBytes(StandardCharsets.UTF_8));
 
         final var mojo = createAndConfigureMojo(webappDir);
@@ -68,7 +68,7 @@ public class JSLintMojoTest {
      */
     @Test
     void testMojoExecute_skipTrue_doesNotProcess() throws Exception {
-        final File webappDir = new File(tempDir, "webapp-jslint-skip");
+        final File webappDir = tempDir.toPath().resolve("webapp-jslint-skip").toFile();
         webappDir.mkdirs();
         final var mojo = createAndConfigureMojo(webappDir);
         MojoExtension.setVariableValueToObject(mojo, "skip", true);
@@ -129,10 +129,10 @@ public class JSLintMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "excludeResources", true);
         MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", false);
         MojoExtension.setVariableValueToObject(mojo, "warSourceDirectory", warSourceDirectory);
-        MojoExtension.setVariableValueToObject(mojo, "webappDirectory", new File(tempDir, "webapp-output"));
-        MojoExtension.setVariableValueToObject(mojo, "outputDirectory", new File(tempDir, "classes"));
-        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", new File(tempDir, "nonexistent-src"));
-        MojoExtension.setVariableValueToObject(mojo, "resources", Collections.emptyList());
+        MojoExtension.setVariableValueToObject(mojo, "webappDirectory", tempDir.toPath().resolve("webapp-output").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "outputDirectory", tempDir.toPath().resolve("classes").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", tempDir.toPath().resolve("nonexistent-src").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "resources", List.of());
         return mojo;
     }
 }
