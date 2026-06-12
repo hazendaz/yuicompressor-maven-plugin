@@ -16,7 +16,7 @@
     <logo name="Build with Maven 3" href="http://maven.apache.org">
         <image src="images/logos/maven-feather.png" />
     </logo>
-    <logo name="CC-GNU LGPL" href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">
+    <logo name="GNU LGPL" href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">
         <image src="https://creativecommons.org/images/public/cc-LGPL-a.png" />
     </logo>
   </poweredBy>
@@ -29,7 +29,6 @@
   <body>
     <links>
       <item name="changelog/scm" href="https://github.com/hazendaz/yuicompressor-maven-plugin/"/>
-      <!--item name="sourceforge" href="http://sf.net/projects/alchim" /-->
     </links>
 
     <menu name="Overview">
@@ -38,7 +37,6 @@
       <item name="Goals" href="plugin-info.html" />
       <item name="Usage: compress" href="usage_compress.html" />
       <item name="Usage: jslint" href="usage_jslint.html" />
-      <!-- item name="FAQ" href="faq.html" /-->
     </menu>
 
     <menu name="Examples">
