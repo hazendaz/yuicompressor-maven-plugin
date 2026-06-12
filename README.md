@@ -41,8 +41,3 @@ Found a bug? Have an idea? Report it to the [issue tracker](https://github.com/h
 * [David Bernard](https://github.com/davidB)
 * [Piotr Kuczynski](https://github.com/pkuczynski)
 * [Jeremy Landis](https://github.com/hazendaz)
-
-
-## License
-
-This project is available under the [Creative Commons GNU LGPL, Version 2.1](http://creativecommons.org/licenses/LGPL/2.1/).
