@@ -233,7 +233,8 @@ public class YuiCompressorMojoTest {
      */
     @Test
     void testMojoExecute_skipTrue_doesNotProcess() throws Exception {
-        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("webapp-skip").toFile(), tempDir.toPath().resolve("output-skip").toFile());
+        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("webapp-skip").toFile(),
+                tempDir.toPath().resolve("output-skip").toFile());
         MojoExtension.setVariableValueToObject(mojo, "skip", true);
 
         // Should complete without any processing (and without NullPointerException)
@@ -532,7 +533,8 @@ public class YuiCompressorMojoTest {
         final File outputDir = tempDir.toPath().resolve("output-resources").toFile();
         outputDir.mkdirs();
 
-        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("no-webapp").toFile(), tempDir.toPath().resolve("no-webapp-out").toFile());
+        final var mojo = createAndConfigureMojo(tempDir.toPath().resolve("no-webapp").toFile(),
+                tempDir.toPath().resolve("no-webapp-out").toFile());
         MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", true);
         MojoExtension.setVariableValueToObject(mojo, "excludeResources", false);
         MojoExtension.setVariableValueToObject(mojo, "outputDirectory", outputDir);
@@ -701,7 +703,8 @@ public class YuiCompressorMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "warSourceDirectory", warSourceDirectory);
         MojoExtension.setVariableValueToObject(mojo, "webappDirectory", webappDirectory);
         MojoExtension.setVariableValueToObject(mojo, "outputDirectory", tempDir.toPath().resolve("classes").toFile());
-        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", tempDir.toPath().resolve("nonexistent-source").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory",
+                tempDir.toPath().resolve("nonexistent-source").toFile());
         MojoExtension.setVariableValueToObject(mojo, "resources", List.of());
         return mojo;
     }

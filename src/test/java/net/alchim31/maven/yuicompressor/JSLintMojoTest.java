@@ -129,9 +129,11 @@ public class JSLintMojoTest {
         MojoExtension.setVariableValueToObject(mojo, "excludeResources", true);
         MojoExtension.setVariableValueToObject(mojo, "excludeWarSourceDirectory", false);
         MojoExtension.setVariableValueToObject(mojo, "warSourceDirectory", warSourceDirectory);
-        MojoExtension.setVariableValueToObject(mojo, "webappDirectory", tempDir.toPath().resolve("webapp-output").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "webappDirectory",
+                tempDir.toPath().resolve("webapp-output").toFile());
         MojoExtension.setVariableValueToObject(mojo, "outputDirectory", tempDir.toPath().resolve("classes").toFile());
-        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory", tempDir.toPath().resolve("nonexistent-src").toFile());
+        MojoExtension.setVariableValueToObject(mojo, "sourceDirectory",
+                tempDir.toPath().resolve("nonexistent-src").toFile());
         MojoExtension.setVariableValueToObject(mojo, "resources", List.of());
         return mojo;
     }

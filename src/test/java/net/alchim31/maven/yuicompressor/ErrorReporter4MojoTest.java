@@ -19,7 +19,6 @@
  */
 package net.alchim31.maven.yuicompressor;
 
-import java.io.File;
 import java.nio.file.Path;
 
 import org.apache.maven.plugin.logging.Log;
