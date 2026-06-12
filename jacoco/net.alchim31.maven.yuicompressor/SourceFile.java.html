@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">yuicompressor-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">net.alchim31.maven.yuicompressor</a> &gt; <span class="el_source">SourceFile.java</span></div><h1>SourceFile.java</h1><pre class="source lang-java linenums">/*
- * YuiCompressor Maven plugin
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ * See LICENSE file for details.
  *
- * Copyright 2012-2025 Hazendaz.
- *
- * Licensed under the GNU Lesser General Public License (LGPL),
- * version 2.1 or later (the &quot;License&quot;).
- * You may not use this file except in compliance with the License.
- * You may read the licence in the 'lgpl.txt' file in the root folder of
- * project or obtain a copy at
- *
- *     https://www.gnu.org/licenses/lgpl-2.1.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an &quot;AS IS&quot; basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012-2026 Hazendaz.
  */
 package net.alchim31.maven.yuicompressor;
 
@@ -53,19 +40,19 @@ public class SourceFile {
      * @param destAsSource
      *            the dest as source
      */
-<span class="fc" id="L56">    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {</span>
-<span class="fc" id="L57">        this.srcRoot = srcRoot;</span>
-<span class="fc" id="L58">        this.destRoot = destRoot;</span>
-<span class="fc" id="L59">        this.destAsSource = destAsSource;</span>
-<span class="fc" id="L60">        this.rpath = name;</span>
-<span class="fc" id="L61">        int sep = this.rpath.lastIndexOf('.');</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (sep &gt; 0) {</span>
-<span class="fc" id="L63">            this.extension = this.rpath.substring(sep);</span>
-<span class="fc" id="L64">            this.rpath = rpath.substring(0, sep);</span>
+<span class="fc" id="L43">    public SourceFile(File srcRoot, File destRoot, String name, boolean destAsSource) {</span>
+<span class="fc" id="L44">        this.srcRoot = srcRoot;</span>
+<span class="fc" id="L45">        this.destRoot = destRoot;</span>
+<span class="fc" id="L46">        this.destAsSource = destAsSource;</span>
+<span class="fc" id="L47">        this.rpath = name;</span>
+<span class="fc" id="L48">        int sep = this.rpath.lastIndexOf('.');</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (sep &gt; 0) {</span>
+<span class="fc" id="L50">            this.extension = this.rpath.substring(sep);</span>
+<span class="fc" id="L51">            this.rpath = rpath.substring(0, sep);</span>
         } else {
-<span class="fc" id="L66">            this.extension = &quot;&quot;;</span>
+<span class="fc" id="L53">            this.extension = &quot;&quot;;</span>
         }
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L55">    }</span>
 
     /**
      * To file.
@@ -73,14 +60,14 @@ public class SourceFile {
      * @return the file
      */
     public File toFile() {
-<span class="fc" id="L76">        String frpath = rpath + extension;</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (destAsSource) {</span>
-<span class="fc" id="L78">            File defaultDest = destRoot.toPath().resolve(frpath).toFile();</span>
-<span class="pc bpc" id="L79" title="1 of 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
-<span class="fc" id="L80">                return defaultDest;</span>
+<span class="fc" id="L63">        String frpath = rpath + extension;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (destAsSource) {</span>
+<span class="fc" id="L65">            File defaultDest = destRoot.toPath().resolve(frpath).toFile();</span>
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">            if (defaultDest.exists() &amp;&amp; defaultDest.canRead()) {</span>
+<span class="fc" id="L67">                return defaultDest;</span>
             }
         }
-<span class="fc" id="L83">        return srcRoot.toPath().resolve(frpath).toFile();</span>
+<span class="fc" id="L70">        return srcRoot.toPath().resolve(frpath).toFile();</span>
     }
 
     /**
@@ -92,7 +79,7 @@ public class SourceFile {
      * @return the file
      */
     public File toDestFile(String suffix) {
-<span class="fc" id="L95">        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();</span>
+<span class="fc" id="L82">        return destRoot.toPath().resolve(rpath + suffix + extension).toFile();</span>
     }
 
     /**
@@ -101,7 +88,7 @@ public class SourceFile {
      * @return the extension
      */
     public String getExtension() {
-<span class="fc" id="L104">        return extension;</span>
+<span class="fc" id="L91">        return extension;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

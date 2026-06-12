@@ -1,1 +1,1 @@
-memberSearchIndex = [{"p":"net.alchim31.maven.yuicompressor","c":"AggregationTestCase","l":"AggregationTestCase()","u":"%3Cinit%3E()","k":"3"}];updateSearchResults();
+memberSearchIndex = [{"p":"net.alchim31.maven.yuicompressor","c":"AggregationTestCase","l":"AggregationTestCase()","u":"%3Cinit%3E()","k":"3"},{"p":"net.alchim31.maven.yuicompressor","c":"JSLintMojoTest","l":"JSLintMojoTest()","u":"%3Cinit%3E()","k":"3"},{"p":"net.alchim31.maven.yuicompressor","c":"YuiCompressorMojoTest","l":"YuiCompressorMojoTest()","u":"%3Cinit%3E()","k":"3"}];updateSearchResults();

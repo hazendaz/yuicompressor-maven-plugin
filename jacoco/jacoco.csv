@@ -1,11 +1,11 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,ErrorReporter4Mojo,164,0,18,0,37,0,18,0,9,0
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,Aggregation,94,261,21,35,25,64,15,26,1,12
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,ErrorReporter4Mojo,0,164,3,15,0,37,3,15,0,9
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,Aggregation,1,354,4,52,1,88,4,37,0,13
 yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,SourceFile,0,85,1,7,0,19,1,7,0,4
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,JSLintMojo,32,0,0,0,8,0,5,0,5,0
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,YuiCompressorMojo,696,0,80,0,118,0,50,0,10,0
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,JSLintMojo,0,32,0,0,0,8,0,5,0,5
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,YuiCompressorMojo,262,434,34,46,41,77,24,26,0,10
 yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,JSLintChecker,0,44,0,0,0,13,0,2,0,2
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,MojoSupport,313,0,42,0,64,0,25,0,4,0
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,YuiCompressorMojo.new GZIPOutputStream() {...},13,0,0,0,2,0,1,0,1,0
-yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,BasicRhinoShell,290,203,24,14,77,58,19,15,5,10
-yuicompressor-maven-plugin,com.github.hazendaz.maven.yuicompressor_maven_plugin,HelpMojo,773,0,112,0,156,0,72,0,16,0
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,MojoSupport,84,229,17,25,15,49,14,11,0,4
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,YuiCompressorMojo.new GZIPOutputStream() {...},0,13,0,0,0,2,0,1,0,1
+yuicompressor-maven-plugin,net.alchim31.maven.yuicompressor,BasicRhinoShell,148,345,18,20,50,85,13,21,1,14
+yuicompressor-maven-plugin,com.github.hazendaz.maven.yuicompressor_maven_plugin,HelpMojo,115,658,30,82,23,133,25,47,0,16
