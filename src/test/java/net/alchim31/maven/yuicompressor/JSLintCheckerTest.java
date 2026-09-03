@@ -37,7 +37,7 @@ class JSLintCheckerTest {
      */
     @BeforeEach
     void setUp() throws IOException {
-        this.tempJsFile = File.createTempFile("test", ".js");
+        this.tempJsFile = Files.createTempFile("test", ".js").toFile();
         this.tempJsFile.deleteOnExit();
         try (var writer = Files.newBufferedWriter(this.tempJsFile.toPath(), StandardCharsets.UTF_8)) {
             writer.write("var a = 1;");

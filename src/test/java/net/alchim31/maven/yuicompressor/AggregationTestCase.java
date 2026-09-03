@@ -272,7 +272,7 @@ public class AggregationTestCase {
      */
     @Test
     void testAbsolutePathFromOutside() throws IOException {
-        final var f1 = File.createTempFile("test-01", ".js");
+        final var f1 = Files.createTempFile("test-01", ".js").toFile();
         Files.write(f1.toPath(), "1".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 
         final var f2 = this.dir.toPath().resolve("02.js").toFile();
@@ -446,7 +446,7 @@ public class AggregationTestCase {
      */
     @Test
     void testInvalidInputDirectory_throwsIllegalStateException() throws IOException {
-        final var notADir = File.createTempFile("notadir", ".tmp");
+        final var notADir = Files.createTempFile("notadir", ".tmp").toFile();
         notADir.deleteOnExit();
 
         final var target = new Aggregation();

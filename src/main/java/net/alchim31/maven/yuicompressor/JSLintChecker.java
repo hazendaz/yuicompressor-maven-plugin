@@ -30,7 +30,7 @@ class JSLintChecker {
      *             the IO exception
      */
     public JSLintChecker() throws IOException {
-        File jslint = File.createTempFile("jslint", ".js");
+        File jslint = Files.createTempFile("jslint", ".js").toFile();
         jslint.deleteOnExit();
         try (InputStream in = getClass().getResourceAsStream("/jslint.js");
                 OutputStream out = Files.newOutputStream(jslint.toPath())) {
