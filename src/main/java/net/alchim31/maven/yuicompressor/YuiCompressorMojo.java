@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -221,8 +222,8 @@ public class YuiCompressorMojo extends MojoSupport {
             }
             return;
         }
-        File outFileTmp = Path.of(outFile.getCanonicalPath() + ".tmp").toFile();
-        FileUtils.forceDelete(outFileTmp);
+        Path outFileTmp = Path.of(outFile.getCanonicalPath() + ".tmp");
+        Files.deleteIfExists(outFileTmp);
 
         if (!outFile.getParentFile().exists() && !outFile.getParentFile().mkdirs()) {
             throw new MojoExecutionException("Cannot create resource output directory: " + outFile.getParentFile());
@@ -232,7 +233,7 @@ public class YuiCompressorMojo extends MojoSupport {
         try (InputStreamReader in = new InputStreamReader(Files.newInputStream(inFile.toPath()),
                 Charset.forName(encoding));
                 /* outFileTmp will be deleted create with FileOutputStream */
-                OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(outFileTmp.toPath()),
+                OutputStreamWriter out = new OutputStreamWriter(Files.newOutputStream(outFileTmp),
                         Charset.forName(encoding));) {
 
             getLog().debug("start compression");
@@ -260,12 +261,10 @@ public class YuiCompressorMojo extends MojoSupport {
 
         boolean outputIgnored = useSmallestFile && inFile.length() < outFile.length();
         if (outputIgnored) {
-            FileUtils.forceDelete(outFileTmp);
-            FileUtils.copyFile(inFile, outFile);
+            Files.copy(inFile.toPath(), outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             getLog().debug("output greater than input, using original instead");
         } else {
-            FileUtils.forceDelete(outFile);
-            FileUtils.rename(outFileTmp, outFile);
+            Files.move(outFileTmp, outFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             buildContext.refresh(outFile);
         }
 
