@@ -28,9 +28,8 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * Tests for {@link YuiCompressorMojo} using the maven-plugin-testing-harness 3.5.1 JUnit 5 extension
  * ({@code @MojoTest}) combined with direct instantiation tests.
  */
-// Note: public here needed for javadocs to work so don't remove it
 @MojoTest
-public class YuiCompressorMojoTest {
+class YuiCompressorMojoTest {
 
     /** Temporary directory for test output files. */
     @TempDir

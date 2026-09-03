@@ -23,8 +23,7 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 /**
  * Tests for {@link JSLintMojo} using direct instantiation.
  */
-// Note: public here needed for javadocs to work so don't remove it
-public class JSLintMojoTest {
+class JSLintMojoTest {
 
     /** Temporary directory for test output files. */
     @TempDir
