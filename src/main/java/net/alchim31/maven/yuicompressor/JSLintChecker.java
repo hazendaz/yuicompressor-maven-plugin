@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 
-import org.codehaus.plexus.util.IOUtil;
 import org.mozilla.javascript.ErrorReporter;
 
 /**
@@ -35,7 +34,7 @@ class JSLintChecker {
         jslint.deleteOnExit();
         try (InputStream in = getClass().getResourceAsStream("/jslint.js");
                 OutputStream out = Files.newOutputStream(jslint.toPath())) {
-            IOUtil.copy(in, out);
+            in.transferTo(out);
         }
         jslintPath = jslint.getCanonicalPath();
     }

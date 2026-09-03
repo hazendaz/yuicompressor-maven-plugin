@@ -28,7 +28,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * Apply compression on JS and CSS (using YUI Compressor).
@@ -240,7 +239,7 @@ public class YuiCompressorMojo extends MojoSupport {
             try {
                 if (nocompress) {
                     getLog().info("No compression is enabled");
-                    IOUtil.copy(in, out);
+                    in.transferTo(out);
                 } else if (".js".equalsIgnoreCase(src.getExtension())) {
                     JavaScriptCompressor compressor = new JavaScriptCompressor(in, jsErrorReporter);
                     compressor.compress(out, linebreakpos, !nomunge, jswarn, preserveAllSemiColons,
@@ -339,7 +338,7 @@ public class YuiCompressorMojo extends MojoSupport {
                         def.setLevel(level);
                     }
                 };) {
-            IOUtil.copy(in, out);
+            in.transferTo(out);
         }
         return gzipped;
     }

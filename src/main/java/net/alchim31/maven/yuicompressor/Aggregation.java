@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.codehaus.plexus.build.BuildContext;
 import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * The Class Aggregation.
@@ -159,7 +158,7 @@ public class Aggregation {
                         if (insertFileHeader) {
                             out.write(createFileHeader(file).getBytes(StandardCharsets.UTF_8));
                         }
-                        IOUtil.copy(in, out);
+                        in.transferTo(out);
                         if (fixLastSemicolon) {
                             out.write(';');
                         }
