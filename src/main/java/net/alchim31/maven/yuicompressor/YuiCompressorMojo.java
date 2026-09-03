@@ -28,7 +28,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Apply compression on JS and CSS (using YUI Compressor).
@@ -326,7 +325,7 @@ public class YuiCompressorMojo extends MojoSupport {
      *             the IO exception
      */
     protected File gzipIfRequested(File file) throws IOException {
-        if (!gzip || file == null || !file.exists() || "gz".equalsIgnoreCase(FileUtils.getExtension(file.getName()))) {
+        if (!gzip || file == null || !file.exists() || file.getName().toLowerCase(Locale.ROOT).endsWith(".gz")) {
             return null;
         }
         File gzipped = Path.of(file.getCanonicalFile() + ".gz").toFile();
