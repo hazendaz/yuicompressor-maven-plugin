@@ -140,6 +140,8 @@
 
         <!-- Reproducible Builds -->
         <project.build.outputTimestamp>1781228702</project.build.outputTimestamp>
+
+        <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
     </properties>
 
     <dependencyManagement>
