@@ -193,6 +193,20 @@
             <artifactId>maven-core</artifactId>
             <version>${maven.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <!-- Reported issue https://github.com/apache/maven-resolver/issues/2174 -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Ensure jcl doe to exclusion above -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.4.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
