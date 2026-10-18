@@ -297,6 +297,9 @@
                     <value>!true</value>
                 </property>
             </activation>
+            <properties>
+                <groovyVersion>6.0.0</groovyVersion>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -312,6 +315,29 @@
                             <preBuildHookScript>setup.groovy</preBuildHookScript>
                             <postBuildHookScript>validate.groovy</postBuildHookScript>
                         </configuration>
+                        <dependencies>
+                            <!-- Keep groovy at same version we are using -->
+                            <dependency>
+                                <groupId>org.apache.groovy</groupId>
+                                <artifactId>groovy</artifactId>
+                                <version>${groovyVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.groovy</groupId>
+                                <artifactId>groovy-json</artifactId>
+                                <version>${groovyVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.groovy</groupId>
+                                <artifactId>groovy-nio</artifactId>
+                                <version>${groovyVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.groovy</groupId>
+                                <artifactId>groovy-xml</artifactId>
+                                <version>${groovyVersion}</version>
+                            </dependency>
+                        </dependencies>
                         <executions>
                             <execution>
                                 <id>integration-test</id>
