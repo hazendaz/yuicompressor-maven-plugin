@@ -301,6 +301,9 @@ public class YuiCompressorMojo extends MojoSupport {
      *            the in
      * @param out
      *            the out
+     *
+     * @throws IOException
+     *             the io exception
      */
     private void compressCss(InputStreamReader in, OutputStreamWriter out) throws IOException {
         try {
