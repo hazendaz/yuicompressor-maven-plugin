@@ -16,7 +16,9 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoExtension;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.LegacySupport;
 import org.codehaus.plexus.build.DefaultBuildContext;
+import org.codehaus.plexus.build.connect.BuildConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -719,9 +721,11 @@ class YuiCompressorMojoTest {
      */
     private DefaultBuildContext buildDefaultBuildContext() throws Exception {
         final BuildContext legacyCtx = Mockito.mock(BuildContext.class);
+        final BuildConnection connection = Mockito.mock(BuildConnection.class);
+        final LegacySupport legacySupport = Mockito.mock(LegacySupport.class);
         Mockito.lenient().when(legacyCtx.newFileOutputStream(ArgumentMatchers.any(File.class)))
                 .thenAnswer(inv -> Files.newOutputStream(((File) inv.getArgument(0)).toPath()));
-        return new DefaultBuildContext(legacyCtx);
+        return new DefaultBuildContext(legacyCtx, connection, legacySupport);
     }
 
     /**

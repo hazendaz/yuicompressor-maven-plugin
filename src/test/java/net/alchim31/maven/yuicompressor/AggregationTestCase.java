@@ -17,7 +17,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.maven.plugin.LegacySupport;
 import org.codehaus.plexus.build.DefaultBuildContext;
+import org.codehaus.plexus.build.connect.BuildConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,14 @@ public class AggregationTestCase {
     @Mock
     BuildContext legacyBuildContext;
 
+    /** The connection. */
+    @Mock
+    private BuildConnection connection;
+
+    /** The legacy support. */
+    @Mock
+    private LegacySupport legacySupport;
+
     /** The default build context. */
     DefaultBuildContext defaultBuildContext;
 
@@ -58,7 +68,7 @@ public class AggregationTestCase {
         // Ensure the mock returns a real OutputStream for output files
         Mockito.lenient().when(this.legacyBuildContext.newFileOutputStream(ArgumentMatchers.any(File.class)))
                 .thenAnswer(invocation -> Files.newOutputStream(((File) invocation.getArgument(0)).toPath()));
-        this.defaultBuildContext = new DefaultBuildContext(this.legacyBuildContext);
+        this.defaultBuildContext = new DefaultBuildContext(this.legacyBuildContext, connection, legacySupport);
     }
 
     /**

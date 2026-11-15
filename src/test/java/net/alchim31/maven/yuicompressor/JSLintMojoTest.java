@@ -12,7 +12,9 @@ import java.nio.file.Files;
 import java.util.List;
 
 import org.apache.maven.api.plugin.testing.MojoExtension;
+import org.apache.maven.plugin.LegacySupport;
 import org.codehaus.plexus.build.DefaultBuildContext;
+import org.codehaus.plexus.build.connect.BuildConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -105,9 +107,11 @@ class JSLintMojoTest {
     private JSLintMojo createAndConfigureMojo(File warSourceDirectory) throws Exception {
         final var mojo = new JSLintMojo();
         final BuildContext legacyCtx = Mockito.mock(BuildContext.class);
+        final BuildConnection connection = Mockito.mock(BuildConnection.class);
+        final LegacySupport legacySupport = Mockito.mock(LegacySupport.class);
         Mockito.lenient().when(legacyCtx.newFileOutputStream(ArgumentMatchers.any(File.class)))
                 .thenAnswer(inv -> Files.newOutputStream(((File) inv.getArgument(0)).toPath()));
-        final var buildContext = new DefaultBuildContext(legacyCtx);
+        final var buildContext = new DefaultBuildContext(legacyCtx, connection, legacySupport);
         MojoExtension.setVariableValueToObject(mojo, "buildContext", buildContext);
         MojoExtension.setVariableValueToObject(mojo, "skip", false);
         MojoExtension.setVariableValueToObject(mojo, "jswarn", false);
